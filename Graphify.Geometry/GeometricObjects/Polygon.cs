@@ -5,22 +5,22 @@ using Graphify.Geometry.GeometricObjects.Operations;
 
 namespace Graphify.Geometry.GeometricObjects;
 
-public abstract class BezierCurve : IFigure
+public class Polygon : IFigure
 {
-    public string Id => throw new NotImplementedException();
-    public IEnumerable<IAttachable> Attached => throw new NotImplementedException();
-    public IEnumerable<Point> ControlPoints => throw new NotImplementedException();
-
+    public string Id { get; }
+    public IEnumerable<IAttachable> Attached { get; }
+    public IEnumerable<Point> ControlPoints { get; }
+    
     private readonly Point[] _points;
 
-    protected BezierCurve(params Point[] points)
+    public Polygon(params Point[] points)
     {
         _points = points;
     }
 
     public void Update() => throw new NotImplementedException();
+    public void Draw(IDrawer drawer) => throw new NotImplementedException();
     public bool CanApply(IOperation operation) => throw new NotImplementedException();
     public void Apply(IOperation operation) => throw new NotImplementedException();
     public bool IsNextTo(Vector2 point, out float? distance) => throw new NotImplementedException();
-    public void Draw(IDrawer drawer) => throw new NotImplementedException();
 }

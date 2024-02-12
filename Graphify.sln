@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphify.Geometry", "Graphify.Geometry\Graphify.Geometry.csproj", "{F62DA488-2FC2-4725-8382-C6349685F3A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.Geometry", "Graphify.Geometry\Graphify.Geometry.csproj", "{F62DA488-2FC2-4725-8382-C6349685F3A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphify.Tests", "Graphify.Tests\Graphify.Tests.csproj", "{E51DAC1D-1635-4289-A0E7-F7165347C337}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.Tests", "Graphify.Tests\Graphify.Tests.csproj", "{E51DAC1D-1635-4289-A0E7-F7165347C337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphify.Client", "Graphify.Client\Graphify.Client.csproj", "{F9E1FE86-A8ED-4FFD-BD93-A8A68B7541E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.Client", "Graphify.Client\Graphify.Client.csproj", "{F9E1FE86-A8ED-4FFD-BD93-A8A68B7541E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphify.IO", "Graphify.IO\Graphify.IO.csproj", "{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.IO", "Graphify.IO\Graphify.IO.csproj", "{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphify.Core", "Graphify.Core\Graphify.Core.csproj", "{A3349386-F0DD-4B39-9227-AE88CC677BF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3349386-F0DD-4B39-9227-AE88CC677BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3349386-F0DD-4B39-9227-AE88CC677BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3349386-F0DD-4B39-9227-AE88CC677BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3349386-F0DD-4B39-9227-AE88CC677BF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="Model\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="Model\**" />
     <None Remove="bin\**" />
+    <None Remove="Model\**" />
     <Page Remove="bin\**" />
+    <Page Remove="Model\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,7 +49,6 @@
   </ItemGroup>
     
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="View\" />
   </ItemGroup>
 </Project>
