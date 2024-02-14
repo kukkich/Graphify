@@ -9,7 +9,7 @@ public class Circle : IFigure
 {
     public string Id => throw new NotImplementedException();
     public IEnumerable<IAttachable> Attached => throw new NotImplementedException();
-    public IEnumerable<Point> ControlPoints => throw new NotImplementedException();
+    public IEnumerable<IPoint> ControlPoints => throw new NotImplementedException();
 
     public float CenterX { get; }
     public float CenterY { get; }
@@ -23,8 +23,7 @@ public class Circle : IFigure
     }
 
     public void Update() => throw new NotImplementedException();
-    public bool CanApply(IOperation operation) => throw new NotImplementedException();
-    public void Apply(IOperation operation) => throw new NotImplementedException();
     public bool IsNextTo(Vector2 point, out float? distance) => throw new NotImplementedException();
-    public void Draw(IDrawer drawer) => throw new NotImplementedException();
+    public bool CanApply<T>(IOperation<T> operation) => throw new NotImplementedException();
+    public T Apply<T>(IOperation<T> operation) => throw new NotImplementedException();
 }

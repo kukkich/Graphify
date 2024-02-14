@@ -24,8 +24,7 @@ public class Point : IPoint
     public void Update() => throw new NotImplementedException();
     public bool CanAttachTo(IFigure consumer) => throw new NotImplementedException();
     public void AttachTo(IFigure consumer) => throw new NotImplementedException();
-    public bool CanApply(IOperation operation) => throw new NotImplementedException();
-    public void Apply(IOperation operation) => throw new NotImplementedException();
     public bool IsNextTo(Vector2 point, out float? distance) => throw new NotImplementedException();
-    public void Draw(IDrawer drawer) => throw new NotImplementedException();
+    public bool CanApply<T>(IOperation<T> operation) => throw new NotImplementedException();
+    public T Apply<T>(IOperation<T> operation) => throw new NotImplementedException();
 }

@@ -9,18 +9,17 @@ public class Polygon : IFigure
 {
     public string Id { get; }
     public IEnumerable<IAttachable> Attached { get; }
-    public IEnumerable<Point> ControlPoints { get; }
+    public IEnumerable<IPoint> ControlPoints { get; }
     
-    private readonly Point[] _points;
+    private readonly IPoint[] _points;
 
-    public Polygon(params Point[] points)
+    public Polygon(params IPoint[] points)
     {
         _points = points;
     }
 
     public void Update() => throw new NotImplementedException();
-    public void Draw(IDrawer drawer) => throw new NotImplementedException();
-    public bool CanApply(IOperation operation) => throw new NotImplementedException();
-    public void Apply(IOperation operation) => throw new NotImplementedException();
     public bool IsNextTo(Vector2 point, out float? distance) => throw new NotImplementedException();
+    public bool CanApply<T>(IOperation<T> operation) => throw new NotImplementedException();
+    public T Apply<T>(IOperation<T> operation) => throw new NotImplementedException();
 }
