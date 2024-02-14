@@ -1,4 +1,6 @@
 using System.Numerics;
+using Graphify.Geometry.GeometricObjects.Curves;
+using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Geometry.GeometricObjects.Interfaces;
 

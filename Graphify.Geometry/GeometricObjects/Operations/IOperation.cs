@@ -1,3 +1,7 @@
+using Graphify.Geometry.GeometricObjects.Curves;
+using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.GeometricObjects.Polygons;
+
 namespace Graphify.Geometry.GeometricObjects.Operations;
 
 public interface IOperation<out TResult>
