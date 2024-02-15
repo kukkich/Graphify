@@ -2,18 +2,21 @@ using System.Numerics;
 using Graphify.Geometry.Attaching;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Operations;
+using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.Styling;
 
-namespace Graphify.Geometry.GeometricObjects;
+namespace Graphify.Geometry.GeometricObjects.Polygons;
 
-public abstract class BezierCurve : IFigure
+public class Polygon : IFigure, IStyled<PolygonStyle>
 {
-    public string Id => throw new NotImplementedException();
-    public IEnumerable<IAttachable> Attached => throw new NotImplementedException();
-    public IEnumerable<IPoint> ControlPoints => throw new NotImplementedException();
+    public string Id { get; }
+    public IEnumerable<IAttachable> Attached { get; }
+    public IEnumerable<IPoint> ControlPoints { get; }
+    public PolygonStyle Style { get; set; }
 
-    private readonly Point[] _points;
+    private readonly IPoint[] _points;
 
-    protected BezierCurve(params Point[] points)
+    public Polygon(params IPoint[] points)
     {
         _points = points;
     }

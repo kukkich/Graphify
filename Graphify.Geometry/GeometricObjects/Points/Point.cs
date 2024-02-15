@@ -2,7 +2,7 @@ using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Operations;
 
-namespace Graphify.Geometry.GeometricObjects;
+namespace Graphify.Geometry.GeometricObjects.Points;
 
 public class Point : IPoint
 {
@@ -10,10 +10,10 @@ public class Point : IPoint
     public IFigure? AttachedTo { get; }
     public IEnumerable<IFigure> ControlPointFor { get; }
     public IEnumerable<IFigure> ControlFor => throw new NotImplementedException();
-
+    public PointStyle Style { get; set; }
     public float X { get; }
     public float Y { get; }
-    
+
     public Point(float x, float y)
     {
         X = x;

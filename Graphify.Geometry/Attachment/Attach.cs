@@ -1,4 +1,9 @@
-namespace Graphify.Geometry.GeometricObjects.Operations;
+using Graphify.Geometry.GeometricObjects.Curves;
+using Graphify.Geometry.GeometricObjects.Operations;
+using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.GeometricObjects.Polygons;
+
+namespace Graphify.Geometry.Attachment;
 
 public class Attach : IOperation<Empty>
 {
