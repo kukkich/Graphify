@@ -1,8 +1,5 @@
-using System.Reflection;
 using System.Windows;
 using Microsoft.Extensions.Logging;
-using ReactiveUI;
-using Splat;
 
 namespace Graphify.Client;
 

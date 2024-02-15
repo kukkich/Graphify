@@ -8,8 +8,7 @@ public class Point : IPoint
 {
     public string Id => throw new NotImplementedException();
     public IFigure? AttachedTo { get; }
-    public IEnumerable<IFigure> ControlPointFor { get; }
-    public IEnumerable<IFigure> ControlFor => throw new NotImplementedException();
+    public IEnumerable<IFigure> ControlFor { get; }
     public PointStyle Style { get; set; }
     public float X { get; }
     public float Y { get; }
@@ -18,7 +17,7 @@ public class Point : IPoint
     {
         X = x;
         Y = y;
-        ControlPointFor = new List<IFigure>();
+        ControlFor = new List<IFigure>();
     }
 
     public void Update() => throw new NotImplementedException();
