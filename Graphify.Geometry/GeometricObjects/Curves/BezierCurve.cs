@@ -3,12 +3,14 @@ using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Curves;
 
-public abstract class BezierCurve : IFigure, IStyled<CurveStyle>
+public abstract class BezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 {
-    public CurveStyle Style { get; set; }
+    [Reactive] public CurveStyle Style { get; set; }
     public IEnumerable<IAttachable> Attached { get; }
     public IEnumerable<Point> ControlPoints { get; }
 

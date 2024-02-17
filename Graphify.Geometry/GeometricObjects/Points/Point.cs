@@ -2,16 +2,18 @@ using System.Numerics;
 using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Points;
 
-public class Point : IGeometricObject, IAttachable, IStyled<PointStyle>
+public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<PointStyle>
 {
-    public float X { get; }
-    public float Y { get; }
+    [Reactive] public float X { get; }
+    [Reactive] public float Y { get; }
     public IFigure? AttachedTo { get; }
     public IEnumerable<IFigure> ControlFor { get; }
-    public PointStyle Style { get; set; }
+    [Reactive] public PointStyle Style { get; set; }
 
     public Point(float x, float y)
     {

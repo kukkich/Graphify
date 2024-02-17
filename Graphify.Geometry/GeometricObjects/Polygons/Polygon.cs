@@ -3,14 +3,16 @@ using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Polygons;
 
-public class Polygon : IFigure, IStyled<PolygonStyle>
+public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
 {
     public IEnumerable<IAttachable> Attached { get; }
     public IEnumerable<Point> ControlPoints { get; }
-    public PolygonStyle Style { get; set; }
+    [Reactive] public PolygonStyle Style { get; set; }
 
     public Polygon()
     {

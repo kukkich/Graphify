@@ -1,8 +1,9 @@
 using Graphify.Geometry.GeometricObjects.Curves;
+using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Points;
 
 public class PointStyle : CurveStyle
 {
-    public PointVariant Variant { get; set; }
+    [Reactive] public PointVariant Variant { get; set; }
 }

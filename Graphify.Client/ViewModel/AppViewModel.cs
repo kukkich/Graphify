@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,8 +12,8 @@ namespace Graphify.Client.ViewModel;
 public class AppViewModel : ReactiveObject
 {
     [Reactive] public int ReactiveProperty { get; private set; }
-    [Reactive] public IGeometryObjectViewModel? EditingObject { get; set; }
-    public SourceList<IGeometryObjectViewModel> GeometryObjects { get; set; }
+    [Reactive] public IGeometricObject? EditingObject { get; set; }
+    public SourceList<IGeometricObject> GeometryObjects { get; set; }
     
     public ReactiveCommand<Unit, Unit> IncrementCommand { get; private set; }
     public ReactiveCommand<Unit, Unit> RightMouseUp { get; private set; }

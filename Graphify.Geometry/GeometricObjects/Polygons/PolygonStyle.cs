@@ -1,11 +1,13 @@
 using System.Drawing;
 using Graphify.Geometry.Drawing;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Polygons;
 
-public class PolygonStyle : IStyle
+public class PolygonStyle : ReactiveObject, IStyle
 {
-    public Color PrimaryColor { get; set; }
-    public string Name { get; set; }
+    [Reactive] public Color PrimaryColor { get; set; }
+    [Reactive] public string Name { get; set; }
     public void ApplyStyle(IDrawer drawer) => throw new NotImplementedException();
 }

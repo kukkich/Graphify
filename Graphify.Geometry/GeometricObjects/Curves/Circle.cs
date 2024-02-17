@@ -3,14 +3,16 @@ using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Curves;
 
-public class Circle : IFigure, IStyled<CurveStyle>
+public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 {
     public IEnumerable<IAttachable> Attached { get; }
     public IEnumerable<Point> ControlPoints { get; }
-    public CurveStyle Style { get; set; }
+    [Reactive] public CurveStyle Style { get; set; }
 
     public Circle()
     {
