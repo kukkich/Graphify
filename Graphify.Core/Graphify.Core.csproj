@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
-  </ItemGroup>
-
 </Project>
