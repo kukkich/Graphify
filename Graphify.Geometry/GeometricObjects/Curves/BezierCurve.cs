@@ -1,28 +1,28 @@
 using System.Numerics;
 using Graphify.Geometry.Attaching;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Operations;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.Styling;
 
 namespace Graphify.Geometry.GeometricObjects.Curves;
 
 public abstract class BezierCurve : IFigure, IStyled<CurveStyle>
 {
-    public string Id => throw new NotImplementedException();
-    public IEnumerable<IAttachable> Attached => throw new NotImplementedException();
-    public IEnumerable<IPoint> ControlPoints => throw new NotImplementedException();
     public CurveStyle Style { get; set; }
+    public IEnumerable<IAttachable> Attached { get; }
+    public IEnumerable<Point> ControlPoints { get; }
 
-    private readonly Point[] _points;
-
-    protected BezierCurve(params Point[] points)
+    protected BezierCurve()
     {
-        _points = points;
+        throw new NotImplementedException();
     }
 
     public void Update() => throw new NotImplementedException();
-    public bool IsNextTo(Vector2 point, out float? distance) => throw new NotImplementedException();
-    public bool CanApply<T>(IOperation<T> operation) => throw new NotImplementedException();
-    public T Apply<T>(IOperation<T> operation) => throw new NotImplementedException();
+    public void ConsumeAttach(IAttachable attachable) => throw new NotImplementedException();
+    public bool IsNextTo(Vector2 point, float distance) => throw new NotImplementedException();
+    public void Move(Vector2 shift) => throw new NotImplementedException();
+    public void Rotate(System.Drawing.Point shift, float angle) => throw new NotImplementedException();
+    public void Reflect(System.Drawing.Point point) => throw new NotImplementedException();
+
+    public void Draw(IDrawer drawer) => throw new NotImplementedException();
 }

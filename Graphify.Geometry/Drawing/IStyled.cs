@@ -1,4 +1,4 @@
-namespace Graphify.Geometry.Styling;
+namespace Graphify.Geometry.Drawing;
 
 public interface IStyled<TStyle>
     where TStyle : IStyle

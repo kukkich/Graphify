@@ -1,17 +1,17 @@
 using System.Numerics;
+using Graphify.Geometry.Attaching;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Operations;
 
 namespace Graphify.Geometry.GeometricObjects.Points;
 
-public class Point : IPoint
+public class Point : IGeometricObject, IAttachable, IStyled<PointStyle>
 {
-    public string Id => throw new NotImplementedException();
+    public float X { get; }
+    public float Y { get; }
     public IFigure? AttachedTo { get; }
     public IEnumerable<IFigure> ControlFor { get; }
     public PointStyle Style { get; set; }
-    public float X { get; }
-    public float Y { get; }
 
     public Point(float x, float y)
     {
@@ -20,10 +20,12 @@ public class Point : IPoint
         ControlFor = new List<IFigure>();
     }
 
+    public bool IsNextTo(Vector2 point, float distance) => throw new NotImplementedException();
+    public void Move(Vector2 shift) => throw new NotImplementedException();
+    public void Rotate(System.Drawing.Point shift, float angle) => throw new NotImplementedException();
+    public void Reflect(System.Drawing.Point point) => throw new NotImplementedException();
     public void Update() => throw new NotImplementedException();
     public bool CanAttachTo(IFigure consumer) => throw new NotImplementedException();
     public void AttachTo(IFigure consumer) => throw new NotImplementedException();
-    public bool IsNextTo(Vector2 point, out float? distance) => throw new NotImplementedException();
-    public bool CanApply<T>(IOperation<T> operation) => throw new NotImplementedException();
-    public T Apply<T>(IOperation<T> operation) => throw new NotImplementedException();
+    public void Draw(IDrawer drawer) => throw new NotImplementedException();
 }

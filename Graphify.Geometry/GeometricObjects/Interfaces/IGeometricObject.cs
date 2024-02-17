@@ -1,9 +1,13 @@
+using System.Drawing;
 using System.Numerics;
-using Graphify.Geometry.GeometricObjects.Operations;
+using Graphify.Geometry.Drawing;
 
 namespace Graphify.Geometry.GeometricObjects.Interfaces;
 
-public interface IGeometricObject : IInteractive
+public interface IGeometricObject : IDrawable
 {
-    public bool IsNextTo(Vector2 point, out float? distance);
+    public bool IsNextTo(Vector2 point, float distance);
+    public void Move(Vector2 shift);
+    public void Rotate(Point shift, float angle);
+    public void Reflect(Point point);
 }

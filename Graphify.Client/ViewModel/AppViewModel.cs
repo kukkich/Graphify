@@ -25,7 +25,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
-    public ReactiveCommand<(string Path, ExportFileFormat Fromat), Unit> Export { get; private set; }
+    public ReactiveCommand<(string Path, ExportFileFormat Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
