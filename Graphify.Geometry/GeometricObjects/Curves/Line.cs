@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Numerics;
 using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
@@ -20,7 +19,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Контрольные точки фигуры, по которым она строится
     /// TODO: А как собственно опорные точки вообще задаются?
     /// </summary>
-    public IEnumerable<Points.Point> ControlPoints { get; }
+    public IEnumerable<Point> ControlPoints { get; }
 
     /// <summary>
     /// Стиль прямой
