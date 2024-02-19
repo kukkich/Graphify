@@ -11,6 +11,8 @@ public class CurveStyle : ReactiveObject, IStyle
     [Reactive] public string Name { get; set; }
     [Reactive] public int Size { get; set; }
 
+    public static CurveStyle Default => new(Color.Black, "Default", CurveStyle.DefaultSize);
+
     public static int DefaultSize { get; set; } = 4;
 
     public CurveStyle(Color primary, string name, int size)
@@ -21,6 +23,4 @@ public class CurveStyle : ReactiveObject, IStyle
     }
 
     public void ApplyStyle(IDrawer drawer) => throw new NotImplementedException();
-
-    public static CurveStyle Default => new(Color.Black, "Default", CurveStyle.DefaultSize);
 }
