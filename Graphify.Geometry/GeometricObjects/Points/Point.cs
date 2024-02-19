@@ -19,7 +19,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     {
         X = x;
         Y = y;
-        ControlFor = new List<IFigure>();
+        ControlFor = new List<IFigure>();   // TODO: потеря расширяемости коллекции, поскольку IEnumerable не имеет метода Add(obj). Как вариант: вынести в приватную переменную и возвращать полю приватную переменную
     }
 
     public bool IsNextTo(Vector2 point, float distance) => throw new NotImplementedException();
