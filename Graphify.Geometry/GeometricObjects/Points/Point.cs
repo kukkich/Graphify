@@ -10,38 +10,42 @@ namespace Graphify.Geometry.GeometricObjects.Points;
 public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<PointStyle>
 {
     /// <summary>
-    /// Координаты точки по оси X
+    /// Координаты точки по оси X.
+    /// Изменения координат точки происходят встроенными методами
     /// </summary>
-    [Reactive] public float X { get; }
+    [Reactive] public float X { get; private set; }
 
     /// <summary>
-    /// Координаты точки по оси Y
+    /// Координаты точки по оси Y.
+    /// Изменения координат точки происходят встроенными методами
     /// </summary>
-    [Reactive] public float Y { get; }
+    [Reactive] public float Y { get; private set; }
 
     /// <summary>
     /// Фигура, к которой присоединена точка.
     /// Имеет значение NULL, если точка не присоединена
     /// </summary>
-    public IFigure? AttachedTo { get; set; } // TODO: как обрабатывать присоединение к одной грани полигона??
+    public IFigure? AttachedTo { get; private set; } // TODO: как обрабатывать присоединение к одной грани полигона??
 
     /// <summary>
-    /// Список фигур, которые задаются данной точкой.
+    /// Список фигур, которые задаются (управляются) данной точкой.
     /// Может быть пустым
     /// </summary>
-    public IEnumerable<IFigure> ControlFor { get; }
+    public IEnumerable<IFigure> ControlFor => _controlFor;
 
     /// <summary>
     /// Стиль точки
     /// </summary>
     [Reactive] public PointStyle Style { get; set; }
 
-    public Point(float x, float y)
+    private List<IFigure> _controlFor;
+
+    public Point(float x, float y, PointStyle? style = null)
     {
         X = x;
         Y = y;
-        Style = PointStyle.Default;         // TODO: вынести в параметр конструктора как значение по умолчанию
-        ControlFor = new List<IFigure>();   // TODO: потеря расширяемости коллекции, поскольку IEnumerable не имеет метода Add(obj). Как вариант: вынести в приватную переменную и возвращать полю приватную переменную
+        Style = style ?? PointStyle.Default;
+        _controlFor = new List<IFigure>(); 
     }
 
     /// <summary>
@@ -59,7 +63,13 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// </summary>
     /// <param name="shift"> - вектор сдвига точки в пространстве</param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
-    public void Move(Vector2 shift) => throw new NotImplementedException();
+    public void Move(Vector2 shift) 
+    {
+        X += shift.X;
+        Y += shift.Y;
+
+        //TODO: Стоит ли вызывать здесь метод Point.Update()? В случае перемещения полигона, полигон будет перерисован N раз вместо 1
+    }
 
     /// <summary>
     /// Метод, вращающий точку относительно точки <c>shift</c> на угол <c>angle</c> по часовой стрелке
@@ -67,7 +77,15 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="shift"> - точка, относительно которой будет совершаться вращение текущей точки</param>
     /// <param name="angle"> - угол вращения точки в градусах</param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
-    public void Rotate(System.Drawing.Point shift, float angle) => throw new NotImplementedException();
+    public void Rotate(System.Drawing.Point shift, float angle)
+    {
+        var radians = angle * Math.PI / 180.0;
+        var s = (float)Math.Sin(radians);
+        var c = (float)Math.Cos(radians);
+
+        (X, Y) = (c * X - s * Y, s * X + c * Y);
+        //TODO: Стоит ли вызывать здесь метод Point.Update()? В случае перемещения полигона, полигон будет перерисован N раз вместо 1
+    }
 
     /// <summary>
     /// Метод, симметрично отражающий текущую точку относительно точки <c>point</c>
@@ -104,4 +122,6 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="drawer"> - рисователь, предоставляющий набор примитивов для отрисовки</param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
+
+    //TODO: сделать метод присоединения фигуры к данной точке
 }
