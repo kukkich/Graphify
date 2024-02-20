@@ -8,11 +8,37 @@
     xmlns:local="clr-namespace:Graphify.Client"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
-    Title="Graphify" Height="450" Width="800">
+    xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+    Title="Graphify" Height="768" Width="1366">
     <Grid>
-        <StackPanel>
-            <TextBox Padding="5" Height="30" Width="40" Margin="0 30 0 0" HorizontalAlignment="Center" x:Name="ValueBox" />
-            <Button x:Name="IncrementButton" Height="30" Width="120" Margin="0 10 0 0">Increment</Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="46"/>
+            <RowDefinition Height="722"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="244"/>
+            <ColumnDefinition  Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Background="Gray">
         </StackPanel>
+        <ListBox Background="White"
+                 Grid.Row="1"
+                 Grid.Column="0">
+            
+        </ListBox>
+        <sharpGL:OpenGLControl x:Name="GlWindow"                               
+                               Height="722"
+                               MinWidth="887"
+                               Padding="0"
+                               Margin="0"
+                               Grid.Row="1"
+                               Grid.Column="1"
+        />
+        
+        
     </Grid>
 </reactiveUi:ReactiveWindow>
