@@ -14,12 +14,21 @@ namespace Graphify.Geometry.Attachment
     public class AttachedPoint
     {
         public Point Object { get; set; }
-        public AttachmentParameter T { get; set; }
+        public float T
+        {
+            get => _t.T;
+            set
+            {
+                _t.T = value;
+            }
+        }
+
+        private AttachmentParameter _t;
 
         public AttachedPoint(Point obj, float t = 0.0f)
         {
             Object = obj;
-            T = t;
+            _t = new AttachmentParameter() { T = t };
         }
     }
 }

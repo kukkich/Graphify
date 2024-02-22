@@ -19,7 +19,6 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     /// <summary>
     /// Контрольные точки фигуры, по которым она строится
-    /// TODO: А как собственно опорные точки вообще задаются? В конструкторе
     /// </summary>
     public IEnumerable<Point> ControlPoints { get => [_pointA, _pointB]; }
 
@@ -76,13 +75,13 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         {
             var dv = new Vector2(A.X - T.X, A.Y - T.Y);
             attachable.Move(dv);
-            attachObj.T = 0;
+            attachObj.T = 0.0f;
         }
         else if (x > 1) // Если точка лежит левее точки B
         {
             var dv = new Vector2(B.X - T.X, B.Y - T.Y);
             attachable.Move(dv);
-            attachObj.T = 1;
+            attachObj.T = 1.0f;
         }
         else // Если точка лежит на прямой
         {
@@ -169,6 +168,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
     public void Move(Vector2 shift)
     {
+        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
         foreach (var point in ControlPoints)
         {
             point.Move(shift);
@@ -182,6 +182,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
     public void Rotate(Point shift, float angle)
     {
+        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
         foreach (var point in ControlPoints)
         {
             point.Rotate(shift, angle);
@@ -194,6 +195,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="point"> - точка, относительно которой происходит отражение</param>
     public void Reflect(Point point)
     {
+        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
         foreach (var objPoint in ControlPoints)
         {
             objPoint.Reflect(point);
