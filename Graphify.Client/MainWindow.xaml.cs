@@ -17,11 +17,6 @@ public partial class MainWindow
 
         this.WhenActivated(disposables =>
         {
-            this.Bind(ViewModel, vm => vm.ReactiveProperty, view => view.ValueBox.Text)
-                .DisposeWith(disposables);
-
-            this.BindCommand(ViewModel, vm => vm.IncrementCommand, view => view.IncrementButton)
-                .DisposeWith(disposables);
         });
     }
 
