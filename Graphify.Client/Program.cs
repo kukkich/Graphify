@@ -1,4 +1,5 @@
 using System.IO;
+using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,5 +50,6 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
+        services.AddSingleton<OpenGLDrawer>();
     }
 }

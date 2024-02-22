@@ -30,7 +30,8 @@
                  Grid.Column="0">
             
         </ListBox>
-        <sharpGL:OpenGLControl x:Name="GlWindow"                               
+        <sharpGL:OpenGLControl x:Name="GlWindow" 
+                               Resized="GlWindow_Resized"
                                Height="722"
                                MinWidth="887"
                                Padding="0"
