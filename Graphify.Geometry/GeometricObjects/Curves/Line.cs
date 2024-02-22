@@ -95,6 +95,19 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     }
 
     /// <summary>
+    /// Удаляет присоединяемую точку <c>attachable</c> из своего множества присоединённых точек
+    /// </summary>
+    /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
+    public void ConsumeDetach(Point attachable)
+    {
+        AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
+        if (maybeAttached != null)
+        {
+            _attached.Remove(maybeAttached);
+        }
+    }
+
+    /// <summary>
     /// Метод обновления положения всех зависимых от прямой точек
     /// </summary>
     public void Update()

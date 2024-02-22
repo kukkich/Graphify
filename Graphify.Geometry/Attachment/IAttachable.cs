@@ -6,6 +6,8 @@ public interface IAttachable : IDependencyNode
 {
     public bool CanAttachTo(IFigure consumer);
     public void AttachTo(IFigure consumer);
+    public void Detach();
     public IFigure? AttachedTo { get; }
+    public IFigure? IsAttached { get; }
     public IEnumerable<IFigure> ControlFor { get; }
 }
