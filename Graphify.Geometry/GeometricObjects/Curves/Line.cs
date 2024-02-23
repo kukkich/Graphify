@@ -33,7 +33,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     public Line() 
     {
         Style = CurveStyle.Default;
-        _attached = [];
+        _attached = new List<IAttachable>();
 
     }
 
