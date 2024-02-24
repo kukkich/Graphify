@@ -32,6 +32,7 @@
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow" 
                                Resized="GlWindow_Resized"
+                               OpenGLDraw="GlWindow_OpenGLDraw"
                                Height="722"
                                MinWidth="887"
                                Padding="0"

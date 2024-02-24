@@ -6,6 +6,7 @@ using SharpGL;
 using Graphify.Client.View.Drawing;
 using System.Windows;
 using System.Reactive.Linq;
+using System.Numerics;
 
 namespace Graphify.Client;
 
@@ -39,5 +40,20 @@ public partial class MainWindow
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
 
+    }
+
+    private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
+    {
+        _drawer.DrawPoint(new Vector2(0.7f,0.7f));
+
+        List<Vector2> Polygon = new List<Vector2>
+        {
+            new Vector2(0,0),
+            new Vector2(0.7f, 0.7f),
+            new Vector2(0.7f, 0),
+        };
+
+
+        _drawer.DrawPolygon(Polygon);
     }
 }
