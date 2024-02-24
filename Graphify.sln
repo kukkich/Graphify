@@ -10,8 +10,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.Client", "Graphify.Client\Graphify.Client.csproj", "{F9E1FE86-A8ED-4FFD-BD93-A8A68B7541E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.IO", "Graphify.IO\Graphify.IO.csproj", "{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F62DA488-2FC2-4725-8382-C6349685F3A5} = {F62DA488-2FC2-4725-8382-C6349685F3A5}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphify.Core", "Graphify.Core\Graphify.Core.csproj", "{A3349386-F0DD-4B39-9227-AE88CC677BF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.Core", "Graphify.Core\Graphify.Core.csproj", "{A3349386-F0DD-4B39-9227-AE88CC677BF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
