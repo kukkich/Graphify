@@ -27,6 +27,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// </summary>
     public IFigure? AttachedTo { get; private set; } // TODO: как обрабатывать присоединение к одной грани полигона??
 
+    public bool IsAttached { get; } //TODO: реализовать
+
     /// <summary>
     /// Список фигур, которые задаются (управляются) данной точкой.
     /// Может быть пустым
@@ -115,6 +117,9 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="consumer"> - фигура, к которой необходимо присоединить текущую точку</param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
     public void AttachTo(IFigure consumer) => throw new NotImplementedException();
+    public void Detach() => throw new NotImplementedException();
+
+    //TODO: сделать метод присоединения фигуры к данной точке
 
     /// <summary>
     /// Метод, отрисовывающий точку, используя графические примитивы
@@ -123,5 +128,4 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
 
-    //TODO: сделать метод присоединения фигуры к данной точке
 }

@@ -8,6 +8,6 @@ public interface IAttachable : IDependencyNode
     public void AttachTo(IFigure consumer);
     public void Detach();
     public IFigure? AttachedTo { get; }
-    public IFigure? IsAttached { get; }
+    public bool IsAttached { get; }
     public IEnumerable<IFigure> ControlFor { get; }
 }
