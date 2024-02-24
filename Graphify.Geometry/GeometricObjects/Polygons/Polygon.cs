@@ -10,7 +10,7 @@ namespace Graphify.Geometry.GeometricObjects.Polygons;
 
 public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
 {
-    public IEnumerable<IAttachable> Attached { get; }
+    public IEnumerable<Point> Attached { get; }
     public IEnumerable<Point> ControlPoints { get; }
     [Reactive] public PolygonStyle Style { get; set; }
 
@@ -22,8 +22,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     public void Update() => throw new NotImplementedException();
     public bool IsNextTo(Vector2 point, float distance) => throw new NotImplementedException();
     public void Move(Vector2 shift) => throw new NotImplementedException();
-    public void ConsumeAttach(IAttachable attachable) => throw new NotImplementedException();
-    public void Rotate(System.Drawing.Point shift, float angle) => throw new NotImplementedException();
-    public void Reflect(System.Drawing.Point point) => throw new NotImplementedException();
+    public void ConsumeAttach(Point attachable) => throw new NotImplementedException();
+    public void ConsumeDetach(Point attachable) => throw new NotImplementedException();
+    public void Rotate(Point shift, float angle) => throw new NotImplementedException();
+    public void Reflect(Point point) => throw new NotImplementedException();
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
 }
