@@ -8,7 +8,6 @@ using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat.ModeDetection;
 
 namespace Graphify.Client.ViewModel;
 
@@ -29,6 +28,9 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
+    public ReactiveCommand<Unit, EditMode> MoveModeCommand { get; }
+    public ReactiveCommand<Unit, EditMode> CreatePointModeCommand { get; }
+    public ReactiveCommand<Unit, EditMode> CreateLineModeCommand { get; }
     public ReactiveCommand<(string Path, ExportFileFormat Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
