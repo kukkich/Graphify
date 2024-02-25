@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using AutoFixture;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
@@ -62,9 +63,8 @@ namespace Graphify.Tests.Geometry
 
         //Move
         [TestCaseSource(nameof(shiftData))]
-        public void GIVEN_Point_WHEN_move_THEN_expected_new_coords(Vector2 shift)
+        public void GIVEN_Point_WHEN_move_THEN_expected_new_coords(Vector2 shift, Vector2 expected)
         {
-            Vector2 expected = new Vector2(_point.X + shift.X, _point.Y + shift.Y);
             _point.Move(shift);
             Vector2 actual = new Vector2(_point.X, _point.Y);
 
@@ -73,8 +73,25 @@ namespace Graphify.Tests.Geometry
 
         static object[] shiftData =
         {
-            new object[] { new Vector2(0.5f, 0.5f)},
-            new object[] { new Vector2(-0.5f, -0.5f)}
+            new object[] { new Vector2(0.5f, 0.5f), new Vector2(0.5f,0.5f)},
+            new object[] { new Vector2(-0.5f, -0.5f), new Vector2(-0.5f, -0.5f) }
+        };
+
+        //Rotate
+        [TestCaseSource(nameof(rotateData))]
+        public void GIVEN_Point_WHEN_rotate_THEN_expected_new_coords(Point shift, float angle, Vector2 expected)
+        {
+            _point.Rotate(shift, angle);
+            Vector2 actual = new Vector2(_point.X, _point.Y);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        static object[] rotateData =
+        {
+            new object[] { new Point(1, 0), 90, new Vector2(1, 1) },
+            new object[] { new Point(1, 0), 540, new Vector2(2, 0) },
+            new object[] { new Point(1, 0), -90, new Vector2(1, -1) }
         };
 
     }
