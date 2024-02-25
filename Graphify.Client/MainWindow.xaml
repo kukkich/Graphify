@@ -11,13 +11,24 @@
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify" Height="768" Width="1366">
     <Window.Resources>
-        <Style x:Key="RoundButtonStyle" TargetType="{x:Type Button}">
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Style.Setters>
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border CornerRadius="2" Background="#D9D9D9">
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" CornerRadius="2" Background="#D9D9D9">
+                                <ContentPresenter />
                             </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -40,36 +51,38 @@
                     Background="White"
                     Orientation="Horizontal"
                     >
+            <Button x:Name="ExportButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="ExportButton_Click"
+                    />
             <Button x:Name="MoveModeButton"
                     Width="25"
                     Height="25"
                     Margin="14, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
-                    CommandParameter="Move"
-                    />
-            <Button x:Name="SaveModeButton"
-                    Width="25"
-                    Height="25"
-                    Margin="0, 0, 14, 5"
-                    Style="{StaticResource RoundButtonStyle}"/>
+                    Click="ModeButton_Click"
+                    />            
             <Button x:Name="CreatePointModeButton"
                     Width="25"
                     Height="25"
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
-                    CommandParameter="CreatePoint"/>
+                    Click="ModeButton_Click"/>
             <Button x:Name="CreateLineModeButton"
                     Width="25"
                     Height="25"
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
-                    CommandParameter="CreateLine"/>
-            <TextBox Padding="5" Height="30" Width="40" Margin="0 30 0 0" HorizontalAlignment="Center" x:Name="ValueBox" />
+                    Click="ModeButton_Click"/>
+            <TextBox Padding="5" Height="30" Width="40" HorizontalAlignment="Center" x:Name="ValueBox" />
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
                  Grid.Column="0">
-            
+
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow"                               
                                Height="722"
@@ -79,7 +92,7 @@
                                Grid.Row="1"
                                Grid.Column="1"
         />
-        
-        
+
+
     </Grid>
 </reactiveUi:ReactiveWindow>

@@ -29,9 +29,6 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
-    public ReactiveCommand<Unit, EditMode> MoveModeCommand { get; }
-    public ReactiveCommand<Unit, EditMode> CreatePointModeCommand { get; }
-    public ReactiveCommand<Unit, EditMode> CreateLineModeCommand { get; }
     public ReactiveCommand<(string Path, ExportFileFormat Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
@@ -45,27 +42,31 @@ public class AppViewModel : ReactiveObject
         {
             _logger.LogDebug("Increment invoked. New value {value}", ReactiveProperty);
         });
-        MoveModeCommand = ReactiveCommand.Create(() => EditMode.Move);
-        CreatePointModeCommand = ReactiveCommand.Create(() => EditMode.CreatePoint);
-        CreateLineModeCommand = ReactiveCommand.Create(() => EditMode.CreateLine);
-        var mergedCommands = Observable.Merge(
-            MoveModeCommand.Select(_ => EditMode.Move),
-            CreatePointModeCommand.Select(_ => EditMode.CreatePoint),
-            CreateLineModeCommand.Select(_ => EditMode.CreateLine)
-);
-
-        // Подписываемся на объединенные команды и вызываем SetEditMode с переданным режимом
-        mergedCommands.Subscribe(mode =>
+        SetEditMode = ReactiveCommand.Create<EditMode, Unit>(selectedMode =>
         {
-            SetEditMode.Execute(mode);
+            if (selectedMode == EditMode.Move)
+            {
+            }
+            else if (selectedMode == EditMode.CreatePoint)
+            {
+            }
+            else if (selectedMode == EditMode.CreateLine)
+            {
+            }
+            return Unit.Default;
+        });
+        Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileFormat Format), Unit>(async tuple =>
+        {
+            string path = tuple.Path;
+            ExportFileFormat format = tuple.Format;
+
+            // действия по экспорту файла с указанным путем и форматом
+            await Task.Delay(1000); // пример асинхронной операции
+
+            return Unit.Default;
         });
     }
 
-    private IObservable<Unit> SetMode(string mode)
-    {
-
-        return Observable.Return(Unit.Default);
-    }
     private IObservable<Unit> Increment()
     {
         ReactiveProperty++;
