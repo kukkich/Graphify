@@ -1,6 +1,6 @@
 using Graphify.Geometry.GeometricObjects.Interfaces;
 
-namespace Graphify.IO;
+namespace Graphify.IO.Interfaces;
 
 public interface IExporter
 {
