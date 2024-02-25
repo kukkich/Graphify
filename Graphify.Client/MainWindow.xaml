@@ -10,6 +10,20 @@
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify" Height="768" Width="1366">
+    <Window.Resources>
+        <Style x:Key="RoundButtonStyle" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border CornerRadius="2" Background="#D9D9D9">
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
@@ -23,7 +37,34 @@
 
         <StackPanel Grid.Row="0"
                     Grid.ColumnSpan="3"
-                    Background="Gray">
+                    Background="White"
+                    Orientation="Horizontal"
+                    >
+            <Button x:Name="MoveModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="14, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    CommandParameter="Move"
+                    />
+            <Button x:Name="SaveModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"/>
+            <Button x:Name="CreatePointModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    CommandParameter="CreatePoint"/>
+            <Button x:Name="CreateLineModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    CommandParameter="CreateLine"/>
+            <TextBox Padding="5" Height="30" Width="40" Margin="0 30 0 0" HorizontalAlignment="Center" x:Name="ValueBox" />
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
