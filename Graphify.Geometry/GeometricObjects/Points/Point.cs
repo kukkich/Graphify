@@ -27,6 +27,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// </summary>
     public IFigure? AttachedTo { get; private set; } // TODO: как обрабатывать присоединение к одной грани полигона??
 
+    public bool IsAttached { get; } //TODO: реализовать
+
     /// <summary>
     /// Список фигур, которые задаются (управляются) данной точкой.
     /// Может быть пустым
@@ -77,7 +79,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="shift"> - точка, относительно которой будет совершаться вращение текущей точки</param>
     /// <param name="angle"> - угол вращения точки в градусах</param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
-    public void Rotate(System.Drawing.Point shift, float angle)
+    public void Rotate(Point shift, float angle)
     {
         var radians = angle * Math.PI / 180.0;
         var s = (float)Math.Sin(radians);
@@ -92,7 +94,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// </summary>
     /// <param name="point" - точка, относительно которой будет происходить отражение></param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
-    public void Reflect(System.Drawing.Point point) => throw new NotImplementedException();
+    public void Reflect(Point point) => throw new NotImplementedException();
 
     /// <summary>
     /// Обновляет фигуры, привязанные к данной точке
@@ -115,6 +117,9 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="consumer"> - фигура, к которой необходимо присоединить текущую точку</param>
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
     public void AttachTo(IFigure consumer) => throw new NotImplementedException();
+    public void Detach() => throw new NotImplementedException();
+
+    //TODO: сделать метод присоединения фигуры к данной точке
 
     /// <summary>
     /// Метод, отрисовывающий точку, используя графические примитивы
@@ -123,5 +128,4 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
 
-    //TODO: сделать метод присоединения фигуры к данной точке
 }
