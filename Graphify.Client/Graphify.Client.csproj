@@ -54,6 +54,7 @@
   </ItemGroup>
     
   <ItemGroup>
+    <ProjectReference Include="..\Graphify.Core\Graphify.Core.csproj" />
     <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
   </ItemGroup>
 </Project>

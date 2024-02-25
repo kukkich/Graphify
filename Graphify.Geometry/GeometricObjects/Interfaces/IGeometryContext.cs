@@ -13,5 +13,8 @@ public interface IGeometryContext
     public Point? TryGetClosestPoint(Vector2 point, double precision);
     public IFigure? TryGetClosestFigure(Vector2 point, double precision);
 
+    public void AddPoint(Point newPoint);
+    public void AddFigure(IFigure newFigure);
+
     public bool TryRemove(IGeometricObject target);
 }
