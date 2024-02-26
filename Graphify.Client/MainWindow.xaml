@@ -27,8 +27,51 @@
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
-                 Grid.Column="0">
-            
+                 Grid.Column="0"
+                 x:Name="listGeometryObjects">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding"
+                            Value="10"/>
+                    <Setter Property="BorderBrush"
+                            Value="LightGray"/>
+                    <Setter Property="BorderThickness"
+                            Value="1"/>
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Fill="{Binding Path=Type}"
+                                 Width="15" 
+                                 Height="15"
+                                 HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding Path=Data}"
+                                   Margin="0"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                        <Button Padding="0"
+                                Margin="0"
+                                Width="30"
+                                FontSize="25"
+                                HorizontalContentAlignment="Center"
+                                Background="White"
+                                BorderBrush="White"
+                                Grid.Column="2">
+                             <Bold>︙</Bold>
+                        </Button>
+                    </Grid>                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow"                               
                                Height="722"
