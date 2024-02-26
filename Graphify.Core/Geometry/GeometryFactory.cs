@@ -1,5 +1,4 @@
 using System.Numerics;
-using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
@@ -10,14 +9,13 @@ namespace Graphify.Core.Geometry;
 
 public class GeometryFactory : IGeometryFactory
 {
-    private readonly IGeometryContext _context;
-    private readonly ILogger<GeometryFactory> _logger;
+    public IGeometryContext? Context { get; set; }
     
-    private static readonly Dictionary<ObjectType, Func<Point[], IFigure>> FactoryMethods = [];
+    private readonly ILogger<GeometryFactory> _logger;
+    private readonly Dictionary<ObjectType, Func<Point[], IFigure>> _factoryMethods = [];
 
-    public GeometryFactory(IGeometryContext context, ILogger<GeometryFactory> logger)
+    public GeometryFactory(ILogger<GeometryFactory> logger)
     {
-        _context = context;
         _logger = logger;
         
         InitializeFactoryMethods();
@@ -25,18 +23,20 @@ public class GeometryFactory : IGeometryFactory
     
     private void InitializeFactoryMethods()
     {
-        FactoryMethods.Add(ObjectType.Circle, (points) => new Circle());
-        FactoryMethods.Add(ObjectType.Polygon, (points) => new Polygon());
-        FactoryMethods.Add(ObjectType.Line, (points) => new Line(points[0], points[1], CurveStyle.Default));
+        _factoryMethods.Add(ObjectType.Circle, (points) => new Circle());
+        _factoryMethods.Add(ObjectType.Polygon, (points) => new Polygon());
+        _factoryMethods.Add(ObjectType.Line, (points) => new Line(points[0], points[1], CurveStyle.Default));
         //FactoryMethods.Add(ObjectType.CubicBezier, (points, style) => new CubicBezierCurve());
     }
     
     public IFigure Create(ObjectType type, Point[] points)
     {
-        if (FactoryMethods.TryGetValue(type, out var factoryMethod))
+        CheckValid();
+        
+        if (_factoryMethods.TryGetValue(type, out var factoryMethod))
         {
             IFigure newFigure = factoryMethod(points);
-            _context.AddFigure(newFigure);
+            Context!.AddFigure(newFigure);
             
             _logger.LogDebug($"Figure {type} was created");
             
@@ -48,11 +48,21 @@ public class GeometryFactory : IGeometryFactory
 
     public Point Create(Vector2 points)
     {
+        CheckValid();
+        
         Point newPoint = new Point(points.X, points.Y, PointStyle.Default);
-        _context.AddPoint(newPoint);
+        Context!.AddPoint(newPoint);
         
         _logger.LogDebug($"Point was created at ${points.X}, ${points.Y}");
         
         return newPoint;
+    }
+
+    private void CheckValid()
+    {
+        if (Context is null)
+        {
+            throw new ArgumentNullException("Current context is null");
+        }
     }
 }

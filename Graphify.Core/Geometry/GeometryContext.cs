@@ -37,4 +37,11 @@ public class GeometryContext : IGeometryContext
     }
 
     public bool TryRemove(IGeometricObject target) => throw new NotImplementedException();
+
+    public void Clear()
+    {
+        _objects.Clear();
+        _figures.Clear();
+        _points.Clear();
+    }
 }

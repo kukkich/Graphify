@@ -1,16 +1,33 @@
 using Graphify.Core.Geometry;
-using Graphify.Core.IO;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 
 namespace Graphify.Core;
 
 public class Application
 {
-    public ApplicationContext ApplicationContext { get; }
-    public PersistenceManager PersistenceManager { get; }
+    public IGeometryFactory Factory => _factory;
+    public Surface Surface { get; private set; }
+
+    private readonly GeometryFactory _factory;
     
-    public Application(ApplicationContext applicationContext, PersistenceManager persistenceManager)
+    public Application(GeometryFactory factory)
     {
-        ApplicationContext = applicationContext;
-        PersistenceManager = persistenceManager;
+        _factory = factory;
+        
+        CreateEmptySurface();
+    }
+
+    public void CreateEmptySurface()
+    {
+        IGeometryContext newContext = new GeometryContext();
+
+        Surface = new Surface(newContext);
+        _factory.Context = newContext;
+    }
+
+    public void LoadSurface(Surface loadedSurface)
+    {
+        Surface = loadedSurface;
+        _factory.Context = loadedSurface.GeometryContext;
     }
 }

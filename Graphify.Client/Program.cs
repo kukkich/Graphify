@@ -60,10 +60,6 @@ public class Program
     private static void ConfigureApplication(IServiceCollection services)
     {
         services.AddSingleton<Application>();
-        
-        services.AddSingleton<IGeometryContext, GeometryContext>();
-        services.AddSingleton<IGeometryFactory, GeometryFactory>();
-        services.AddSingleton<ApplicationContext>();
-        services.AddSingleton<PersistenceManager>();
+        services.AddSingleton<GeometryFactory>();
     }
 }

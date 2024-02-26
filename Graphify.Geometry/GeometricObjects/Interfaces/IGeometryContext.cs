@@ -17,4 +17,5 @@ public interface IGeometryContext
     public void AddFigure(IFigure newFigure);
 
     public bool TryRemove(IGeometricObject target);
+    public void Clear();
 }
