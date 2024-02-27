@@ -59,6 +59,8 @@ public class Program
 
     private static void ConfigureApplication(IServiceCollection services)
     {
+        services.AddSingleton<ApplicationContext>();
+        services.AddSingleton<Surface>();
         services.AddSingleton<GeometryFactory>();
     }
 }
