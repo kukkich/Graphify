@@ -45,7 +45,7 @@ public class GeometryFactory : IGeometryFactory
     {
         Point newPoint = new Point(points.X, points.Y, PointStyle.Default);
 
-        _logger.LogDebug($"Point was created at ${points.X}, ${points.Y}");
+        _logger.LogDebug("Point was created at {point}", points);
 
         return newPoint;
     }
