@@ -14,8 +14,8 @@ public class Exporter
         _exporters.Add(ExportFileType.Svg, svgExporter);
     }
 
-    public void Export(string path, Surface context)
+    public SaveResult Export(string path, Surface context)
     {
-
+        return SaveResult.UnknownError;
     }
 }

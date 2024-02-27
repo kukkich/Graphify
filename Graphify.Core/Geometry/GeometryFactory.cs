@@ -9,8 +9,6 @@ namespace Graphify.Core.Geometry;
 
 public class GeometryFactory : IGeometryFactory
 {
-    public IGeometryContext? Context { get; set; }
-    
     private readonly ILogger<GeometryFactory> _logger;
     private readonly Dictionary<ObjectType, Func<Point[], IFigure>> _factoryMethods = [];
 
@@ -31,12 +29,9 @@ public class GeometryFactory : IGeometryFactory
     
     public IFigure Create(ObjectType type, Point[] points)
     {
-        CheckValid();
-        
         if (_factoryMethods.TryGetValue(type, out var factoryMethod))
         {
             IFigure newFigure = factoryMethod(points);
-            Context!.AddFigure(newFigure);
             
             _logger.LogDebug($"Figure {type} was created");
             
@@ -48,21 +43,10 @@ public class GeometryFactory : IGeometryFactory
 
     public Point Create(Vector2 points)
     {
-        CheckValid();
-        
         Point newPoint = new Point(points.X, points.Y, PointStyle.Default);
-        Context!.AddPoint(newPoint);
         
         _logger.LogDebug($"Point was created at ${points.X}, ${points.Y}");
         
         return newPoint;
-    }
-
-    private void CheckValid()
-    {
-        if (Context is null)
-        {
-            throw new ArgumentNullException("Current context is null");
-        }
     }
 }

@@ -10,16 +10,16 @@ public class GeometryContext : IGeometryContext
     public IEnumerable<IFigure> Figures  { get { return _figures; } }
     public IEnumerable<Point> Points  { get { return _points; } }
 
-    private List<IGeometricObject> _objects = [];
-    private List<IFigure> _figures = [];
-    private List<Point> _points = [];
+    private HashSet<IGeometricObject> _objects = [];
+    private HashSet<IFigure> _figures = [];
+    private HashSet<Point> _points = [];
     public IGeometricObject? TryGetClosestObject(Vector2 point, double precision) => throw new NotImplementedException();
 
     public Point? TryGetClosestPoint(Vector2 point, double precision) => throw new NotImplementedException();
 
     public IFigure? TryGetClosestFigure(Vector2 point, double precision) => throw new NotImplementedException();
 
-    protected void AddObject(IGeometricObject newObject)
+    private void AddObject(IGeometricObject newObject)
     {
         _objects.Add(newObject);
     }
