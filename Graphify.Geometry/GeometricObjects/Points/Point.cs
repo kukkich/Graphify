@@ -162,13 +162,13 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         }
 
         // Проверка на то, что фигура, к которой привязывается наша точка, косвенно зависит от нашей точки
-        var figures = new HashSet<IFigure>();
+        var figures = new HashSet<IFigure>();           // Для отслеживания ещё не посещённых фигур
+        var visitedFigures = new HashSet<IFigure>();    // Для отслеживания уже или в скором времени посещённых фигур
         _ = figures.Add(consumer);
+        _ = visitedFigures.Add(consumer);
 
         while (figures.Count != 0)
         {
-            // TODO: ОПАСНО! Возможно возникновение бесконечного цикла вследствие рекурсии, надо не просто тестить, надо ДУМАТЬ ЧЁ ДЕЛАТЬ
-            // В идеале - трекать какие фигуры уже были посещены
             var figure = figures.First();
 
             var points = figure.ControlPoints;
@@ -181,7 +181,11 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
                 foreach(var fig in point.ControlFor)
                 {
-                    figures.Add(fig);
+                    bool isAdded = visitedFigures.Add(fig);
+                    if (isAdded)
+                    {
+                        figures.Add(fig);
+                    }
                 }
             }
 
