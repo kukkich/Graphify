@@ -14,9 +14,18 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     public IEnumerable<Point> ControlPoints { get; }
     [Reactive] public CurveStyle Style { get; set; }
 
-    public Circle()
+    private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
+
+    private Point _pointA;
+    private Point _pointB;
+
+    public Circle(Point A, Point B, CurveStyle? style = null)
     {
-        throw new NotImplementedException();
+        _pointA = A;
+        _pointB = B;
+
+        Style = style ?? CurveStyle.Default;
+        _attached = [];
     }
 
     public void Update() => throw new NotImplementedException();
