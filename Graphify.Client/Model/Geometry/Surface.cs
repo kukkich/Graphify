@@ -1,8 +1,8 @@
-using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Points;
 
-namespace Graphify.Core.Geometry;
+namespace Graphify.Client.Model.Geometry;
 
 public class Surface : IGeometryContext
 {
@@ -45,4 +45,3 @@ public class Surface : IGeometryContext
         _points.Clear();
     }
 }
-

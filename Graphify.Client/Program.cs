@@ -1,8 +1,10 @@
 using System.IO;
+using Graphify.Client.Model;
+using Graphify.Client.Model.Geometry;
 using Graphify.Client.ViewModel;
 using Graphify.Core;
-using Graphify.Core.Geometry;
 using Graphify.Core.IO;
+using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

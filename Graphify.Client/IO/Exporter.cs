@@ -1,5 +1,5 @@
 using Graphify.Client.Enums;
-using Graphify.Core.Geometry;
+using Graphify.Client.Model.Geometry;
 using Graphify.IO;
 
 namespace Graphify.Core.IO;

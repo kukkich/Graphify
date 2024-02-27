@@ -1,11 +1,11 @@
-using Graphify.Core.Geometry;
+using Graphify.Client.Model.Geometry;
 
-namespace Graphify.Core;
+namespace Graphify.Client.Model;
 
 public class ApplicationContext
 {
-    public Surface Surface { get; private set; } 
-    
+    public Surface Surface { get; private set; }
+
     public ApplicationContext(Surface surface)
     {
         Surface = surface;
