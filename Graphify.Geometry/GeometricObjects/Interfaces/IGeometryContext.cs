@@ -1,8 +1,7 @@
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Points;
 
-namespace Graphify.Client.Model.Geometry;
+namespace Graphify.Geometry.GeometricObjects.Interfaces;
 
 public interface IGeometryContext
 {
@@ -17,4 +16,3 @@ public interface IGeometryContext
     public bool TryRemove(IGeometricObject target);
     public void Clear();
 }
-

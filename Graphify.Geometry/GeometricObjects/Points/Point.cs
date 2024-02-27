@@ -1,6 +1,7 @@
 using System.Numerics;
 using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -128,4 +129,5 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <exception cref="NotImplementedException"> - исключение, ибо метод не реализован</exception>
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
 
+    public PointExportData GetExportData() => throw new NotImplementedException();
 }
