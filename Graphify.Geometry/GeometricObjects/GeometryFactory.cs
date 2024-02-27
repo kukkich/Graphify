@@ -21,7 +21,7 @@ public class GeometryFactory : IGeometryFactory
 
     private void InitializeFactoryMethods()
     {
-        _factoryMethods.Add(ObjectType.Circle, (points) => new Circle());
+        _factoryMethods.Add(ObjectType.Circle, (points) => new Circle(points[0], points[1], CurveStyle.Default));
         _factoryMethods.Add(ObjectType.Polygon, (points) => new Polygon());
         _factoryMethods.Add(ObjectType.Line, (points) => new Line(points[0], points[1], CurveStyle.Default));
         //FactoryMethods.Add(ObjectType.CubicBezier, (points, style) => new CubicBezierCurve());
