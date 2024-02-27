@@ -2,5 +2,5 @@ namespace Graphify.IO;
 
 public interface IImporter
 {
-    public void ImportFrom(string path);
+    public ImportResult ImportFrom(string path);
 }

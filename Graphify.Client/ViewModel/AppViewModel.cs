@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
+using Graphify.Core;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -34,6 +35,7 @@ public class AppViewModel : ReactiveObject
     public AppViewModel(ILogger<AppViewModel> logger)
     {
         _logger = logger;
+        
         IncrementCommand = ReactiveCommand.CreateFromObservable(Increment);
         IncrementCommand.Subscribe(_ =>
         {
