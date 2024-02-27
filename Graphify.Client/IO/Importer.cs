@@ -1,7 +1,7 @@
 using Graphify.Client.Enums;
 using Graphify.Client.Model.Geometry;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.IO;
+using Graphify.IO.Interfaces;
 
 namespace Graphify.Core.IO;
 
