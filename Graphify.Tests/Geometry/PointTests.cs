@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
@@ -12,11 +14,8 @@ namespace Graphify.Tests.Geometry
 {
     internal class PointTests
     {
-
-        //test
-        //2
-        private readonly int t;
         private Point _point = null;
+        private IEqualityComparer<Point> _comparer = new PointComparer();
 
         [SetUp]
         public void Setup()
@@ -25,7 +24,19 @@ namespace Graphify.Tests.Geometry
         }
 
         //IsNextTo
-        
+        [TestCaseSource(nameof(bigDistance))]
+        public void GIVEN_Point_WHEN_distance_is_to_long_THEN_expected_false(Vector2 point, float distance)
+        {
+            bool result = _point.IsNextTo(point, distance);
+            Assert.That(result, Is.False);
+        }
+
+        [TestCaseSource(nameof(smallDistance))]
+        public void GIVEN_Point_WHEN_distance_is_to_long_THEN_expected_true(Vector2 point, float distance)
+        {
+            bool result = _point.IsNextTo(point, distance);
+            Assert.That(result, Is.True);
+        }
 
         [TestCaseSource(nameof(wrongDataIsNextTo))]
         public void GIVEN_Point_WHEN_wrong_data_THEN_expected_exception(Vector2 point, float distance)
@@ -57,8 +68,9 @@ namespace Graphify.Tests.Geometry
         {
             _point.Move(shift);
             Vector2 actual = new Vector2(_point.X, _point.Y);
+            Point point = new Point(_point.X,_point.Y);
 
-            Assert.AreEqual(expected, actual);
+            Assert.That(_point, Is.EqualTo(point).Using(_comparer));
         }
 
         static object[] shiftData =
