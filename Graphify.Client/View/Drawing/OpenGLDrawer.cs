@@ -78,6 +78,9 @@ public class OpenGLDrawer : IDrawer
         _gl.Vertex(point.X, point.Y);
         _gl.End();
     }
+
+    public void DrawLine(Vector2 start, Vector2 end) => throw new NotImplementedException();
+
     public void DrawPolygon(IEnumerable<Vector2> points)
     {
         _gl.PointSize(5);
