@@ -44,15 +44,12 @@ public class AppViewModel : ReactiveObject
             _logger.LogDebug("Increment invoked. New value {value}", ReactiveProperty);
         });
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
-        Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileFormat Format), Unit>(async tuple =>
+        Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileFormat Format), Unit>(tuple =>
         {
             string path = tuple.Path;
             ExportFileFormat format = tuple.Format;
 
-            // действия по экспорту файла с указанным путем и форматом
-            await Task.Delay(1000); // пример асинхронной операции
-
-            return Unit.Default;
+            return Task.FromResult(Unit.Default);
         });
     }
     //TODO реализовать
