@@ -39,7 +39,9 @@ public partial class MainWindow
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
-
+        _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
+        _gl.LoadIdentity();
+        _gl.Ortho(-GlWindow.ActualWidth / 2, GlWindow.ActualWidth / 2, - GlWindow.ActualHeight / 2, GlWindow.ActualHeight / 2, -1, 1);
     }
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
@@ -53,7 +55,27 @@ public partial class MainWindow
             new Vector2(0.7f, 0),
         };
 
-
         _drawer.DrawPolygon(Polygon);
+
+        List<Vector2> Line = new List<Vector2>
+        {
+            new Vector2(-1,0),   
+            new Vector2(0, -0.5f),
+        };
+
+        _drawer.DrawPolygon(Line);
+
+        _drawer.DrawCircle(new Vector2(0, 100), 300);
+
+        List<Vector2> Curve = new List<Vector2>
+        {
+            new Vector2(50,200),
+            new Vector2(200,120),
+            new Vector2(55,284),
+            new Vector2(200,200),
+        };
+
+        _drawer.DrawBezierCurve(Curve);
+
     }
 }
