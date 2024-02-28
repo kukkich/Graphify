@@ -1,5 +1,6 @@
 using System.Numerics;
 using Graphify.Geometry.Attaching;
+using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
