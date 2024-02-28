@@ -1,6 +1,13 @@
 using System.IO;
 using Graphify.Client.View.Drawing;
+using Graphify.Client.Model;
+using Graphify.Client.Model.Commands;
+using Graphify.Client.Model.Geometry;
 using Graphify.Client.ViewModel;
+using Graphify.Core;
+using Graphify.Core.IO;
+using Graphify.Geometry.GeometricObjects;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -51,5 +58,16 @@ public class Program
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
         services.AddSingleton<OpenGLDrawer>();
+      
+        ConfigureApplication(services);
+    }
+
+    private static void ConfigureApplication(IServiceCollection services)
+    {
+        services.AddSingleton<ApplicationContext>();
+        services.AddSingleton<Surface>();
+        services.AddSingleton<IGeometryFactory, GeometryFactory>();
+        services.AddScoped<CommandsBuffer>();
+        services.AddSingleton<Application>();
     }
 }

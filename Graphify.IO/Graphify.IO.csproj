@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
+  </ItemGroup>
+
 </Project>
