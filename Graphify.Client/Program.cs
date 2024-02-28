@@ -1,4 +1,5 @@
 using System.IO;
+using Graphify.Client.View.Drawing;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Geometry;
@@ -56,7 +57,8 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
-
+        services.AddSingleton<OpenGLDrawer>();
+      
         ConfigureApplication(services);
     }
 
