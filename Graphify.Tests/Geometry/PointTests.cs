@@ -95,6 +95,5 @@ namespace Graphify.Tests.Geometry
             new object[] { new Point(1, 0), 540, new Vector2(2, 0) },
             new object[] { new Point(1, 0), -90, new Vector2(1, -1) }
         };
-
     }
 }

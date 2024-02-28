@@ -43,6 +43,8 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         _attached = [];
     }
 
+    
+
 
     /// <summary>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек
@@ -217,4 +219,13 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     }
 
     public FigureExportData GetExportData() => throw new NotImplementedException();
+
+    //переопределили метод для сравнения объектов
+    public override bool Equals(object obj)
+    {
+        if (obj.GetType() != this.GetType()) return false;
+
+        var other = (Line)obj;
+        return (Point.Equals(this._pointA, other._pointA) && Point.Equals(this._pointB, other._pointB));
+    }
 }

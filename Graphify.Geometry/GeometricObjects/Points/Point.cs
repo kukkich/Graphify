@@ -244,4 +244,13 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     }
 
     public PointExportData GetExportData() => throw new NotImplementedException();
+
+    //переопределили метод для сравнения объектов
+    public override bool Equals(object obj)
+    {
+        if (obj.GetType() != this.GetType()) return false;
+
+        var other = (Point)obj;
+        return (this.X == other.X) && (this.Y == other.Y);
+    }
 }
