@@ -37,7 +37,23 @@ public class Surface : IGeometryContext
         AddObject(newFigure);
     }
 
-    public bool TryRemove(IGeometricObject target) => throw new NotImplementedException();
+    public bool TryRemove(IGeometricObject target)
+    {
+        if (_objects.Remove(target))
+        {
+            if (_points.Remove((Point)target))
+            {
+                return true;
+            }
+            else if(_figures.Remove((IFigure)target))
+            {
+                return true;
+            }
+
+            throw new ArgumentOutOfRangeException("REROU");
+        }
+        return false;
+    }
 
     public void Clear()
     {

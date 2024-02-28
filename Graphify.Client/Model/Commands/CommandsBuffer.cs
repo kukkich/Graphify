@@ -15,7 +15,7 @@ public class CommandsBuffer
 
     public void AddCommand(ICommand command)
     {
-        if (_commands.Count < 10)
+        if (_commands.Count >= 10)
         {
             _commands.RemoveLast();
         }
