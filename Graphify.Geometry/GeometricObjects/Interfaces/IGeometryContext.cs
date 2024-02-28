@@ -14,4 +14,5 @@ public interface IGeometryContext
     public IFigure? TryGetClosestFigure(Vector2 point, double precision);
 
     public bool TryRemove(IGeometricObject target);
+    public void Clear();
 }
