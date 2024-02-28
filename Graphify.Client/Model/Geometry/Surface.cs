@@ -13,6 +13,7 @@ public class Surface : IGeometryContext
     private HashSet<IGeometricObject> _objects = [];
     private HashSet<IFigure> _figures = [];
     private HashSet<Point> _points = [];
+
     public IGeometricObject? TryGetClosestObject(Vector2 point, double precision) => throw new NotImplementedException();
 
     public Point? TryGetClosestPoint(Vector2 point, double precision) => throw new NotImplementedException();

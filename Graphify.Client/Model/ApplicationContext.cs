@@ -4,7 +4,7 @@ namespace Graphify.Client.Model;
 
 public class ApplicationContext
 {
-    public Surface Surface { get; private set; }
+    public Surface Surface { get; set; }
 
     public ApplicationContext(Surface surface)
     {
