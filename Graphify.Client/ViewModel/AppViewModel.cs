@@ -1,5 +1,7 @@
+using System;
 using System.Numerics;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Core;
@@ -41,8 +43,23 @@ public class AppViewModel : ReactiveObject
         {
             _logger.LogDebug("Increment invoked. New value {value}", ReactiveProperty);
         });
-    }
+        SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
+        Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileFormat Format), Unit>(async tuple =>
+        {
+            string path = tuple.Path;
+            ExportFileFormat format = tuple.Format;
 
+            // действия по экспорту файла с указанным путем и форматом
+            await Task.Delay(1000); // пример асинхронной операции
+
+            return Unit.Default;
+        });
+    }
+    //TODO реализовать
+    private IObservable<Unit> SetMode(EditMode mode)
+    {
+        return Observable.Return(Unit.Default);
+    }
     private IObservable<Unit> Increment()
     {
         ReactiveProperty++;
@@ -50,7 +67,12 @@ public class AppViewModel : ReactiveObject
     }
 }
 
-public enum EditMode { }
+public enum EditMode
+{
+    Move,
+    CreatePoint,
+    CreateLine
+}
 
 public enum ExportFileFormat
 {
