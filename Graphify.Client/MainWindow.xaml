@@ -10,6 +10,41 @@
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify" Height="768" Width="1366">
+    <Window.Resources>
+        <ContextMenu x:Key="cmButton">
+            <MenuItem Header="Удалить"
+                      Click="Delete_Click"/>
+            <MenuItem Header="Клонировать"
+                      Click="Clone_Click"/>
+        </ContextMenu>
+        <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True" />
+            <Setter Property="HasDropShadow"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border x:Name="Border"
+                                Background="White"
+                                BorderBrush="LightGray"
+                                BorderThickness="1">
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasDropShadow"
+                                     Value="true">
+                                <Setter TargetName="Border"
+                                        Property="CornerRadius"
+                                        Value="4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
@@ -63,12 +98,13 @@
                                 Margin="0"
                                 Width="30"
                                 FontSize="25"
+                                FontWeight="Bold"
                                 HorizontalContentAlignment="Center"
                                 Background="White"
                                 BorderBrush="White"
-                                Grid.Column="2">
-                             <Bold>︙</Bold>
-                        </Button>
+                                Grid.Column="2"
+                                Content="︙"
+                                Click="Button_Click"/>
                     </Grid>                    
                 </DataTemplate>
             </ListBox.ItemTemplate>

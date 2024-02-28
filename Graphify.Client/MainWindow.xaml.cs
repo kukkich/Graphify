@@ -3,6 +3,8 @@ using Graphify.Client.ViewModel;
 using ReactiveUI;
 using SharpGL.WPF;
 using SharpGL;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace Graphify.Client;
 
@@ -19,7 +21,7 @@ public partial class MainWindow
         {
         });
 
-        List<Figure> listObjects = new List<Figure>()
+        List<Figure> listObjects = new List<Figure>() //temporarily
         {
             new Figure()
             {
@@ -42,10 +44,23 @@ public partial class MainWindow
                 Type = "LightGray"
             }
         };
-        this.listGeometryObjects.ItemsSource = listObjects;
-
+        this.listGeometryObjects.ItemsSource = listObjects; //temporarily
     }
-    public class Figure
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+    private void Delete_Click(object sender, RoutedEventArgs e)
+    {
+        
+    }
+    private void Clone_Click(object sender, RoutedEventArgs e)
+    {
+
+    }    
+    public class Figure //temporarily
     {
         public string Data { get; set; }
         public string Type { get; set; }
