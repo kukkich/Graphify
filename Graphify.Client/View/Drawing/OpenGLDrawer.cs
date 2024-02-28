@@ -13,7 +13,7 @@ public class OpenGLDrawer : IDrawer
     public void InitGl(OpenGL gl)
     {
         _gl = gl;
-        _gl.ClearColor(1.0f,1.0f,1.0f,1.0f);
+        _gl.ClearColor(0.9f,0.9f,0.9f,1.0f);
         _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
 
 

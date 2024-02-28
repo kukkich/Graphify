@@ -32,7 +32,7 @@ public partial class MainWindow
         this.WhenActivated(disposables =>
         {
             this.WhenAnyValue(x => x.GlWindow)
-                .Where(glWindow => glWindow != null)
+                .Where(glWindow => glWindow is not null)
                 .Subscribe(glWindow =>
                 {
                     _gl = glWindow.OpenGL;
@@ -53,6 +53,7 @@ public partial class MainWindow
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
     {
+        /*
         _drawer.DrawPoint(new Vector2(0.7f,0.7f));
 
         List<Vector2> Polygon = new List<Vector2>
@@ -83,7 +84,9 @@ public partial class MainWindow
         };
 
         _drawer.DrawBezierCurve(Curve);
-      
+        */
+
+
         this.WhenActivated(disposables =>
         {
             this.Bind(ViewModel, vm => vm.ReactiveProperty, view => view.ValueBox.Text)
@@ -94,10 +97,10 @@ public partial class MainWindow
     private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
         Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (clickedButton is not null)
         {
             EditMode selectedMode = EditMode.Move;
-            if (ViewModel != null)
+            if (ViewModel is not null)
             {
                 ViewModel.SetEditMode.Execute(selectedMode);
             }
@@ -107,10 +110,10 @@ public partial class MainWindow
     private void CreatePointModeButton_Click(object sender, RoutedEventArgs e)
     {
         Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (clickedButton is not null)
         {
             EditMode selectedMode = EditMode.CreatePoint;
-            if (ViewModel != null)
+            if (ViewModel is not null)
             {
                 ViewModel.SetEditMode.Execute(selectedMode);
             }
@@ -120,10 +123,10 @@ public partial class MainWindow
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
     {
         Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (clickedButton is not null)
         {
             EditMode selectedMode = EditMode.CreateLine;
-            if (ViewModel != null)
+            if (ViewModel is not null)
             {
                 ViewModel.SetEditMode.Execute(selectedMode);
             }
@@ -132,7 +135,7 @@ public partial class MainWindow
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         //реализовать выпадающее окно для выбора пути
-        if (ViewModel != null)
+        if (ViewModel is not null)
         {
             ViewModel.Export.Execute();
         }
@@ -140,7 +143,7 @@ public partial class MainWindow
 
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
     {
-        if (ViewModel != null)
+        if (ViewModel is not null)
         {
             ViewModel.MouseDown.Execute();
         }

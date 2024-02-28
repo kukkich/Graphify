@@ -50,6 +50,8 @@ public class AppViewModel : ReactiveObject
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileFormat Format), Unit>(tuple =>
         {
+            _logger.LogDebug("Export button pressed");
+
             string path = tuple.Path;
             ExportFileFormat format = tuple.Format;
             return Task.FromResult(Unit.Default);
