@@ -52,7 +52,6 @@ public class AppViewModel : ReactiveObject
         {
             string path = tuple.Path;
             ExportFileFormat format = tuple.Format;
-
             return Task.FromResult(Unit.Default);
         });
 
