@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
@@ -27,6 +25,11 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Стиль прямой
     /// </summary>
     [Reactive] public CurveStyle Style { get; set; }
+
+    /// <summary>
+    /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
+    /// </summary>
+    private bool CanBeMoved => !(_pointA.IsAttached || _pointB.IsAttached);
 
 
     private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
@@ -177,12 +180,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     }
 
     /// <summary>
-    /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>
+    /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
+    /// Если прямая имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
     public void Move(Vector2 shift)
     {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
+        if (!CanBeMoved)
+        {
+            return;
+        }
+
         foreach (var point in ControlPoints)
         {
             point.Move(shift);
@@ -191,12 +199,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     /// <summary>
     /// Метод, позволяющий вращать прямую относительно опорной точки <c>shift</c> на угол <c>angle</c> по часовой стрелке.
+    /// Если прямая имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="shift"> - опорная точка, относительно которой осуществляется вращение прямой</param>
     /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
     public void Rotate(Point shift, float angle)
     {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
+        if (!CanBeMoved)
+        {
+            return;
+        }
+
         foreach (var point in ControlPoints)
         {
             point.Rotate(shift, angle);
@@ -205,11 +218,16 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     /// <summary>
     /// Метод, позволяющий сделать зеркальное отражение с переворотом относительно заданной точки.
+    /// Если прямая имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="point"> - точка, относительно которой происходит отражение</param>
     public void Reflect(Point point)
     {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
+        if (!CanBeMoved)
+        {
+            return;
+        }
+
         foreach (var objPoint in ControlPoints)
         {
             objPoint.Reflect(point);
