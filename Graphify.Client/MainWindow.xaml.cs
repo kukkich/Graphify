@@ -9,6 +9,7 @@ using ReactiveUI.Fody.Helpers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Net.Sockets;
+using System.Windows.Input;
 
 namespace Graphify.Client;
 
@@ -16,7 +17,6 @@ public partial class MainWindow
 {
     private OpenGL _gl;
     private readonly ILogger<AppViewModel> _logger;
-    [Reactive] public int Mode { get; private set; }
     public MainWindow(AppViewModel viewModel)
     {
         ViewModel = viewModel;
@@ -29,34 +29,59 @@ public partial class MainWindow
         });
     }
 
-    private void ModeButton_Click(object sender, RoutedEventArgs e)
+    private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
         Button? clickedButton = sender as Button;
         if (clickedButton != null)
         {
             EditMode selectedMode = EditMode.Move;
-            if (clickedButton.Name == "MoveModeButton")
+            if (ViewModel != null)
             {
-                selectedMode = EditMode.Move;
-            }
-            else if (clickedButton.Name == "CreatePointModeButton")
-            {
-                selectedMode = EditMode.CreatePoint;
-            }
-            else if (clickedButton.Name == "CreateLineModeButton")
-            {
-                selectedMode = EditMode.CreateLine;
-            }
-            AppViewModel? viewModel = DataContext as AppViewModel;
-            if (viewModel != null)
-            {
-                viewModel.SetEditMode.Execute(selectedMode);
+                ViewModel.SetEditMode.Execute(selectedMode);
             }
         }
     }
 
+    private void CreatePointModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        Button? clickedButton = sender as Button;
+        if (clickedButton != null)
+        {
+            EditMode selectedMode = EditMode.CreatePoint;
+            if (ViewModel != null)
+            {
+                ViewModel.SetEditMode.Execute(selectedMode);
+            }
+        }
+    }
+
+    private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        Button? clickedButton = sender as Button;
+        if (clickedButton != null)
+        {
+            EditMode selectedMode = EditMode.CreateLine;
+            if (ViewModel != null)
+            {
+                ViewModel.SetEditMode.Execute(selectedMode);
+            }
+        }
+    }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
-        
+        //реализовать выпадающее окно для выбора пути
+        if (ViewModel != null)
+        {
+            ViewModel.Export.Execute();
+        }
     }
+
+    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel != null)
+        {
+            ViewModel.MouseDown.Execute();
+        }
+    }
+    
 }

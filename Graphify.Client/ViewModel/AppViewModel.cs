@@ -28,9 +28,6 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
-    public ReactiveCommand<Unit, EditMode> MoveModeCommand { get; }
-    public ReactiveCommand<Unit, EditMode> CreatePointModeCommand { get; }
-    public ReactiveCommand<Unit, EditMode> CreateLineModeCommand { get; }
     public ReactiveCommand<(string Path, ExportFileFormat Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
@@ -44,19 +41,7 @@ public class AppViewModel : ReactiveObject
         {
             _logger.LogDebug("Increment invoked. New value {value}", ReactiveProperty);
         });
-        SetEditMode = ReactiveCommand.Create<EditMode, Unit>(selectedMode =>
-        {
-            if (selectedMode == EditMode.Move)
-            {
-            }
-            else if (selectedMode == EditMode.CreatePoint)
-            {
-            }
-            else if (selectedMode == EditMode.CreateLine)
-            {
-            }
-            return Unit.Default;
-        });
+        SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileFormat Format), Unit>(async tuple =>
         {
             string path = tuple.Path;
@@ -68,7 +53,11 @@ public class AppViewModel : ReactiveObject
             return Unit.Default;
         });
     }
-
+    //TODO реализовать
+    private IObservable<Unit> SetMode(EditMode mode)
+    {
+        return Observable.Return(Unit.Default);
+    }
     private IObservable<Unit> Increment()
     {
         ReactiveProperty++;

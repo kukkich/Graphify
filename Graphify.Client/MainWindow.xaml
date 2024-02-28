@@ -63,20 +63,20 @@
                     Height="25"
                     Margin="14, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="ModeButton_Click"
+                    Click="MoveModeButton_Click"
                     />            
             <Button x:Name="CreatePointModeButton"
                     Width="25"
                     Height="25"
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="ModeButton_Click"/>
+                    Click="CreatePointModeButton_Click"/>
             <Button x:Name="CreateLineModeButton"
                     Width="25"
                     Height="25"
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="ModeButton_Click"/>
+                    Click="CreateLineModeButton_Click"/>
             <TextBox Padding="5" Height="30" Width="40" HorizontalAlignment="Center" x:Name="ValueBox" />
         </StackPanel>
         <ListBox Background="White"
@@ -91,6 +91,7 @@
                                Margin="0"
                                Grid.Row="1"
                                Grid.Column="1"
+                               MouseDown="GlWindow_MouseDown"
         />
 
 
