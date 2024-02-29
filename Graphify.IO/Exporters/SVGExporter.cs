@@ -114,8 +114,8 @@ public sealed class SVGExporter : IExporter
 
         List<Vector2> circlePoints =
         [
-            new Vector2() { X = points[0].X, Y = points[0].Y },
-            new Vector2 { X = points[1].X, Y = points[1].X }
+            new Vector2 { X = points[0].X, Y = points[0].Y },
+            new Vector2 { X = points[1].X, Y = points[1].Y }
         ];
 
         float distance = Vector2.Distance(circlePoints[0], circlePoints[1]);
@@ -146,7 +146,7 @@ public sealed class SVGExporter : IExporter
         }
 
         _svgElements.AddPath(
-            сubicBezier => сubicBezier
+            cubicBezier => cubicBezier
                 .D(
                 d => d
                     .M(points[0].X, points[0].Y)

@@ -12,8 +12,6 @@ using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.IO;
-using Graphify.IO.Exporters;
-using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

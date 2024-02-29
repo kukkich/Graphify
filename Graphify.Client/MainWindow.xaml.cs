@@ -12,10 +12,8 @@ using Serilog.Core;
 using ReactiveUI.Fody.Helpers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Net.Sockets;
 using System.Windows.Input;
 using Graphify.Client.Model.Enums;
-using Graphify.Geometry.Drawing;
 
 namespace Graphify.Client;
 
@@ -53,69 +51,52 @@ public partial class MainWindow
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
     {
-        this.WhenActivated(disposables =>
-        {
-            this.Bind(ViewModel, vm => vm.ReactiveProperty, view => view.ValueBox.Text)
-                .DisposeWith(disposables);
-        });
     }
 
     private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
-        Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (sender is not Button)
         {
-            EditMode selectedMode = EditMode.Move;
-            if (ViewModel != null)
-            {
-                ViewModel.SetEditMode.Execute(selectedMode);
-            }
+            return;
         }
+
+        ViewModel?.SetEditMode.Execute(EditMode.Move);
     }
 
     private void CreatePointModeButton_Click(object sender, RoutedEventArgs e)
     {
-        Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (sender is not Button)
         {
-            EditMode selectedMode = EditMode.CreatePoint;
-            if (ViewModel != null)
-            {
-                ViewModel.SetEditMode.Execute(selectedMode);
-            }
+            return;
         }
+
+        ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
     {
-        Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (sender is not Button)
         {
-            EditMode selectedMode = EditMode.CreateLine;
-            if (ViewModel != null)
-            {
-                ViewModel.SetEditMode.Execute(selectedMode);
-            }
+            return;
         }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
     }
 
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
-        //реализовать выпадающее окно для выбора пути
-        if (ViewModel != null)
-        {
-            ViewModel.Export.Execute(("", ExportFileType.Svg));
-        }
+        ViewModel?.Export.Execute(("", ExportFileType.Svg));
     }
 
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
     {
-        if (ViewModel != null)
+        if (ViewModel is null)
         {
-            var position = args.GetPosition((OpenGLControl)sender);
-            position.X -= GlWindow.ActualWidth / 2;
-            position.Y = GlWindow.ActualHeight / 2 - position.Y;
-            ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+            return;
         }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 }
