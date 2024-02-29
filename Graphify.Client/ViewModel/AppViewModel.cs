@@ -4,8 +4,10 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
+using Graphify.Client.Model;
 using Graphify.Core;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -33,10 +35,12 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
+    private readonly Application _application;
 
-    public AppViewModel(ILogger<AppViewModel> logger)
+    public AppViewModel(ILogger<AppViewModel> logger, Application application)
     {
         _logger = logger;
+        _application = application;
         
         IncrementCommand = ReactiveCommand.CreateFromObservable(Increment);
         IncrementCommand.Subscribe(_ =>
@@ -48,11 +52,14 @@ public class AppViewModel : ReactiveObject
         {
             string path = tuple.Path;
             ExportFileFormat format = tuple.Format;
-
             return Task.FromResult(Unit.Default);
         });
+
+        _application.AddPoint(new Point(1f, 1f));
+        _application.UndoAction();
+        _application.RedoAction();
     }
-    //TODO реализовать
+    //TODO �����������
     private IObservable<Unit> SetMode(EditMode mode)
     {
         return Observable.Return(Unit.Default);

@@ -54,9 +54,9 @@
     
   <ItemGroup>
     <Folder Include="Model\Geometry\" />
-    <Folder Include="View\" />
+    <Folder Include="View\" />    
   </ItemGroup>
-    
+  
   <ItemGroup>
     <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
     <ProjectReference Include="..\Graphify.IO\Graphify.IO.csproj" />

@@ -9,7 +9,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify" Height="768" Width="1366">
+    Title="Graphify" Height="1080" Width="1920">
     <Window.Resources>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Style.Setters>
@@ -111,9 +111,11 @@
                  Grid.Column="0">
 
         </ListBox>
-        <sharpGL:OpenGLControl x:Name="GlWindow"                               
-                               Height="722"
-                               MinWidth="887"
+        <sharpGL:OpenGLControl x:Name="GlWindow" 
+                               Resized="GlWindow_Resized"
+                               OpenGLDraw="GlWindow_OpenGLDraw"
+                               Height="1080"
+                               MinWidth="1920"
                                Padding="0"
                                Margin="0"
                                Grid.Row="1"

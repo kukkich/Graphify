@@ -13,6 +13,7 @@ public class Surface : IGeometryContext
     private HashSet<IGeometricObject> _objects = [];
     private HashSet<IFigure> _figures = [];
     private HashSet<Point> _points = [];
+
     public IGeometricObject? TryGetClosestObject(Vector2 point, double precision) => throw new NotImplementedException();
 
     public Point? TryGetClosestPoint(Vector2 point, double precision) => throw new NotImplementedException();
@@ -36,7 +37,23 @@ public class Surface : IGeometryContext
         AddObject(newFigure);
     }
 
-    public bool TryRemove(IGeometricObject target) => throw new NotImplementedException();
+    public bool TryRemove(IGeometricObject target)
+    {
+        if (_objects.Remove(target))
+        {
+            if (_points.Remove((Point)target))
+            {
+                return true;
+            }
+            else if(_figures.Remove((IFigure)target))
+            {
+                return true;
+            }
+
+            throw new ArgumentOutOfRangeException("REROU");
+        }
+        return false;
+    }
 
     public void Clear()
     {
