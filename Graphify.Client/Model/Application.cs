@@ -22,7 +22,7 @@ public class Application
         _commandsBuffer = commandsBuffer;
         _drawLoop = drawLoop;
         
-        drawLoop.Initialize(60);
+        drawLoop.Initialize(160);
         drawLoop.Start();
     }
 

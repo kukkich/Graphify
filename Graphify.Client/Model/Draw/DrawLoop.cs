@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Windows.Threading;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -20,7 +20,8 @@ public class DrawLoop
     public DrawLoop(ApplicationContext applicationContext, IDrawer drawer)
     {
         _drawer = drawer;
-        applicationContext.OnSurfaceChangedEvent += (context) => _context = _context = context;
+        _context = applicationContext.Surface;
+        applicationContext.OnSurfaceChangedEvent += (context) => _context = context;
     }
 
     public void Initialize(float fps = 60)
@@ -62,6 +63,7 @@ public class DrawLoop
     {
         if (_isRunning)
         {
+            _drawer.Reset();
             foreach (IGeometricObject geometricObject in _context.Objects)
             {
                 geometricObject.Draw(_drawer);

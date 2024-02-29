@@ -7,4 +7,10 @@ public class PointExportData
 {
     public Vector2 Position { get; internal set; }
     public PointStyle Style { get; internal set; } = null!;
+
+    public PointExportData(Vector2 position, PointStyle style)
+    {
+        Position = position;
+        Style = style;
+    }
 }

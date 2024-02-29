@@ -22,5 +22,5 @@ public class CurveStyle : ReactiveObject, IStyle
         Size = size;
     }
 
-    public void ApplyStyle(IDrawer drawer) => throw new NotImplementedException();
+    public void ApplyStyle(IDrawer drawer) {}
 }

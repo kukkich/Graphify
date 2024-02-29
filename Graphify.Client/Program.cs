@@ -65,7 +65,7 @@ public class Program
         services.AddTransient<AppViewModel>();
        
         services.AddIO();
-        services.AddSingleton<OpenGLDrawer>();
+        //services.AddSingleton<OpenGLDrawer>();
 
         ConfigureExportImport(services);
         ConfigureApplication(services);

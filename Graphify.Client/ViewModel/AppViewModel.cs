@@ -54,13 +54,14 @@ public class AppViewModel : ReactiveObject
         });
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
+        MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
 
         _application.AddPoint(new Vector2(1f, 1f));
         _application.UndoAction();
         _application.RedoAction();
     }
 
-    //TODO �����������
+    //TODO �����������???????
     private IObservable<Unit> SetMode(EditMode mode)
     {
         return Observable.Return(Unit.Default);
@@ -75,6 +76,13 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> Increment()
     {
         ReactiveProperty++;
+        return Observable.Return(Unit.Default);
+    }
+
+    //TODO Implement for other figures
+    private IObservable<Unit> MouseDownAction(Vector2 position)
+    {
+        _application.AddPoint(position);
         return Observable.Return(Unit.Default);
     }
 }

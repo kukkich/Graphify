@@ -243,5 +243,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         drawer.DrawPoint(p);
     }
 
-    public PointExportData GetExportData() => throw new NotImplementedException();
+    public PointExportData GetExportData()
+    {
+        return new PointExportData(new Vector2(X, Y), Style);
+    }
 }

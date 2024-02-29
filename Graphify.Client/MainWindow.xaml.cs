@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Net.Sockets;
 using System.Windows.Input;
 using Graphify.Client.Model.Enums;
+using Graphify.Geometry.Drawing;
 
 namespace Graphify.Client;
 
@@ -23,26 +24,30 @@ public partial class MainWindow
     private readonly OpenGLDrawer _drawer;
     private OpenGL _gl;
   
-    public MainWindow(AppViewModel viewModel, OpenGLDrawer drawer)
+    public MainWindow(AppViewModel viewModel, IDrawer drawer)
     {
         ViewModel = viewModel;
         DataContext = viewModel;
         InitializeComponent();
-        _drawer = drawer;
+        //TODO Think about init order 
+        _drawer = (OpenGLDrawer)drawer;
+        _gl = this.GlWindow.OpenGL;
+        _drawer.InitGl(_gl);
 
-        this.WhenActivated(disposables =>
-        {
-            this.WhenAnyValue(x => x.GlWindow)
-                .Where(glWindow => glWindow != null)
-                .Subscribe(glWindow =>
-                {
-                    _gl = glWindow.OpenGL;
-                    _drawer.InitGl(_gl);
-                })
-                .DisposeWith(disposables);
+        //TODO What is it?
+        //this.WhenActivated(disposables =>
+        //{
+        //    this.WhenAnyValue(x => x.GlWindow)
+        //        .Where(glWindow => glWindow != null)
+        //        .Subscribe(glWindow =>
+        //        {
+        //            _gl = glWindow.OpenGL;
+        //            _drawer.InitGl(_gl);
+        //        })
+        //        .DisposeWith(disposables);
 
 
-        });
+        //});
     }
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
@@ -54,37 +59,38 @@ public partial class MainWindow
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
     {
-        _drawer.DrawPoint(new Vector2(0.7f,0.7f));
+        //TODO Remove
+        //_drawer.DrawPoint(new Vector2(0.7f,0.7f));
 
-        List<Vector2> Polygon = new List<Vector2>
-        {
-            new Vector2(0,0),
-            new Vector2(0.7f, 0.7f),
-            new Vector2(0.7f, 0),
-        };
+        //List<Vector2> Polygon = new List<Vector2>
+        //{
+        //    new Vector2(0,0),
+        //    new Vector2(0.7f, 0.7f),
+        //    new Vector2(0.7f, 0),
+        //};
 
-        _drawer.DrawPolygon(Polygon);
+        //_drawer.DrawPolygon(Polygon);
 
-        List<Vector2> Line = new List<Vector2>
-        {
-            new Vector2(-1,0),   
-            new Vector2(0, -0.5f),
-        };
+        //List<Vector2> Line = new List<Vector2>
+        //{
+        //    new Vector2(-1,0),   
+        //    new Vector2(0, -0.5f),
+        //};
 
-        _drawer.DrawPolygon(Line);
+        //_drawer.DrawPolygon(Line);
 
-        _drawer.DrawCircle(new Vector2(0, 100), 300);
+        //_drawer.DrawCircle(new Vector2(0, 100), 300);
 
-        List<Vector2> Curve = new List<Vector2>
-        {
-            new Vector2(50,200),
-            new Vector2(200,120),
-            new Vector2(55,284),
-            new Vector2(200,200),
-        };
+        //List<Vector2> Curve = new List<Vector2>
+        //{
+        //    new Vector2(50,200),
+        //    new Vector2(200,120),
+        //    new Vector2(55,284),
+        //    new Vector2(200,200),
+        //};
 
-        _drawer.DrawBezierCurve(Curve);
-      
+        //_drawer.DrawBezierCurve(Curve);
+
         this.WhenActivated(disposables =>
         {
             this.Bind(ViewModel, vm => vm.ReactiveProperty, view => view.ValueBox.Text)
@@ -143,7 +149,10 @@ public partial class MainWindow
     {
         if (ViewModel != null)
         {
-            ViewModel.MouseDown.Execute();
+            var position = args.GetPosition((OpenGLControl)sender);
+            position.X -= GlWindow.ActualWidth / 2;
+            position.Y = GlWindow.ActualHeight / 2 - position.Y;
+            ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
         }
     }
 }
