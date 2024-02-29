@@ -86,9 +86,8 @@ public sealed class SVGExporter : IExporter
     {
         if (points.Count != 2)
         {
-            _logger.LogDebug(
-                "The number of points to build a line is not equal to 2." +
-                " The number of points contained: {}", points.Count);
+            _logger.LogError(
+                "The number of points to build a line is not equal to 2. The number of points contained: {pointsCount}", points.Count);
 
             throw new ArgumentException("");
         }
@@ -107,9 +106,8 @@ public sealed class SVGExporter : IExporter
     {
         if (points.Count != 2)
         {
-            _logger.LogDebug(
-                "The number of points to build a circle is not equal to 2." +
-                " The number of points contained: {}", points.Count);
+            _logger.LogError(
+                "The number of points to build a circle is not equal to 2. The number of points contained: {pointsCount}", points.Count);
 
             throw new ArgumentException("");
         }
@@ -141,9 +139,8 @@ public sealed class SVGExporter : IExporter
     {
         if (points.Count != 4)
         {
-            _logger.LogDebug(
-                "The number of points to build a cubic bezier is not equal to 4." +
-                " The number of points contained: {}", points.Count);
+            _logger.LogError(
+                "The number of points to build a cubic bezier is not equal to 4. The number of points contained: {pointsCount}", points.Count);
 
             throw new ArgumentException("");
         }
