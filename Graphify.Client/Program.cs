@@ -1,5 +1,7 @@
 using System.IO;
+using Graphify.Client.View.Drawing;
 using Graphify.Client.Model;
+using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Geometry;
 using Graphify.Client.ViewModel;
 using Graphify.Geometry.GeometricObjects;
@@ -53,8 +55,9 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
-
+       
         services.AddIO();
+        services.AddSingleton<OpenGLDrawer>();
 
         ConfigureApplication(services);
     }
@@ -63,6 +66,8 @@ public class Program
     {
         services.AddSingleton<ApplicationContext>();
         services.AddSingleton<Surface>();
-        services.AddSingleton<GeometryFactory>();
+        services.AddSingleton<IGeometryFactory, GeometryFactory>();
+        services.AddScoped<CommandsBuffer>();
+        services.AddSingleton<Application>();
     }
 }
