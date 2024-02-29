@@ -1,17 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Points;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using NUnit.Framework.Constraints;
-using Graphify.Geometry.Attachment;
-using Graphify.Geometry.Attaching;
 //using System.Drawing;
 
 namespace Graphify.Tests.Geometry
@@ -19,18 +8,18 @@ namespace Graphify.Tests.Geometry
     internal class LineTests
     {
         private Line _line = null;
-        private IEqualityComparer<Line> _comparer = new LineComparer();
+        private readonly IEqualityComparer<Line> _comparer = new LineComparer();
         private Line _secondLine = null;
         private Point _b = null;
 
         [SetUp]
         public void Setup()
         {
-            
+
             _line = new Line(new Point(0, 0), _b);
             _b = new Point(1, 1);
             _secondLine = new Line(new Point(0, 1), new Point(2, 1));
-            _secondLine.ConsumeAttach(_b); 
+            _secondLine.ConsumeAttach(_b);
         }
 
         //IsNextTo
@@ -41,7 +30,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(result, Is.False);
         }
 
-        static object[] bigDistance =
+        private static readonly object[] bigDistance =
         {
             new object[] { new Vector2(1.5f, -0.5f), 1f },
         };
@@ -53,7 +42,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(result, Is.True);
         }
 
-        static object[] smallDistance =
+        private static readonly object[] smallDistance =
         {
             new object[] { new Vector2(1, 0), 1 },
         };
@@ -64,7 +53,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<ArgumentException>(() => _line.IsNextTo(point, distance));
         }
 
-        static object[] wrongDataIsNextTo =
+        private static readonly object[] wrongDataIsNextTo =
         {
             new object[] { new Vector2(0.5f, 0.5f), -1f },
         };
@@ -78,7 +67,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] moveData =
+        private static readonly object[] moveData =
         {
             new object[] { new Vector2(0.5f, 0.5f), new Line(new Point(0.5f, 0.5f), new Point(1.5f, 1.5f))},
             new object[] { new Vector2(-0.5f, -0.5f), new Line(new Point(-0.5f, -0.5f), new Point(0.5f, 0.5f))},
@@ -91,7 +80,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _line.Move(shift));
         }
 
-        static object[] attachedPointMoveData =
+        private static readonly object[] attachedPointMoveData =
         {
             new object[] { new Vector2(0.5f, 0.5f), new Line(new Point(0.5f, 0.5f), new Point(1.5f, 1.5f))},
         };
@@ -106,7 +95,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] rotateData =
+        private static readonly object[] rotateData =
         {
             new object[] { new Point(1, 0), 90, new Line(new Point(1, 1), new Point(2, 0))},
             new object[] { new Point(1, 0), 180, new Line(new Point(2, 0), new Point(1, -1))},
@@ -119,7 +108,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _line.Rotate(shift, angle));
         }
 
-        static object[] attachedPointRotateData =
+        private static readonly object[] attachedPointRotateData =
         {
             new object[] { new Point(1, 0), 90, new Line(new Point(1, 1), new Point(2, 0))},
         };
@@ -135,7 +124,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] reflectData =
+        private static readonly object[] reflectData =
         {
             new object[] { new Point(1, 0), new Line(new Point(2, 0), new Point(1, -1))},
             new object[] { new Point(0, 0), new Line(new Point(0, 0), new Point(-1, -1))},
@@ -148,7 +137,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _line.Reflect(point));
         }
 
-        static object[] attachedPointReflectData =
+        private static readonly object[] attachedPointReflectData =
         {
             new object[] { new Point(1, 0), new Line(new Point(2, 0), new Point(1, -1))},
         };
@@ -161,7 +150,8 @@ namespace Graphify.Tests.Geometry
             bool result = _line.Attached.Contains(attachable);
             Assert.That(result, Is.True);
         }
-        static object[] attachedData =
+
+        private static readonly object[] attachedData =
         {
             new object[] {new Point(0.5f, 0.5f)},
             new object[] {new Point(0, 1)}
@@ -171,9 +161,9 @@ namespace Graphify.Tests.Geometry
         public void GIVEN_Line_WHEN_the_control_point_is_attached_THEN_expected_exception(Point attachable)
         {
             Assert.Throws<InvalidOperationException>(() => _line.ConsumeAttach(attachable));
-        }        
+        }
 
-        static object[] controlPointToAttachedData =
+        private static readonly object[] controlPointToAttachedData =
         {
             new object[] {new Point(0, 0)},
             new object[] {new Point(1, 1)},
@@ -185,7 +175,8 @@ namespace Graphify.Tests.Geometry
             _line.ConsumeAttach(attachable);
             Assert.Throws<InvalidOperationException>(() => _line.ConsumeAttach(attachable));
         }
-        static object[] doubleAttachedData =
+
+        private static readonly object[] doubleAttachedData =
         {
             new object[] {new Point(0.5f, 0.5f)}
         };
@@ -203,7 +194,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(result, Is.True);
         }
 
-        static object[] detachData =
+        private static readonly object[] detachData =
         {
             new object[] { new Point(0.5f, 0.5f)},
             new object[] {new Point(0, 0)},

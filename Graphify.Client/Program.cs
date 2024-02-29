@@ -1,10 +1,10 @@
 using System.IO;
-using Graphify.Client.View.Drawing;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Geometry;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
 using Graphify.Core.Model.IO.Export;
 using Graphify.Core.Model.IO.Import;
@@ -61,7 +61,7 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
-       
+
         services.AddIO();
         services.AddScoped<OpenGLDrawer>();
 
@@ -73,7 +73,7 @@ public class Program
     {
         services.AddSingleton<Exporter>();
         services.AddSingleton<Importer>();
-        
+
         services.AddSingleton<IImporterFactory, ImporterFactory>();
         services.AddSingleton<IExporterFactory, ExporterFactory>();
     }
@@ -86,7 +86,7 @@ public class Program
         services.AddScoped<Surface>();
         services.AddScoped<IGeometryFactory, GeometryFactory>();
         services.AddScoped<IDrawer, OpenGLDrawer>();
-        
+
         services.AddScoped<CommandsBuffer>();
     }
 }

@@ -8,7 +8,7 @@ namespace Graphify.Core.Model.IO.Import;
 public class Importer
 {
     private readonly Dictionary<ImportFileType, IImporter> _importers = [];
-    
+
     public Importer(/*ISvgImporter svgImporter*/)
     {
         /*_importers.Add(ImportFileType.Png, svgImporter);*/

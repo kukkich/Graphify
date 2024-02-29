@@ -7,7 +7,7 @@ public class ApplicationContext
     public Surface Surface { get; private set; }
     public delegate void OnSurfaceChanged(Surface newSurface);
     public event OnSurfaceChanged OnSurfaceChangedEvent;
-    
+
     public ApplicationContext(Surface surface)
     {
         Surface = surface;

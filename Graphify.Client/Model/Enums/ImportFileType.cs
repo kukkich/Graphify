@@ -2,6 +2,6 @@ namespace Graphify.Client.Model.Enums;
 
 public enum ImportFileType
 {
-    Png, 
+    Png,
     Custom
 }

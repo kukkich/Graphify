@@ -1,5 +1,3 @@
-using Graphify.Client.Model.Geometry;
-
 namespace Graphify.Client.Model.Commands;
 
 public class CommandsBuffer

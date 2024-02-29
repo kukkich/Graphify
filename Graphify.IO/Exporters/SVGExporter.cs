@@ -1,12 +1,12 @@
+using System.Numerics;
+using Aspose.Svg;
+using Aspose.Svg.Builder;
 using Graphify.Geometry.Export;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
-using Aspose.Svg;
-using Aspose.Svg.Builder;
-using System.Numerics;
-using Graphify.Geometry.GeometricObjects.Curves;
 
 namespace Graphify.IO.Exporters;
 
@@ -91,7 +91,7 @@ public sealed class SVGExporter : IExporter
 
             throw new ArgumentException("");
         }
-        
+
         _svgElements.AddLine(
             line => line
                 .X1(points[0].X)
@@ -101,7 +101,7 @@ public sealed class SVGExporter : IExporter
                 .Stroke(dataLine.Style.PrimaryColor)
                 .StrokeWidth((dataLine.Style as CurveStyle ?? CurveStyle.Default).Size));
     }
-    
+
     private void AddCircle(FigureExportData dataCircle, List<Point> points)
     {
         if (points.Count != 2)
@@ -158,7 +158,7 @@ public sealed class SVGExporter : IExporter
     }
 
     private void CreateFile(string path)
-    { 
+    {
         // Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
         using var document = new SVGDocument();

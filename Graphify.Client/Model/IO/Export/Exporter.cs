@@ -9,7 +9,7 @@ public class Exporter
 {
     private readonly Application _application;
     private readonly Dictionary<ExportFileType, IExporter> _exporters = [];
-    
+
     public Exporter(Application application, IExporterFactory exporterFactory)
     {
         _application = application;

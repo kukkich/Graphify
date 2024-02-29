@@ -1,8 +1,8 @@
+using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Polygons;
-using System.Numerics;
 using Microsoft.Extensions.Logging;
 
 namespace Graphify.Geometry.GeometricObjects;
@@ -34,7 +34,7 @@ public class GeometryFactory : IGeometryFactory
             IFigure newFigure = factoryMethod(points);
 
             _logger.LogDebug("Figure {type} was created", type);
-            
+
             return newFigure;
         }
 

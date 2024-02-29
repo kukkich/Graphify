@@ -1,23 +1,19 @@
-using System.Reactive.Disposables;
-using Graphify.Client.ViewModel;
-using ReactiveUI;
-using SharpGL.WPF;
-using SharpGL;
-using Graphify.Client.View.Drawing;
-using System.Windows;
-using System.Reactive.Linq;
 using System.Numerics;
-using Microsoft.Extensions.Logging;
-using Serilog.Core;
-using ReactiveUI.Fody.Helpers;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Graphify.Client.Model.Enums;
+using Graphify.Client.View.Drawing;
+using Graphify.Client.ViewModel;
+using ReactiveUI;
+using SharpGL;
+using SharpGL.WPF;
 
 namespace Graphify.Client;
 
-public partial class MainWindow     
+public partial class MainWindow
 {
     private readonly OpenGLDrawer _drawer;
     private OpenGL _gl;
@@ -28,7 +24,7 @@ public partial class MainWindow
         ViewModel = viewModel;
         DataContext = viewModel;
         InitializeComponent();
-        
+
         this.WhenActivated(disposables =>
         {
             this.WhenAnyValue(x => x.GlWindow)
@@ -46,7 +42,7 @@ public partial class MainWindow
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
         _gl.LoadIdentity();
-        _gl.Ortho(-GlWindow.ActualWidth / 2, GlWindow.ActualWidth / 2, - GlWindow.ActualHeight / 2, GlWindow.ActualHeight / 2, -1, 1);
+        _gl.Ortho(-GlWindow.ActualWidth / 2, GlWindow.ActualWidth / 2, -GlWindow.ActualHeight / 2, GlWindow.ActualHeight / 2, -1, 1);
     }
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)

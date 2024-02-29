@@ -1,15 +1,11 @@
-using System;
 using System.Numerics;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
-using Graphify.Core;
 using Graphify.Core.Model.IO.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -21,7 +17,7 @@ public class AppViewModel : ReactiveObject
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
     public SourceList<IGeometricObject> GeometryObjects { get; set; }
-    
+
     public ReactiveCommand<Unit, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Unit, Unit> RightMouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
@@ -60,13 +56,13 @@ public class AppViewModel : ReactiveObject
     {
         return Observable.Return(Unit.Default);
     }
-    
+
     private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
     {
         _exporter.Export(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
     }
-    
+
     private IObservable<Unit> Increment()
     {
         ReactiveProperty++;

@@ -10,7 +10,7 @@ namespace Graphify.Tests.Geometry
         private Line _lineToAttach = null;
         private Point _point = null;
         private Point _attachedPoint = null;
-        private IEqualityComparer<Point> _comparer = new PointComparer();
+        private readonly IEqualityComparer<Point> _comparer = new PointComparer();
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace Graphify.Tests.Geometry
             Assert.IsFalse(result);
         }
 
-        static object[] longDistance =
+        private static readonly object[] longDistance =
         {
             new object[] { new Vector2(1f, 2f), 2f },
             new object[] { new Vector2(1f, 2f), 1f }
@@ -43,7 +43,7 @@ namespace Graphify.Tests.Geometry
             Assert.IsTrue(result);
         }
 
-        static object[] shortDistance =
+        private static readonly object[] shortDistance =
         {
             new object[] { new Vector2(0.5f, 0.5f), 2f },
             new object[] { new Vector2(0.5f, 0.5f), 1f }
@@ -55,7 +55,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<ArgumentException>(() => _point.IsNextTo(point, distance));
         }
 
-        static object[] negativeDataIsNextTo =
+        private static readonly object[] negativeDataIsNextTo =
         {
             new object[] { new Vector2(0.5f, 0.5f), -1f }
         };
@@ -70,7 +70,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] shiftData =
+        private static readonly object[] shiftData =
         {
             new object[] { new Vector2(0.5f, 0.5f), new Point(0.5f,0.5f) },
             new object[] { new Vector2(-0.5f, -0.5f), new Point(-0.5f, -0.5f) }
@@ -86,7 +86,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] rotateData =
+        private static readonly object[] rotateData =
         {
             new object[] { new Point(1, 0), 90, new Vector2(1, 1) },
             new object[] { new Point(1, 0), 540, new Vector2(2, 0) },
@@ -99,7 +99,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _attachedPoint.Rotate(shift, angle));
         }
 
-        static object[] attachedRotateData =
+        private static readonly object[] attachedRotateData =
         {
             new object[] { new Point(1, 0), 90, new Vector2(1, 1) }
         };
@@ -114,7 +114,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] reflectData =
+        private static readonly object[] reflectData =
         {
             new object[] { new Point(0.5f, 0.5f), new Point(1f, 1f) },
             new object[] { new Point(-0.5f, -0.5f), new Point(-1f, -1f) }
@@ -126,7 +126,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _attachedPoint.Reflect(point));
         }
 
-        static object[] attachedReflectData =
+        private static readonly object[] attachedReflectData =
         {
             new object[] { new Point(0.5f, 0.5f) },
         };
@@ -140,7 +140,7 @@ namespace Graphify.Tests.Geometry
             Assert.IsFalse(result);
         }
 
-        static object[] canAttachToData =
+        private static readonly object[] canAttachToData =
         {
             new object[] { new Line(new Point(1, 0), new Point(-1, 0)) }
         };
@@ -161,7 +161,7 @@ namespace Graphify.Tests.Geometry
             Assert.IsTrue(result);
         }
 
-        static object[] candAttachToData =
+        private static readonly object[] candAttachToData =
         {
             new object[] { new Line(new Point(1, 0), new Point(-1, 0)) }
         };
@@ -176,7 +176,7 @@ namespace Graphify.Tests.Geometry
             Assert.IsTrue(result);
         }
 
-        static object[] attachToContainsData =
+        private static readonly object[] attachToContainsData =
         {
             new object[] { new Line(new Point(1, 0), new Point(-1, 0)) },
             new object[] { new Line(new Point(1, 1), new Point(-1, 1)) }
@@ -190,7 +190,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(_point, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] attachToNewCoordsData =
+        private static readonly object[] attachToNewCoordsData =
         {
             new object[] { new Line(new Point(1, 0), new Point(-1, 0)), new Point(0, 0) },
             new object[] { new Line(new Point(1, 1), new Point(-1, 1)), new Point(0, 1) }
@@ -202,7 +202,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _attachedPoint.AttachTo(line));
         }
 
-        static object[] attachToExceptionData =
+        private static readonly object[] attachToExceptionData =
         {
             new object[] { new Line(new Point(1, 0), new Point(-1, 0)) }
         };

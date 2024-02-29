@@ -74,7 +74,7 @@ public class OpenGLDrawer : IDrawer
         _gl.End();
     }
 
-    public void DrawPoint(Vector2 point) 
+    public void DrawPoint(Vector2 point)
     {
         _gl.PointSize(5);
         _gl.Begin(OpenGL.GL_POINTS);

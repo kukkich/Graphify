@@ -1,5 +1,4 @@
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;

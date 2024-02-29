@@ -44,7 +44,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// </summary>
     [Reactive] public PointStyle Style { get; set; }
 
-    private List<IFigure> _controlFor;
+    private readonly List<IFigure> _controlFor;
 
     public Point(float x, float y, PointStyle? style = null)
     {
@@ -52,7 +52,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         Y = y;
         Style = style ?? PointStyle.Default;
 
-        _controlFor = new List<IFigure>(); 
+        _controlFor = new List<IFigure>();
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// Вместе со своим перемещением, обновляет все фигуры, которые к точке привязаны, вызовом метода <c>Point.Update()</c>
     /// </summary>
     /// <param name="shift"> - вектор сдвига точки в пространстве</param>
-    public void Move(Vector2 shift) 
+    public void Move(Vector2 shift)
     {
         if (IsAttached)
         {
@@ -173,14 +173,14 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
             var figure = figures.First();
 
             var points = figure.ControlPoints;
-            foreach(var point in points)
+            foreach (var point in points)
             {
                 if (point == this)
                 {
                     return false;
                 }
 
-                foreach(var fig in point.ControlFor)
+                foreach (var fig in point.ControlFor)
                 {
                     bool isAdded = visitedFigures.Add(fig);
                     if (isAdded)

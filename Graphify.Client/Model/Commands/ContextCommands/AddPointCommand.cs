@@ -1,4 +1,3 @@
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Client.Model.Commands;
@@ -15,7 +14,7 @@ public class AddPointCommand : ICommand
     }
 
     public void Execute()
-    { 
+    {
         _context.Surface.AddPoint(_point);
     }
 

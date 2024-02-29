@@ -1,15 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Points;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using NUnit.Framework.Constraints;
 
 namespace Graphify.Tests.Geometry
 {
@@ -18,7 +9,7 @@ namespace Graphify.Tests.Geometry
         private Circle _circle = null;
         private Circle _secondCircle = null;
         private Point _b = null;
-        private IEqualityComparer<Circle> _comparer = new CircleComparer();
+        private readonly IEqualityComparer<Circle> _comparer = new CircleComparer();
 
         [SetUp]
         public void Setup()
@@ -37,7 +28,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(result, Is.False);
         }
 
-        static object[] bigDistance =
+        private static readonly object[] bigDistance =
         {
             new object[] { new Vector2(3, 3), 2 },
         };
@@ -49,7 +40,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(result, Is.True);
         }
 
-        static object[] smallDistance =
+        private static readonly object[] smallDistance =
         {
             new object[] { new Vector2(2, 0), 1 },
         };
@@ -60,7 +51,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<ArgumentException>(() => _circle.IsNextTo(point, distance));
         }
 
-        static object[] wrongDataIsNextTo =
+        private static readonly object[] wrongDataIsNextTo =
         {
             new object[] { new Vector2(0.5f, 0.5f), -1f },
         };
@@ -75,7 +66,7 @@ namespace Graphify.Tests.Geometry
 
         }
 
-        static object[] moveData =
+        private static readonly object[] moveData =
         {
             new object[] { new Vector2(0.5f, 0.5f), new Circle(new Point(0.5f, 0.5f), new Point(1.5f, 1.5f))},
             new object[] { new Vector2(-0.5f, -0.5f), new Circle(new Point(-0.5f, -0.5f), new Point(0.5f, 0.5f))},
@@ -88,7 +79,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _circle.Move(shift));
         }
 
-        static object[] attachedPointMoveData =
+        private static readonly object[] attachedPointMoveData =
         {
             new object[] { new Vector2(-0.5f, -0.5f), new Circle(new Point(-0.5f, -0.5f), new Point(0.5f, 0.5f))},
         };
@@ -103,7 +94,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] rotateData =
+        private static readonly object[] rotateData =
         {
             new object[] { new Point(1, 0), 90, new Circle(new Point(1, 1), new Point(2, 0))},
             new object[] { new Point(1, 0), 180, new Circle(new Point(2, 0), new Point(1, -1))},
@@ -116,7 +107,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _circle.Rotate(shift, angle));
         }
 
-        static object[] attachedPointRotateData =
+        private static readonly object[] attachedPointRotateData =
         {
             new object[] { new Point(1, 0), 90, new Circle(new Point(1, 1), new Point(2, 0))},
         };
@@ -132,7 +123,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
         }
 
-        static object[] reflectData =
+        private static readonly object[] reflectData =
         {
             new object[] { new Point(1, 0), new Circle(new Point(2, 0), new Point(1, -1))},
             new object[] { new Point(0, 0), new Circle(new Point(0, 0), new Point(-1, -1))},
@@ -145,7 +136,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _circle.Reflect(point));
         }
 
-        static object[] attachedPointReflectData =
+        private static readonly object[] attachedPointReflectData =
         {
             new object[] { new Point(1, 0), new Circle(new Point(2, 0), new Point(1, -1))},
         };
@@ -159,7 +150,7 @@ namespace Graphify.Tests.Geometry
             Assert.That(result, Is.True);
         }
 
-        static object[] attachedData =
+        private static readonly object[] attachedData =
        {
             new object[] {new Point(-1, -1)},
             new object[] {new Point(0, 2)}
@@ -172,7 +163,7 @@ namespace Graphify.Tests.Geometry
 
         }
 
-        static object[] controlPointToAttachedData =
+        private static readonly object[] controlPointToAttachedData =
         {
             new object[] {new Point(0, 0)},
         };
@@ -184,7 +175,7 @@ namespace Graphify.Tests.Geometry
             Assert.Throws<InvalidOperationException>(() => _circle.ConsumeAttach(attachable));
         }
 
-        static object[] doubleAttachedData =
+        private static readonly object[] doubleAttachedData =
         {
              new object[] {new Point(3.5f, 3.5f)}
         };
@@ -198,11 +189,11 @@ namespace Graphify.Tests.Geometry
             _circle.ConsumeDetach(dettachable);
 
             bool result = _circle.Attached.Contains(dettachable);
-            
+
             Assert.That(result, Is.True);
         }
 
-        static object[] detachData =
+        private static readonly object[] detachData =
         {
             new object[] { new Point(0.5f, 0.5f)},
             new object[] {new Point(0, 0)},

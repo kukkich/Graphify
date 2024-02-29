@@ -10,13 +10,13 @@ public class DrawLoop
 {
     private IGeometryContext _context;
     private readonly OpenGLDrawer _drawer;
-    
+
     private Stopwatch _stopwatch;
     private float _fps;
     private bool _isRunning;
-    
+
     private DispatcherTimer _timer;
-    
+
     public DrawLoop(ApplicationContext applicationContext, OpenGLDrawer drawer)
     {
         _drawer = drawer;
@@ -29,11 +29,11 @@ public class DrawLoop
         _fps = fps;
         _stopwatch = new Stopwatch();
         _isRunning = false;
-        
+
         _timer = new DispatcherTimer();
         _timer.Tick += Timer_Tick;
     }
-    
+
     private void Timer_Tick(object sender, EventArgs e)
     {
         _stopwatch.Start();
@@ -41,7 +41,7 @@ public class DrawLoop
         _stopwatch.Stop();
         _stopwatch.Reset();
     }
-    
+
     public void Start()
     {
         if (_isRunning)
