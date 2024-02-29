@@ -43,6 +43,8 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         _attached = [];
     }
 
+    
+
 
     /// <summary>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек

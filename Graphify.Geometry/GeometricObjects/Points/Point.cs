@@ -208,8 +208,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         {
             return;
         }
-        AttachedTo = consumer;
         consumer.ConsumeAttach(this);
+        AttachedTo = consumer;
 
         Update();
     }
@@ -242,6 +242,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         drawer.DrawPoint(p);
     }
+
 
     public PointExportData GetExportData()
     {
