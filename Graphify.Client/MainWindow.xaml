@@ -38,11 +38,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
-            <RowDefinition Height="722"/>
+            <RowDefinition MinHeight="722"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="244"/>
-            <ColumnDefinition  Width="*"/>
+            <ColumnDefinition Width="*" MinWidth="244"/>
+            <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
@@ -82,21 +82,16 @@
         <ListBox Background="White"
                  Grid.Row="1"
                  Grid.Column="0">
-
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow" 
                                Resized="GlWindow_Resized"
                                OpenGLDraw="GlWindow_OpenGLDraw"
-                               DrawFPS="True"
                                Height="1080"
                                MinWidth="1920"
-                               Padding="0"
-                               Margin="0"
                                Grid.Row="1"
                                Grid.Column="1"
                                MouseDown="GlWindow_MouseDown"
         />
-
 
     </Grid>
 </reactiveUi:ReactiveWindow>
