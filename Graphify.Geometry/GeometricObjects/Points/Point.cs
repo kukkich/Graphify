@@ -208,8 +208,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         {
             return;
         }
-        AttachedTo = consumer;
         consumer.ConsumeAttach(this);
+        AttachedTo = consumer;
 
         Update();
     }
