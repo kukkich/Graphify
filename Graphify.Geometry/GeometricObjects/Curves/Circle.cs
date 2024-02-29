@@ -57,7 +57,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     {
         var radius = Radius;
 
-        foreach(var attachedPoint in _attached)
+        foreach (var attachedPoint in _attached)
         {
             var point = attachedPoint.Object;
             var attachedParam = attachedPoint.T;
@@ -68,27 +68,28 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
             point.Move(dv);
         }
     }
-    
+
     /// <summary>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо присоединить к прямой</param>
+    /// <exception cref="InvalidOperationException"> - если присоединить точку <c>attachable</c> к данной фигуре невозможно</exception>
     public void ConsumeAttach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
-            return; // TODO: заменить на exception
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка является опорной для данной фигуры");
         }
 
         if (_attached.Find(x => x.Object == attachable) != null)
         {
-            return; // TODO: заменить на exception
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка уже присоединена к данной фигуре");
         }
 
         var centerToPointVec = new Vector2(attachable.X - _centerPoint.X, attachable.Y - _centerPoint.Y);
         var length = Math.Sqrt(centerToPointVec.X * centerToPointVec.X + centerToPointVec.Y * centerToPointVec.Y);
         var angle = Math.Acos(centerToPointVec.X / length) * double.Sign(Math.Asin(centerToPointVec.Y / length));
-        angle = (angle + 2 * Math.PI) % (2*Math.PI);  // Округляем угол до нужного диапазона [0; 2pi)
+        angle = (angle + 2 * Math.PI) % (2 * Math.PI);  // Округляем угол до нужного диапазона [0; 2pi)
 
         var radius = Radius;
         var newPosition = new Vector2((float)(radius * Math.Cos(angle)), (float)(radius * Math.Sin(angle)));
@@ -105,13 +106,17 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Удаляет присоединённую точку <c>attachable</c> из своего множества присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
+    /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
     public void ConsumeDetach(Point attachable)
     {
         AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
         if (maybeAttached != null)
         {
             _attached.Remove(maybeAttached);
+            return;
         }
+
+        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
     }
 
     /// <summary>
@@ -134,11 +139,12 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Если окружность имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг окружности</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Move(Vector2 shift)
     {
         if (!CanBeMoved)
         {
-            return; //TODO: бросить исключение о невозможности перемещения фигуры
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
         foreach (var objPoint in ControlPoints)
@@ -153,11 +159,12 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     /// <param name="shift"> - опорная точка, относительно которой осуществляется вращение окружности</param>
     /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Rotate(Point shift, float angle)
     {
         if (!CanBeMoved)
         {
-            return; //TODO: бросить исключение о невозможности перемещения фигуры
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
         foreach (var objPoint in ControlPoints)
@@ -165,17 +172,18 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
             objPoint.Rotate(shift, angle);
         }
     }
-    
+
     /// <summary>
     /// Метод, позволяющий сделать зеркальное отражение с переворотом относительно заданной точки.
     /// Если окружность имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="point"> - точка, относительно которой происходит отражение</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Reflect(Point point)
     {
         if (!CanBeMoved)
         {
-            return; //TODO: бросить исключение о невозможности перемещения фигуры
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
         foreach (var objPoint in ControlPoints)
@@ -183,7 +191,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
             objPoint.Reflect(point);
         }
     }
-    
+
     /// <summary>
     /// Отрисовка окружности на экране
     /// </summary>
