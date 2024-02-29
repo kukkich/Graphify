@@ -12,8 +12,6 @@ using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.IO;
-using Graphify.IO.Exporters;
-using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -65,7 +63,7 @@ public class Program
         services.AddTransient<AppViewModel>();
        
         services.AddIO();
-        //services.AddSingleton<OpenGLDrawer>();
+        services.AddScoped<OpenGLDrawer>();
 
         ConfigureExportImport(services);
         ConfigureApplication(services);
@@ -84,10 +82,10 @@ public class Program
     {
         services.AddSingleton<Application>();
         services.AddSingleton<ApplicationContext>();
-        services.AddSingleton<DrawLoop>();
-        services.AddSingleton<Surface>();
-        services.AddSingleton<IGeometryFactory, GeometryFactory>();
-        services.AddSingleton<IDrawer, OpenGLDrawer>();
+        services.AddScoped<DrawLoop>();
+        services.AddScoped<Surface>();
+        services.AddScoped<IGeometryFactory, GeometryFactory>();
+        services.AddScoped<IDrawer, OpenGLDrawer>();
         
         services.AddScoped<CommandsBuffer>();
     }

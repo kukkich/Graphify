@@ -8,7 +8,6 @@ public class ApplicationContext
     public delegate void OnSurfaceChanged(Surface newSurface);
     public event OnSurfaceChanged OnSurfaceChangedEvent;
     
-    
     public ApplicationContext(Surface surface)
     {
         Surface = surface;

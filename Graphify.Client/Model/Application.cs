@@ -21,9 +21,9 @@ public class Application
         _geometryFactory = geometryFactory;
         _commandsBuffer = commandsBuffer;
         _drawLoop = drawLoop;
-        
-        drawLoop.Initialize(160);
-        drawLoop.Start();
+
+        _drawLoop.Initialize(160);
+        _drawLoop.Start();
     }
 
     public void AddPoint(Vector2 pointCoords)

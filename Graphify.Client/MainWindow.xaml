@@ -38,11 +38,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
-            <RowDefinition Height="722"/>
+            <RowDefinition MinHeight="722"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="244"/>
-            <ColumnDefinition  Width="*"/>
+            <ColumnDefinition Width="*" MinWidth="244"/>
+            <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
@@ -64,7 +64,7 @@
                     Margin="14, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="MoveModeButton_Click"
-                    />            
+                    />
             <Button x:Name="CreatePointModeButton"
                     Width="25"
                     Height="25"
@@ -77,26 +77,20 @@
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="CreateLineModeButton_Click"/>
-            <TextBox Padding="5" Height="30" Width="40" HorizontalAlignment="Center" x:Name="ValueBox" />
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
                  Grid.Column="0">
-
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow" 
                                Resized="GlWindow_Resized"
                                OpenGLDraw="GlWindow_OpenGLDraw"
-                               DrawFPS="True"
                                Height="1080"
                                MinWidth="1920"
-                               Padding="0"
-                               Margin="0"
                                Grid.Row="1"
                                Grid.Column="1"
                                MouseDown="GlWindow_MouseDown"
         />
-
 
     </Grid>
 </reactiveUi:ReactiveWindow>

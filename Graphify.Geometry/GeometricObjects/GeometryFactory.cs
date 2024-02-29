@@ -33,8 +33,8 @@ public class GeometryFactory : IGeometryFactory
         {
             IFigure newFigure = factoryMethod(points);
 
-            _logger.LogDebug($"Figure {type} was created");
-
+            _logger.LogDebug("Figure {type} was created", type);
+            
             return newFigure;
         }
 

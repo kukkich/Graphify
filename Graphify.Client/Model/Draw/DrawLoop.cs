@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Windows.Threading;
-using Graphify.Geometry.Drawing;
+using Graphify.Client.View.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 
 namespace Graphify.Client.Model.Draw;
@@ -9,19 +9,19 @@ namespace Graphify.Client.Model.Draw;
 public class DrawLoop
 {
     private IGeometryContext _context;
-    private readonly IDrawer _drawer;
+    private readonly OpenGLDrawer _drawer;
     
     private Stopwatch _stopwatch;
     private float _fps;
     private bool _isRunning;
     
-    private DispatcherTimer timer;
+    private DispatcherTimer _timer;
     
-    public DrawLoop(ApplicationContext applicationContext, IDrawer drawer)
+    public DrawLoop(ApplicationContext applicationContext, OpenGLDrawer drawer)
     {
         _drawer = drawer;
         _context = applicationContext.Surface;
-        applicationContext.OnSurfaceChangedEvent += (context) => _context = context;
+        applicationContext.OnSurfaceChangedEvent += context => _context = context;
     }
 
     public void Initialize(float fps = 60)
@@ -30,8 +30,8 @@ public class DrawLoop
         _stopwatch = new Stopwatch();
         _isRunning = false;
         
-        timer = new DispatcherTimer();
-        timer.Tick += Timer_Tick;
+        _timer = new DispatcherTimer();
+        _timer.Tick += Timer_Tick;
     }
     
     private void Timer_Tick(object sender, EventArgs e)
@@ -45,13 +45,15 @@ public class DrawLoop
     public void Start()
     {
         if (_isRunning)
+        {
             return;
+        }
 
         _isRunning = true;
         TimeSpan targetElapsedTime = TimeSpan.FromSeconds(1.0 / _fps);
 
-        timer.Interval = targetElapsedTime;
-        timer.Start();
+        _timer.Interval = targetElapsedTime;
+        _timer.Start();
     }
 
     public void Stop()
@@ -61,13 +63,15 @@ public class DrawLoop
 
     private void Update(float deltaTime)
     {
-        if (_isRunning)
+        if (!_isRunning || !_drawer.GlInitialized)
         {
-            _drawer.Reset();
-            foreach (IGeometricObject geometricObject in _context.Objects)
-            {
-                geometricObject.Draw(_drawer);
-            }
+            return;
+        }
+
+        _drawer.Reset();
+        foreach (IGeometricObject geometricObject in _context.Objects)
+        {
+            geometricObject.Draw(_drawer);
         }
     }
 }

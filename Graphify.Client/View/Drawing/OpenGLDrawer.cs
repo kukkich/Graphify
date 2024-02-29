@@ -1,13 +1,15 @@
 using System.Drawing;
 using System.Numerics;
-using System.Windows.Controls;
 using Graphify.Geometry.Drawing;
 using SharpGL;
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 
 namespace Graphify.Client.View.Drawing;
 
 public class OpenGLDrawer : IDrawer
 {
+    public bool GlInitialized => _gl is not null;
+
     private OpenGL _gl;
 
     public void InitGl(OpenGL gl)
@@ -15,11 +17,11 @@ public class OpenGLDrawer : IDrawer
         _gl = gl;
     }
 
-    public Color LineColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public int LineThickness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public Color PointColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public int PointSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public Color FillColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public Color LineColor { get; set; }
+    public int LineThickness { get; set; }
+    public Color PointColor { get; set; }
+    public int PointSize { get; set; }
+    public Color FillColor { get; set; }
 
     public void Reset()
     {
@@ -57,8 +59,8 @@ public class OpenGLDrawer : IDrawer
         _gl.PointSize(1);
         _gl.Begin(OpenGL.GL_POINTS);
 
-        int numPoints = 10000; // Количество точек окружности
-        double angleStep = (2 * Math.PI) / numPoints;
+        const int numPoints = 1000;
+        const double angleStep = (2 * Math.PI) / numPoints;
 
         _gl.Color(0f, 0f, 0f);
         for (int i = 0; i < numPoints; i++)

@@ -22,7 +22,6 @@ public class AppViewModel : ReactiveObject
     [Reactive] public IGeometricObject? EditingObject { get; set; }
     public SourceList<IGeometricObject> GeometryObjects { get; set; }
     
-    public ReactiveCommand<Unit, Unit> IncrementCommand { get; private set; }
     public ReactiveCommand<Unit, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Unit, Unit> RightMouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
@@ -46,12 +45,7 @@ public class AppViewModel : ReactiveObject
         _logger = logger;
         _application = application;
         _exporter = exporter;
-        
-        IncrementCommand = ReactiveCommand.CreateFromObservable(Increment);
-        IncrementCommand.Subscribe(_ =>
-        {
-            _logger.LogDebug("Increment invoked. New value {value}", ReactiveProperty);
-        });
+
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
         MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
