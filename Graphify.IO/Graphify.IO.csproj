@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.SVG" Version="24.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
   </ItemGroup>
 

@@ -1,11 +1,19 @@
 using System.IO;
+using Graphify.Client.View.Drawing;
 using Graphify.Client.Model;
+using Graphify.Client.Model.Commands;
+using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Geometry;
+using Graphify.Client.Model.Interfaces;
 using Graphify.Client.ViewModel;
-using Graphify.Core;
-using Graphify.Core.IO;
+using Graphify.Core.Model.IO.Export;
+using Graphify.Core.Model.IO.Import;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.IO;
+using Graphify.IO.Exporters;
+using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -55,14 +63,32 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
+       
+        services.AddIO();
+        //services.AddSingleton<OpenGLDrawer>();
 
+        ConfigureExportImport(services);
         ConfigureApplication(services);
+    }
+
+    private static void ConfigureExportImport(IServiceCollection services)
+    {
+        services.AddSingleton<Exporter>();
+        services.AddSingleton<Importer>();
+        
+        services.AddSingleton<IImporterFactory, ImporterFactory>();
+        services.AddSingleton<IExporterFactory, ExporterFactory>();
     }
 
     private static void ConfigureApplication(IServiceCollection services)
     {
+        services.AddSingleton<Application>();
         services.AddSingleton<ApplicationContext>();
+        services.AddSingleton<DrawLoop>();
         services.AddSingleton<Surface>();
-        services.AddSingleton<GeometryFactory>();
+        services.AddSingleton<IGeometryFactory, GeometryFactory>();
+        services.AddSingleton<IDrawer, OpenGLDrawer>();
+        
+        services.AddScoped<CommandsBuffer>();
     }
 }

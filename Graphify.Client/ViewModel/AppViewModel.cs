@@ -1,9 +1,15 @@
+using System;
 using System.Numerics;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
+using Graphify.Client.Model;
+using Graphify.Client.Model.Enums;
 using Graphify.Core;
+using Graphify.Core.Model.IO.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -27,32 +33,56 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
-    public ReactiveCommand<(string Path, ExportFileFormat Format), Unit> Export { get; private set; }
+    public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
+    private readonly Application _application;
+    // TODO remove
+    private readonly Exporter _exporter;
 
-    public AppViewModel(ILogger<AppViewModel> logger)
+    public AppViewModel(ILogger<AppViewModel> logger, Application application, Exporter exporter)
     {
         _logger = logger;
+        _application = application;
+        _exporter = exporter;
         
         IncrementCommand = ReactiveCommand.CreateFromObservable(Increment);
         IncrementCommand.Subscribe(_ =>
         {
             _logger.LogDebug("Increment invoked. New value {value}", ReactiveProperty);
         });
+        SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
+        Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
+        MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
+
+        _application.AddPoint(new Vector2(1f, 1f));
+        _application.UndoAction();
+        _application.RedoAction();
     }
 
+    //TODO �����������???????
+    private IObservable<Unit> SetMode(EditMode mode)
+    {
+        return Observable.Return(Unit.Default);
+    }
+    
+    private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
+    {
+        _exporter.Export(tuple.Format, tuple.Path);
+        return Task.FromResult(Unit.Default);
+    }
+    
     private IObservable<Unit> Increment()
     {
         ReactiveProperty++;
         return Observable.Return(Unit.Default);
     }
-}
 
-public enum EditMode { }
-
-public enum ExportFileFormat
-{
-
+    //TODO Implement for other figures
+    private IObservable<Unit> MouseDownAction(Vector2 position)
+    {
+        _application.AddPoint(position);
+        return Observable.Return(Unit.Default);
+    }
 }
