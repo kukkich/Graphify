@@ -4,10 +4,8 @@ using Graphify.Client.Model;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Geometry;
 using Graphify.Client.ViewModel;
-using Graphify.Core;
-using Graphify.Core.IO;
 using Graphify.Geometry.GeometricObjects;
-using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -57,8 +55,10 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
+       
+        services.AddIO();
         services.AddSingleton<OpenGLDrawer>();
-      
+
         ConfigureApplication(services);
     }
 

@@ -1,6 +1,7 @@
 using Graphify.Client.Enums;
 using Graphify.Client.Model.Geometry;
-using Graphify.IO;
+using Graphify.IO.Exporters;
+using Graphify.IO.Interfaces;
 
 namespace Graphify.Core.IO;
 
@@ -8,7 +9,7 @@ public class Exporter
 {
     private readonly Dictionary<ExportFileType, IExporter> _exporters = [];
     
-    public Exporter(IPNGExporter pngExporter, ISVGExporter svgExporter)
+    public Exporter(PNGExporter pngExporter, SVGExporter svgExporter)
     {
         _exporters.Add(ExportFileType.Png, pngExporter);
         _exporters.Add(ExportFileType.Svg, svgExporter);
