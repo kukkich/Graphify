@@ -50,16 +50,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо присоединить к прямой</param>
+    /// <exception cref="InvalidOperationException"> - если присоединить точку <c>attachable</c> к данной фигуре невозможно</exception>
     public void ConsumeAttach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
-            return;
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка является опорной для данной фигуры");
         }
 
         if (_attached.Find(x => x.Object == attachable) != null)
         {
-            return;
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка уже присоединена к данной фигуре");
         }
 
         // Вычисление нового положения точки на прямой.
@@ -101,13 +102,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Удаляет присоединяемую точку <c>attachable</c> из своего множества присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
+    /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
     public void ConsumeDetach(Point attachable)
     {
         AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
         if (maybeAttached != null)
         {
             _attached.Remove(maybeAttached);
+            return;
         }
+
+        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
     }
 
     /// <summary>
@@ -180,14 +185,14 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     /// <summary>
     /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
-    /// Если прямая имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Move(Vector2 shift)
     {
         if (!CanBeMoved)
         {
-            return;
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
         foreach (var point in ControlPoints)
@@ -198,15 +203,15 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     /// <summary>
     /// Метод, позволяющий вращать прямую относительно опорной точки <c>shift</c> на угол <c>angle</c> по часовой стрелке.
-    /// Если прямая имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="shift"> - опорная точка, относительно которой осуществляется вращение прямой</param>
     /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Rotate(Point shift, float angle)
     {
         if (!CanBeMoved)
         {
-            return;
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
         foreach (var point in ControlPoints)
@@ -217,14 +222,14 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     /// <summary>
     /// Метод, позволяющий сделать зеркальное отражение с переворотом относительно заданной точки.
-    /// Если прямая имеет хотя бы одну закреплённую точку, то данный метод не делает ничего.
     /// </summary>
     /// <param name="point"> - точка, относительно которой происходит отражение</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Reflect(Point point)
     {
         if (!CanBeMoved)
         {
-            return;
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
         foreach (var objPoint in ControlPoints)
