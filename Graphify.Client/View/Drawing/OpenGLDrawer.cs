@@ -13,10 +13,6 @@ public class OpenGLDrawer : IDrawer
     public void InitGl(OpenGL gl)
     {
         _gl = gl;
-        _gl.ClearColor(1.0f,1.0f,1.0f,1.0f);
-        _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-
-
     }
 
     public Color LineColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -24,6 +20,12 @@ public class OpenGLDrawer : IDrawer
     public Color PointColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public int PointSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public Color FillColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public void Reset()
+    {
+        _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+    }
 
     public void DrawBezierCurve(IEnumerable<Vector2> points)
     {

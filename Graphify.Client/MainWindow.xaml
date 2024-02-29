@@ -87,6 +87,7 @@
         <sharpGL:OpenGLControl x:Name="GlWindow" 
                                Resized="GlWindow_Resized"
                                OpenGLDraw="GlWindow_OpenGLDraw"
+                               DrawFPS="True"
                                Height="1080"
                                MinWidth="1920"
                                Padding="0"
