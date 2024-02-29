@@ -39,20 +39,22 @@ public class Surface : IGeometryContext
 
     public bool TryRemove(IGeometricObject target)
     {
-        if (_objects.Remove(target))
+        if (!_objects.Remove(target))
         {
-            if (_points.Remove((Point)target))
-            {
-                return true;
-            }
-            else if(_figures.Remove((IFigure)target))
-            {
-                return true;
-            }
-
-            throw new ArgumentOutOfRangeException("REROU");
+            return false;
         }
-        return false;
+        
+        if (_points.Remove((Point)target))
+        {
+            return true;
+        }
+        
+        if(_figures.Remove((IFigure)target))
+        {
+            return true;
+        }
+
+        throw new ArgumentException("Target object not found");
     }
 
     public void Clear()

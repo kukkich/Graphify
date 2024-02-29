@@ -59,8 +59,8 @@ public class OpenGLDrawer : IDrawer
         _gl.PointSize(1);
         _gl.Begin(OpenGL.GL_POINTS);
 
-        int numPoints = 1000; // Количество точек окружности
-        double angleStep = (2 * Math.PI) / numPoints;
+        const int numPoints = 1000;
+        const double angleStep = (2 * Math.PI) / numPoints;
 
         _gl.Color(0f, 0f, 0f);
         for (int i = 0; i < numPoints; i++)

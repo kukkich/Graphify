@@ -15,7 +15,7 @@ public class DrawLoop
     private float _fps;
     private bool _isRunning;
     
-    private DispatcherTimer timer;
+    private DispatcherTimer _timer;
     
     public DrawLoop(ApplicationContext applicationContext, OpenGLDrawer drawer)
     {
@@ -30,8 +30,8 @@ public class DrawLoop
         _stopwatch = new Stopwatch();
         _isRunning = false;
         
-        timer = new DispatcherTimer();
-        timer.Tick += Timer_Tick;
+        _timer = new DispatcherTimer();
+        _timer.Tick += Timer_Tick;
     }
     
     private void Timer_Tick(object sender, EventArgs e)
@@ -52,8 +52,8 @@ public class DrawLoop
         _isRunning = true;
         TimeSpan targetElapsedTime = TimeSpan.FromSeconds(1.0 / _fps);
 
-        timer.Interval = targetElapsedTime;
-        timer.Start();
+        _timer.Interval = targetElapsedTime;
+        _timer.Start();
     }
 
     public void Stop()
