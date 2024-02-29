@@ -244,4 +244,5 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     }
 
     public PointExportData GetExportData() => throw new NotImplementedException();
+
 }
