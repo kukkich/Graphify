@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Net.Sockets;
 using System.Windows.Input;
+using Graphify.Client.Model.Enums;
 
 namespace Graphify.Client;
 
@@ -134,7 +135,7 @@ public partial class MainWindow
         //реализовать выпадающее окно для выбора пути
         if (ViewModel != null)
         {
-            ViewModel.Export.Execute();
+            ViewModel.Export.Execute(("", ExportFileType.Svg));
         }
     }
 
