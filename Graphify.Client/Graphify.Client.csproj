@@ -18,6 +18,12 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Icons\line.png" />
+    <None Remove="Icons\move.png" />
+    <None Remove="Icons\point.png" />
+    <None Remove="Icons\redo.png" />
+    <None Remove="Icons\save.png" />
+    <None Remove="Icons\undo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,5 +61,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
     <ProjectReference Include="..\Graphify.IO\Graphify.IO.csproj" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Resource Include="Icons\line.png" />
+    <Resource Include="Icons\move.png" />
+    <Resource Include="Icons\point.png" />
+    <Resource Include="Icons\redo.png" />
+    <Resource Include="Icons\save.png" />
+    <Resource Include="Icons\undo.png" />
   </ItemGroup>
 </Project>
