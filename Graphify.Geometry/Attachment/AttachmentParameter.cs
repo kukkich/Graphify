@@ -2,7 +2,8 @@ namespace Graphify.Geometry.Attaching;
 
 public class AttachmentParameter
 {
-    public float T {
+    public float T
+    {
         get => _t;
         set
         {
@@ -10,7 +11,7 @@ public class AttachmentParameter
             {
                 throw new ArgumentException();
             }
-            
+
             _t = value;
         }
     }

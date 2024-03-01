@@ -1,5 +1,5 @@
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using System.Numerics;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Client.Model.Geometry;
@@ -10,9 +10,9 @@ public class Surface : IGeometryContext
     public IEnumerable<IFigure> Figures => _figures;
     public IEnumerable<Point> Points => _points;
 
-    private HashSet<IGeometricObject> _objects = [];
-    private HashSet<IFigure> _figures = [];
-    private HashSet<Point> _points = [];
+    private readonly HashSet<IGeometricObject> _objects = [];
+    private readonly HashSet<IFigure> _figures = [];
+    private readonly HashSet<Point> _points = [];
 
     public IGeometricObject? TryGetClosestObject(Vector2 point, double precision) => throw new NotImplementedException();
 
@@ -39,20 +39,22 @@ public class Surface : IGeometryContext
 
     public bool TryRemove(IGeometricObject target)
     {
-        if (_objects.Remove(target))
+        if (!_objects.Remove(target))
         {
-            if (_points.Remove((Point)target))
-            {
-                return true;
-            }
-            else if(_figures.Remove((IFigure)target))
-            {
-                return true;
-            }
-
-            throw new ArgumentOutOfRangeException("REROU");
+            return false;
         }
-        return false;
+
+        if (_points.Remove((Point)target))
+        {
+            return true;
+        }
+
+        if (_figures.Remove((IFigure)target))
+        {
+            return true;
+        }
+
+        throw new ArgumentException("Target object not found");
     }
 
     public void Clear()

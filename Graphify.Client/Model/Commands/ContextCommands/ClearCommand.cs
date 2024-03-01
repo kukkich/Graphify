@@ -20,6 +20,6 @@ public class ClearCommand : ICommand
 
     public void Undo()
     {
-        _context.Surface = _surface;
+        _context.SetSurface(_surface);
     }
 }

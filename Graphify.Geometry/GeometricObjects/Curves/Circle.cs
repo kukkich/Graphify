@@ -1,5 +1,4 @@
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
@@ -16,10 +15,10 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     public IEnumerable<Point> ControlPoints { get; }
     [Reactive] public CurveStyle Style { get; set; }
 
-    private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
+    private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
-    private Point _pointA;
-    private Point _pointB;
+    private readonly Point _pointA;
+    private readonly Point _pointB;
 
     public Circle(Point A, Point B, CurveStyle? style = null)
     {
@@ -32,7 +31,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     public void Update() => throw new NotImplementedException();
     public void ConsumeAttach(Point attachable) => throw new NotImplementedException();
-    public void ConsumeDetach(Point attachable) => throw new NotImplementedException ();
+    public void ConsumeDetach(Point attachable) => throw new NotImplementedException();
     public bool IsNextTo(Vector2 point, float distance) => throw new NotImplementedException();
     public void Move(Vector2 shift) => throw new NotImplementedException();
     public void Rotate(Point shift, float angle) => throw new NotImplementedException();

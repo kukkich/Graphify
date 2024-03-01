@@ -1,4 +1,4 @@
-namespace Graphify.Client.Enums;
+﻿namespace Graphify.Client.Model.Enums;
 
 public enum SaveResult
 {
