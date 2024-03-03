@@ -2,20 +2,20 @@ using System.Numerics;
 using Aspose.Svg;
 using Aspose.Svg.Builder;
 using Aspose.Svg.Toolkit.Optimizers;
+using DynamicData;
 using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Xml.Linq;
-using System.Linq;
 
 namespace Graphify.IO.Exporters;
 
 public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 {
-    private const int ExtraSize = 50;
+    private const byte ExtraSize = 50;
 
     private readonly ILogger<SVGExporter> _logger = logger;
 
@@ -62,7 +62,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
         {
             case ObjectType.Line: AddLine(data, controlPoints.ToList<Point>()); break;
             case ObjectType.Circle: AddCircle(data, controlPoints.ToList<Point>()); break;
-            case ObjectType.Polygon: AddPolygon(); break;
+            case ObjectType.Polygon:AddPolygon(data, controlPoints.ToList<Point>());  break;
             case ObjectType.CubicBezier: AddCubicBezier(data, controlPoints.ToList<Point>()); break;
         }
     }
@@ -96,7 +96,9 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
                 .X2(points[1].X)
                 .Y2(points[1].Y)
                 .Stroke(dataLine.Style.PrimaryColor)
-                .StrokeWidth((dataLine.Style as CurveStyle ?? CurveStyle.Default).Size));
+                .StrokeWidth((dataLine.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Transform(t => t.Scale(1, -1))
+                );
     }
 
     private void AddCircle(FigureExportData dataCircle, List<Point> points)
@@ -121,12 +123,40 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
                 .Fill(Paint.None)
                 .Stroke(dataCircle.Style.PrimaryColor)
                 .StrokeWidth((dataCircle.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Transform(t => t.Scale(1, -1))
             );
     }
 
-    private void AddPolygon() => throw new NotImplementedException();
+    private void AddPolygon(FigureExportData dataPolygon, List<Point> points)
+    {
+        if (points.Count < 3)
+        {
+            _logger.LogError(
+                "The number of points to build a Polygon less 3. The number of points contained: {pointsCount}", points.Count);
 
-    private void AddPolyline() => throw new NotImplementedException();
+            throw new ArgumentException("");
+        }
+
+        /* double[] pointsSVG = new double[points.Count * 2];
+
+         for (int i = 0; i < points.Count - 1; i++)
+         {
+             var x = points[i].PointToArray();
+
+             pointsSVG[2 * i] = x[0];
+             pointsSVG[2 * i + 1] = x[1];
+         }*/
+
+        double[] pointsSVG = points.SelectMany(x => x.PointToArray()).ToArray();
+
+        _svgElements.AddPolygon(
+            polygon => polygon
+                .Points(pointsSVG)
+                .Fill(dataPolygon.Style.PrimaryColor)
+                .Stroke(Paint.None)
+                .Transform(t => t.Scale(1, -1))
+            );
+    }
 
     private void AddCubicBezier(FigureExportData dataBezier, List<Point> points)
     {
@@ -147,7 +177,9 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
                     .Z())
                 .Fill(Paint.None)
                 .Stroke(dataBezier.Style.PrimaryColor)
-                .StrokeWidth((dataBezier.Style as CurveStyle ?? CurveStyle.Default).Size));
+                .StrokeWidth((dataBezier.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Transform(t => t.Scale(1, -1))
+            );
     }
 
     private void CreateFile(string path)
@@ -198,20 +230,44 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
         }
     }
 
-    private void UpdateSvgSize(FigureExportData figures) => throw new NotImplementedException();
+    private void UpdateSvgSize(FigureExportData figures)
+    {
+        Vector2 leftBottomBound = figures.LeftBottomBound;
+        Vector2 rightTopBound = figures.RightTopBound;
+
+        if (leftBottomBound.X < LeftBottomBound.X)
+        {
+            LeftBottomBound = new Vector2(leftBottomBound.X, LeftBottomBound.Y);
+        }
+
+        if (leftBottomBound.Y < LeftBottomBound.Y)
+        {
+            LeftBottomBound = new Vector2(LeftBottomBound.X, leftBottomBound.Y);
+        }
+
+        if (rightTopBound.X > RightTopBound.X)
+        {
+            RightTopBound = new Vector2(rightTopBound.X, RightTopBound.X);
+        }
+
+        if (rightTopBound.Y > RightTopBound.Y)
+        {
+            RightTopBound = new Vector2(RightTopBound.X, rightTopBound.Y);
+        }
+    }
 
     private static void DeleteWatermark(string path)
     {
         const string str = "<text y=\"15\" style=\"font-family:Times New Roman; font-size:15px; fill:red;\" >Evaluation Only. Created with Aspose.SVG. Copyright 2018-2024 Aspose Pty Ltd.</text>";
 
-        int lastIndex = path.LastIndexOf(".");
+        int lastIndex = path.LastIndexOf('.');
 
         using StreamReader reader = new(path);
-        using StreamWriter writer = new(path.Insert(lastIndex,"WW"));
+        using StreamWriter writer = new(path.Insert(lastIndex, "WW"));
 
         var content = reader.ReadLine();
         var newContent = content!.Replace(str, "");
-        
+
         writer.WriteLine(newContent);
     }
 }
