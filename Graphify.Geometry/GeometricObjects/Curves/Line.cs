@@ -26,6 +26,11 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     [Reactive] public CurveStyle Style { get; set; }
 
+    /// <summary>
+    /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
+    /// </summary>
+    private bool CanBeMoved => !(_pointA.IsAttached || _pointB.IsAttached);
+
 
     private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
@@ -48,16 +53,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо присоединить к прямой</param>
+    /// <exception cref="InvalidOperationException"> - если присоединить точку <c>attachable</c> к данной фигуре невозможно</exception>
     public void ConsumeAttach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
-            return;
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка является опорной для данной фигуры");
         }
 
         if (_attached.Find(x => x.Object == attachable) != null)
         {
-            return;
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка уже присоединена к данной фигуре");
         }
 
         // Вычисление нового положения точки на прямой.
@@ -99,13 +105,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Удаляет присоединяемую точку <c>attachable</c> из своего множества присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
+    /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
     public void ConsumeDetach(Point attachable)
     {
         AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
         if (maybeAttached != null)
         {
             _attached.Remove(maybeAttached);
+            return;
         }
+
+        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
     }
 
     /// <summary>
@@ -177,12 +187,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     }
 
     /// <summary>
-    /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>
+    /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
     /// </summary>
     /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Move(Vector2 shift)
     {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
+        if (!CanBeMoved)
+        {
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
+        }
+
         foreach (var point in ControlPoints)
         {
             point.Move(shift);
@@ -194,9 +209,14 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     /// <param name="shift"> - опорная точка, относительно которой осуществляется вращение прямой</param>
     /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Rotate(Point shift, float angle)
     {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
+        if (!CanBeMoved)
+        {
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
+        }
+
         foreach (var point in ControlPoints)
         {
             point.Rotate(shift, angle);
@@ -207,9 +227,14 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Метод, позволяющий сделать зеркальное отражение с переворотом относительно заданной точки.
     /// </summary>
     /// <param name="point"> - точка, относительно которой происходит отражение</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
     public void Reflect(Point point)
     {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
+        if (!CanBeMoved)
+        {
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
+        }
+
         foreach (var objPoint in ControlPoints)
         {
             objPoint.Reflect(point);
