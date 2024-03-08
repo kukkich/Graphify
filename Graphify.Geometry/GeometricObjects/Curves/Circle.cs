@@ -1,5 +1,4 @@
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
@@ -42,7 +41,6 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     private Point _centerPoint;
     private Point _radiusPoint;
-
 
     public Circle(Point center, Point radius, CurveStyle? style = null)
     {
@@ -200,5 +198,6 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         drawer.DrawCircle(centerPoint, Radius);
     }
+
     public FigureExportData GetExportData() => throw new NotImplementedException();
 }
