@@ -155,7 +155,16 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="point"> - точка, относительно которой проверяется расстояние</param>
     /// <param name="distance"> - расстояние, в пределах которого выполняется проверка</param>
     /// <returns><c>true</c>, если точка <c>point</c> находится в пределах расстояния <c>distance</c> от прямой; <c>false</c> в ином случае</returns>
-    public bool IsNextTo(Vector2 point, float distance) => distance > DistanceTo(point);
+    /// <exception cref="ArgumentException"> - в случае, если <c>distance</c> не является строго положительным числом</exception>
+    public bool IsNextTo(Vector2 point, float distance)
+    {
+        if (distance <= 0)
+        {
+            throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
+        }
+
+        return distance > DistanceTo(point);
+    }
 
     /// <summary>
     /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.

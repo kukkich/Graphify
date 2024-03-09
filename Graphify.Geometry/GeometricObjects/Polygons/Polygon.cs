@@ -101,8 +101,14 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     /// <param name="point"> - точка, относительно которой проверяется расстояние</param>
     /// <param name="distance"> - расстояние, в пределах которого выполняется проверка</param>
     /// <returns><c>true</c>, если точка <c>point</c> находится в пределах расстояния <c>distance</c> от грани полигона; <c>false</c> в ином случае</returns>
+    /// <exception cref="ArgumentException"> - в случае, если <c>distance</c> не является строго положительным числом</exception>
     public bool IsNextTo(Vector2 point, float distance)
     {
+        if (distance <= 0)
+        {
+            throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
+        }
+
         var isNextToLines = _lines.Where(line => line.IsNextTo(point, distance));
 
         return isNextToLines.Any();
