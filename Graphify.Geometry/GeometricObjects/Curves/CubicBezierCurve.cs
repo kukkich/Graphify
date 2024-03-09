@@ -16,7 +16,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
     protected CubicBezierCurve()
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // TODO: реализация логики кривой Безье
     }
 
     public void Update() => throw new NotImplementedException();
