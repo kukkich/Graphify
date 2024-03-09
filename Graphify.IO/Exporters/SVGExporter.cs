@@ -111,7 +111,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
             throw new ArgumentException("");
         }
 
-        var circlePoints = points.ToListVector2();
+        var circlePoints = points.ToVector2();
 
         float radius = Vector2.Distance(circlePoints[0], circlePoints[1]);
 
