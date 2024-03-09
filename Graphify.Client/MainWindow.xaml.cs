@@ -9,7 +9,8 @@ using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
 using ReactiveUI;
 using SharpGL;
-using SharpGL.WPF;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace Graphify.Client;
 
@@ -36,8 +37,43 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
         });
-    }
 
+        List<Figure> listObjects = new List<Figure>() //temporarily
+        {
+            new Figure()
+            {
+                Data = "A = (-1.2, 1.33)",
+                Type = "LightBlue"
+            },
+            new Figure()
+            {
+                Data = "B = (3.45, 2.1)",
+                Type = "LightBlue"
+            },
+            new Figure()
+            {
+                Data = "C = (0, 0)",
+                Type = "LightBlue"
+            },
+            new Figure()
+            {
+                Data = "f: Прямая(B, C)",
+                Type = "LightGray"
+            }
+        };
+        this.listGeometryObjects.ItemsSource = listObjects; //temporarily
+    }
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+    private void Delete_Click(object sender, RoutedEventArgs e)
+    { }
+    private void Clone_Click(object sender, RoutedEventArgs e)
+    { }
+  
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -89,10 +125,16 @@ public partial class MainWindow
         {
             return;
         }
-
+    
         var position = args.GetPosition((OpenGLControl)sender);
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+  
+    public class Figure //temporarily
+    {
+        public string Data { get; set; }
+        public string Type { get; set; }
     }
 }
