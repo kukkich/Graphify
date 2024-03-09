@@ -113,13 +113,13 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 
         var circlePoints = points.ToListVector2();
 
-        float distance = Vector2.Distance(circlePoints[0], circlePoints[1]);
+        float radius = Vector2.Distance(circlePoints[0], circlePoints[1]);
 
         _svgElements.AddCircle(
             circle => circle
                 .Cx(circlePoints[0].X)
                 .Cy(circlePoints[0].Y)
-                .R(distance)
+                .R(radius)
                 .Fill(Paint.None)
                 .Stroke(dataCircle.Style.PrimaryColor)
                 .StrokeWidth((dataCircle.Style as CurveStyle ?? CurveStyle.Default).Size)
