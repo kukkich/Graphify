@@ -14,11 +14,11 @@ public class Surface : IGeometryContext
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
 
-    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision) => throw new NotImplementedException();
+    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 
-    public Point? TryGetClosestPoint(Vector2 point, double precision) => throw new NotImplementedException();
+    public Point? TryGetClosestPoint(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 
-    public IFigure? TryGetClosestFigure(Vector2 point, double precision) => throw new NotImplementedException();
+    public IFigure? TryGetClosestFigure(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 
     public void AddObject(IGeometricObject newObject)
     {
@@ -54,14 +54,14 @@ public class Surface : IGeometryContext
             return false;
         }
 
-        if (_points.Remove((Point)target))
+        if (target is Point point)
         {
-            return true;
+            return _points.Remove(point);
         }
 
-        if (_figures.Remove((IFigure)target))
+        if (target is IFigure figure)
         {
-            return true;
+            return _figures.Remove(figure);
         }
 
         throw new ArgumentException("Target object not found");

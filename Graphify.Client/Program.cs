@@ -4,6 +4,7 @@ using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Geometry;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Client.Model.Tools;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
 using Graphify.Core.Model.IO.Export;
@@ -67,6 +68,7 @@ public class Program
 
         ConfigureExportImport(services);
         ConfigureApplication(services);
+        ConfigureTools(services);
     }
 
     private static void ConfigureExportImport(IServiceCollection services)
@@ -88,5 +90,11 @@ public class Program
         services.AddScoped<IDrawer, OpenGLDrawer>();
 
         services.AddScoped<CommandsBuffer>();
+    }
+    
+    private static void ConfigureTools(IServiceCollection services)
+    {
+        services.AddScoped<ToolsController>();
+        services.AddScoped<IToolsFactory, ToolsFactory>();
     }
 }

@@ -4,6 +4,8 @@ using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
+using Graphify.Client.Model.Interfaces;
+using Graphify.Client.Model.Tools;
 using Graphify.Core.Model.IO.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -33,46 +35,34 @@ public class AppViewModel : ReactiveObject
 
     private readonly ILogger<AppViewModel> _logger;
     private readonly Application _application;
-    // TODO remove
-    private readonly Exporter _exporter;
 
-    public AppViewModel(ILogger<AppViewModel> logger, Application application, Exporter exporter)
+    public AppViewModel(ILogger<AppViewModel> logger, Application application)
     {
         _logger = logger;
         _application = application;
-        _exporter = exporter;
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
         MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
-
-        _application.AddPoint(new Vector2(1f, 1f));
-        _application.UndoAction();
-        _application.RedoAction();
     }
 
     //TODO �����������???????
     private IObservable<Unit> SetMode(EditMode mode)
     {
+        _application.ToolsController.SetTool(mode);
         return Observable.Return(Unit.Default);
     }
 
     private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
     {
-        _exporter.Export(tuple.Format, tuple.Path);
+        _application.Exporter.Export(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
-    }
-
-    private IObservable<Unit> Increment()
-    {
-        ReactiveProperty++;
-        return Observable.Return(Unit.Default);
     }
 
     //TODO Implement for other figures
     private IObservable<Unit> MouseDownAction(Vector2 position)
     {
-        _application.AddPoint(position);
+        _application.ToolsController.MouseDown(position);
         return Observable.Return(Unit.Default);
     }
 }

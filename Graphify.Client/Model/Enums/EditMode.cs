@@ -4,5 +4,6 @@ public enum EditMode
 {
     Move,
     CreatePoint,
-    CreateLine
+    CreateLine,
+    CreateCircleTwoPoints
 }

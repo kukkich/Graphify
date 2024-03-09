@@ -83,7 +83,10 @@ public class OpenGLDrawer : IDrawer
         _gl.End();
     }
 
-    public void DrawLine(Vector2 start, Vector2 end) => throw new NotImplementedException();
+    public void DrawLine(Vector2 start, Vector2 end)
+    {
+        DrawCircle(start, 2);
+    }
 
     public void DrawPolygon(IEnumerable<Vector2> points)
     {
