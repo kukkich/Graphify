@@ -1,6 +1,6 @@
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using ReactiveUI;
@@ -27,4 +27,5 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     public void Rotate(Point shift, float angle) => throw new NotImplementedException();
     public void Reflect(Point point) => throw new NotImplementedException();
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
+    public FigureExportData GetExportData() => throw new NotImplementedException();
 }

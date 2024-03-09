@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using ReactiveUI;
@@ -28,10 +27,10 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     [Reactive] public CurveStyle Style { get; set; }
 
 
-    private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
+    private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
-    private Point _pointA;
-    private Point _pointB;
+    private readonly Point _pointA;
+    private readonly Point _pointB;
 
     public Line(Point A, Point B, CurveStyle? style = null)
     {
@@ -41,6 +40,8 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         Style = style ?? CurveStyle.Default;
         _attached = [];
     }
+
+
 
 
     /// <summary>
@@ -214,4 +215,6 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             objPoint.Reflect(point);
         }
     }
+
+    public FigureExportData GetExportData() => throw new NotImplementedException();
 }

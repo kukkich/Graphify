@@ -6,21 +6,24 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="bin\**" />
-    <Compile Remove="Model\**" />
     <EmbeddedResource Remove="bin\**" />
-    <EmbeddedResource Remove="Model\**" />
     <None Remove="bin\**" />
-    <None Remove="Model\**" />
     <Page Remove="bin\**" />
-    <Page Remove="Model\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Icons\line.png" />
+    <None Remove="Icons\move.png" />
+    <None Remove="Icons\point.png" />
+    <None Remove="Icons\redo.png" />
+    <None Remove="Icons\save.png" />
+    <None Remove="Icons\undo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,10 +54,21 @@
   </ItemGroup>
     
   <ItemGroup>
-    <Folder Include="View\" />
+    <Folder Include="Model\Geometry\" />
+    <Folder Include="View\" />    
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
+    <ProjectReference Include="..\Graphify.IO\Graphify.IO.csproj" />
   </ItemGroup>
     
   <ItemGroup>
-    <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
+    <Resource Include="Icons\line.png" />
+    <Resource Include="Icons\move.png" />
+    <Resource Include="Icons\point.png" />
+    <Resource Include="Icons\redo.png" />
+    <Resource Include="Icons\save.png" />
+    <Resource Include="Icons\undo.png" />
   </ItemGroup>
 </Project>

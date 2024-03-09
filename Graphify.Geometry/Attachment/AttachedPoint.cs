@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Graphify.Geometry.Attaching;
 using Graphify.Geometry.GeometricObjects.Points;
 
@@ -23,7 +18,7 @@ namespace Graphify.Geometry.Attachment
             }
         }
 
-        private AttachmentParameter _t;
+        private readonly AttachmentParameter _t;
 
         public AttachedPoint(Point obj, float t = 0.0f)
         {

@@ -9,7 +9,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify" Height="768" Width="1366">
+    Title="Graphify" Height="1080" Width="1920">
     <Window.Resources>
         <ContextMenu x:Key="cmButton">
             <MenuItem Header="Удалить"
@@ -43,22 +43,100 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" BorderBrush="#D9D9D9" BorderThickness="1" CornerRadius="2" Background="White">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
-            <RowDefinition Height="722"/>
+            <RowDefinition MinHeight="722"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="244"/>
-            <ColumnDefinition  Width="*"/>
+            <ColumnDefinition Width="*" MinWidth="244"/>
+            <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0"
                     Grid.ColumnSpan="3"
-                    Background="Gray">
+                    Background="White"
+                    Orientation="Horizontal"
+                    >
+            <Button x:Name="ExportButton"
+                    Width="30"
+                    Height="30"
+                    Margin="14, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="ExportButton_Click"
+                    >
+                <Image Source="/Icons/save.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="MoveModeButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"                    
+                    Click="MoveModeButton_Click">
+                <Image Source="/Icons/move.png" Stretch="Uniform"/>
+            </Button>
+
+            <Button x:Name="CreatePointModeButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreatePointModeButton_Click">
+                <Image Source="/Icons/point.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="CreateLineModeButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateLineModeButton_Click">
+                <Image Source="/Icons/line.png" Stretch="Uniform"/>
+            </Button>
+
+            <Button x:Name="UndoButton"
+                    Width="50"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateLineModeButton_Click">
+                <Image Source="/Icons/undo.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="RedoButton"
+                    Width="50"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateLineModeButton_Click">
+                <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <TextBox Padding="5" Height="30" Width="40" HorizontalAlignment="Center" x:Name="ValueBox" />
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
@@ -109,15 +187,15 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <sharpGL:OpenGLControl x:Name="GlWindow"                               
-                               Height="722"
-                               MinWidth="887"
-                               Padding="0"
-                               Margin="0"
+        <sharpGL:OpenGLControl x:Name="GlWindow" 
+                               Resized="GlWindow_Resized"
+                               OpenGLDraw="GlWindow_OpenGLDraw"
+                               Height="1080"
+                               MinWidth="1920"
                                Grid.Row="1"
                                Grid.Column="1"
+                               MouseDown="GlWindow_MouseDown"
         />
-        
-        
+
     </Grid>
 </reactiveUi:ReactiveWindow>
