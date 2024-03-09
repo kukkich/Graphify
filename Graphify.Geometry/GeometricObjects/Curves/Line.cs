@@ -29,7 +29,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <summary>
     /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
     /// </summary>
-    private bool CanBeMoved => !(_pointA.IsAttached || _pointB.IsAttached);
+    internal bool CanBeMoved => !(_pointA.IsAttached || _pointB.IsAttached);
 
 
     private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
@@ -155,42 +155,13 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="point"> - точка, относительно которой проверяется расстояние</param>
     /// <param name="distance"> - расстояние, в пределах которого выполняется проверка</param>
     /// <returns><c>true</c>, если точка <c>point</c> находится в пределах расстояния <c>distance</c> от прямой; <c>false</c> в ином случае</returns>
-    public bool IsNextTo(Vector2 point, float distance)
-    {
-        // Точка будет располагаться на прямой, по кратчайшему расстоянию к этой прямой
-        var A = new Vector2(_pointA.X, _pointA.Y); // Вспомогательные векторы для упрощения записи
-        var B = new Vector2(_pointB.X, _pointB.Y);
-        var T = point;
-        var ab = new Vector2(B.X - A.X, B.Y - A.Y);
-        var n = new Vector2(ab.Y, -ab.X);
-
-        // Определяем растяжение вектора ab
-        var x = (T.Y - A.Y) * ab.Y + (-A.X + T.X) * ab.X;
-        x /= ab.X * ab.X + ab.Y * ab.Y;
-
-        // Если точка point лежит левее точки A
-        if (x < 0)
-        {
-            return _pointA.IsNextTo(point, distance);
-        }
-        else if (x > 1) // Если точка point лежит правее точки B
-        {
-            return _pointB.IsNextTo(point, distance);
-        }
-
-        // Если точка point лежит между точками A и B
-        // Определяем растяжение нормали n
-        var y = (A.X + x * ab.X - T.X) / ab.Y;
-        var dist = y * n;  // Определяем расстояние от точки до прямой
-
-        return distance > dist.Length();
-    }
+    public bool IsNextTo(Vector2 point, float distance) => distance > DistanceTo(point);
 
     /// <summary>
     /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
     /// </summary>
     /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
-    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными)</exception>
     public void Move(Vector2 shift)
     {
         if (!CanBeMoved)
@@ -254,5 +225,36 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             RightTopBound = rightBound,
         };
         return exportData;
+    }
+
+    internal float DistanceTo(Vector2 point)
+    {
+        // Точка будет располагаться на прямой, по кратчайшему расстоянию к этой прямой
+        var A = new Vector2(_pointA.X, _pointA.Y); // Вспомогательные векторы для упрощения записи
+        var B = new Vector2(_pointB.X, _pointB.Y);
+        var T = point;
+        var ab = new Vector2(B.X - A.X, B.Y - A.Y);
+        var n = new Vector2(ab.Y, -ab.X);
+
+        // Определяем растяжение вектора ab
+        var x = (T.Y - A.Y) * ab.Y + (-A.X + T.X) * ab.X;
+        x /= ab.X * ab.X + ab.Y * ab.Y;
+
+        // Если точка point лежит левее точки A
+        if (x < 0)
+        {
+            return (A - point).Length();
+        }
+        else if (x > 1) // Если точка point лежит правее точки B
+        {
+            return (B - point).Length();
+        }
+
+        // Если точка point лежит между точками A и B
+        // Определяем растяжение нормали n
+        var y = (A.X + x * ab.X - T.X) / ab.Y;
+        var dist = y * n;  // Определяем расстояние от точки до прямой
+
+        return dist.Length();
     }
 }
