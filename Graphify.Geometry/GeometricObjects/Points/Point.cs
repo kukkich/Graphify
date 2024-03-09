@@ -116,11 +116,16 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
             throw new InvalidOperationException("Невозможно повернуть точку: точка является закреплённой");
         }
 
-        var radians = angle * Math.PI / 180.0;
+        var x = X - shift.X;
+        var y = Y - shift.Y;
+
+        var radians = -angle * Math.PI / 180.0;
         var s = (float)Math.Sin(radians);
         var c = (float)Math.Cos(radians);
 
-        (X, Y) = (c * X - s * Y, s * X + c * Y);
+        (x, y) = (c * x - s * y, s * x + c * y);
+        (X, Y) = (x + shift.X, y + shift.Y);
+
         Update();
     }
 
