@@ -16,7 +16,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
 
     public Polygon()
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); //TODO: реализация логики полигона
     }
 
     public void Update() => throw new NotImplementedException();

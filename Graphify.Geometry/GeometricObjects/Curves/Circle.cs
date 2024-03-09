@@ -199,5 +199,20 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         drawer.DrawCircle(centerPoint, Radius);
     }
 
-    public FigureExportData GetExportData() => throw new NotImplementedException();
+    public FigureExportData GetExportData()
+    {
+        var exportData = new FigureExportData
+        {
+            FigureType = ObjectType.Circle,
+            Style = Style
+        };
+
+        var radius = Radius;
+        var leftBounds = new Vector2(_centerPoint.X - radius, _centerPoint.Y - radius);
+        var rightBounds = new Vector2(_centerPoint.X + radius, _centerPoint.Y + radius);
+        exportData.LeftBottomBound = leftBounds;
+        exportData.RightTopBound = rightBounds;
+
+        return exportData;
+    }
 }

@@ -241,5 +241,18 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         }
     }
 
-    public FigureExportData GetExportData() => throw new NotImplementedException();
+    public FigureExportData GetExportData()
+    {
+        var leftBound = new Vector2(Math.Min(_pointA.X, _pointB.X), Math.Min(_pointA.Y, _pointB.Y));
+        var rightBound = new Vector2(Math.Max(_pointA.X, _pointB.X), Math.Max(_pointA.Y, _pointB.Y));
+
+        var exportData = new FigureExportData()
+        {
+            FigureType = ObjectType.Line,
+            Style = Style,
+            LeftBottomBound = leftBound,
+            RightTopBound = rightBound,
+        };
+        return exportData;
+    }
 }
