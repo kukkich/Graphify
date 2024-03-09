@@ -43,6 +43,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Style.Setters>
                 <Setter Property="Template">

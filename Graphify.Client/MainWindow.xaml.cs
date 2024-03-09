@@ -11,6 +11,7 @@ using ReactiveUI;
 using SharpGL;
 using System.Windows.Controls;
 using System.Windows;
+using SharpGL.WPF;
 
 namespace Graphify.Client;
 
