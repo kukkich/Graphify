@@ -20,9 +20,19 @@ public class Surface : IGeometryContext
 
     public IFigure? TryGetClosestFigure(Vector2 point, double precision) => throw new NotImplementedException();
 
-    private void AddObject(IGeometricObject newObject)
+    public void AddObject(IGeometricObject newObject)
     {
         _objects.Add(newObject);
+
+        if (newObject is Point point)
+        {
+            _points.Add(point);
+        }
+        else if(newObject is IFigure figure)
+        {
+            _figures.Add(figure);
+        }
+        
     }
 
     public void AddPoint(Point newPoint)
