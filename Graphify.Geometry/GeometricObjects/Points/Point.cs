@@ -61,8 +61,14 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="point"> - точка, относительно которой выполняется проверка</param>
     /// <param name="distance"> - расстояние, в радиусе которого выполняется проверка</param>
     /// <returns>логическое значение: находится ли точка <c>point</c> в радиусе <c>distance</c> от текущей точки</returns>
+    /// <exception cref="ArgumentException"> - в случае, если <c>distance</c> не является строго положительным числом</exception>
     public bool IsNextTo(Vector2 point, float distance)
     {
+        if (distance <= 0)
+        {
+            throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
+        }
+
         var dx = X - point.X;
         var dy = Y - point.Y;
 
@@ -110,11 +116,16 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
             throw new InvalidOperationException("Невозможно повернуть точку: точка является закреплённой");
         }
 
-        var radians = angle * Math.PI / 180.0;
+        var x = X - shift.X;
+        var y = Y - shift.Y;
+
+        var radians = -angle * Math.PI / 180.0;
         var s = (float)Math.Sin(radians);
         var c = (float)Math.Cos(radians);
 
-        (X, Y) = (c * X - s * Y, s * X + c * Y);
+        (x, y) = (c * x - s * y, s * x + c * y);
+        (X, Y) = (x + shift.X, y + shift.Y);
+
         Update();
     }
 

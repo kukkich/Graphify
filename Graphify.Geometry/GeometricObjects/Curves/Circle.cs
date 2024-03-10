@@ -122,10 +122,15 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Расстояние замеряется по окружности, а не по кругу.
     /// </summary>
     /// <param name="point"> - точка, относительно которой выполняется проверка расстояния</param>
-    /// <param name="distance"> - расстояние, в пределах которого выполняется проверка</param>
+    /// <param name="distance"> - расстояние, в пределах которого выполняется проверка (положительное число)</param>
     /// <returns><c>true</c>, если точка <c>point</c> находится в пределах расстояния <c>distance</c> от прямой; <c>false</c> в ином случае</returns>
+    /// <exception cref="ArgumentException"> - в случае, если <c>distance</c> не является строго положительным числом</exception>
     public bool IsNextTo(Vector2 point, float distance)
     {
+        if (distance <= 0)
+        {
+            throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
+        }
         var dvToPoint = new Vector2(_centerPoint.X - point.X, _centerPoint.Y - point.Y);
         var distanceToPoint = (float)Math.Sqrt(dvToPoint.X * dvToPoint.X + dvToPoint.Y * dvToPoint.Y);
 
@@ -199,5 +204,20 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         drawer.DrawCircle(centerPoint, Radius);
     }
 
-    public FigureExportData GetExportData() => throw new NotImplementedException();
+    public FigureExportData GetExportData()
+    {
+        var exportData = new FigureExportData
+        {
+            FigureType = ObjectType.Circle,
+            Style = Style
+        };
+
+        var radius = Radius;
+        var leftBounds = new Vector2(_centerPoint.X - radius, _centerPoint.Y - radius);
+        var rightBounds = new Vector2(_centerPoint.X + radius, _centerPoint.Y + radius);
+        exportData.LeftBottomBound = leftBounds;
+        exportData.RightTopBound = rightBounds;
+
+        return exportData;
+    }
 }
