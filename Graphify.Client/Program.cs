@@ -4,6 +4,7 @@ using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Geometry;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Client.Model.Shortcuts;
 using Graphify.Client.Model.Tools;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
@@ -90,6 +91,7 @@ public class Program
         services.AddScoped<IDrawer, OpenGLDrawer>();
 
         services.AddScoped<CommandsBuffer>();
+        services.AddScoped<ShortcutController>();
     }
     
     private static void ConfigureTools(IServiceCollection services)

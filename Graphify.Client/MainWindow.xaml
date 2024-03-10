@@ -118,6 +118,7 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                MouseDown="GlWindow_MouseDown"
+                               KeyDown="GlWindow_KeyDown"
         />
 
     </Grid>
