@@ -190,13 +190,13 @@ namespace Graphify.Tests.Geometry
 
             bool result = _circle.Attached.Contains(dettachable);
 
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
         }
 
         private static readonly object[] detachData =
         {
             new object[] { new Point(0.5f, 0.5f)},
-            new object[] {new Point(0, 0)},
+            new object[] { new Point(0f, 0f)},
         };
     }
 }
