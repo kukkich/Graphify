@@ -15,10 +15,10 @@ public class PointTool : IApplicationTool
         _applicationContext = applicationContext;
         _commandsBuffer = commandsBuffer;
     }
-    
+
     public void MouseMove(Vector2 newPosition)
     {
-        
+
     }
 
     public void MouseDown(Vector2 clickPosition)
@@ -31,6 +31,6 @@ public class PointTool : IApplicationTool
 
     public void Reset()
     {
-        
+
     }
 }

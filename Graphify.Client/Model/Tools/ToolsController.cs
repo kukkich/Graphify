@@ -8,12 +8,12 @@ public class ToolsController
 {
     private readonly Dictionary<EditMode, IApplicationTool> _tools = [];
     private IApplicationTool? _currentTool;
-    
+
     public ToolsController(IToolsFactory toolsFactory)
     {
         CreateTools(toolsFactory);
     }
-    
+
     private void CreateTools(IToolsFactory toolsFactory)
     {
         foreach (EditMode type in Enum.GetValues(typeof(EditMode)))
@@ -28,10 +28,10 @@ public class ToolsController
         {
             _currentTool.Reset();
         }
-        
+
         _currentTool = GetTool(editMode);
     }
-    
+
     private IApplicationTool GetTool(EditMode editMode)
     {
         return _tools[editMode];

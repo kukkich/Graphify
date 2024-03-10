@@ -96,7 +96,7 @@ public partial class MainWindow
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
-    private void GlWindow_KeyDown(object sender, KeyEventArgs e)
+    private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
     {
         if (ViewModel is null)
         {

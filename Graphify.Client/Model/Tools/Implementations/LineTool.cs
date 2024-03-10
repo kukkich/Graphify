@@ -10,18 +10,18 @@ public class LineTool : IApplicationTool
 {
     private readonly ApplicationContext _context;
     private readonly CommandsBuffer _commandsBuffer;
-    
+
     private const int RequiredClicks = 1;
     private int _currentClicks = 0;
     private Point? _firstPoint;
     private Point? _secondPoint;
-    
+
     public LineTool(ApplicationContext context, CommandsBuffer commandsBuffer)
     {
         _context = context;
         _commandsBuffer = commandsBuffer;
     }
-    
+
     public void MouseMove(Vector2 newPosition) => throw new NotImplementedException();
 
     public void MouseDown(Vector2 clickPosition)

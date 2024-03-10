@@ -17,7 +17,7 @@ public class ApplicationContext
     {
         Surface = surface;
         _factory = factory;
-        
+
         OnSurfaceChangedEvent?.Invoke(surface);
     }
 

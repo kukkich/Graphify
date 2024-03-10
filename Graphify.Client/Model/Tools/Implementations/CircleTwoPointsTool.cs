@@ -1,6 +1,4 @@
 ﻿using System.Numerics;
-using System.Reactive.Disposables;
-using Aspose.Svg.Builder;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -25,7 +23,7 @@ public class CircleTwoPointsTool : IApplicationTool
 
     public void MouseMove(Vector2 newPosition)
     {
-        
+
     }
 
     public void MouseDown(Vector2 clickPosition)
@@ -46,7 +44,7 @@ public class CircleTwoPointsTool : IApplicationTool
 
     public void Cancel()
     {
-        
+
     }
 
     public void Reset()

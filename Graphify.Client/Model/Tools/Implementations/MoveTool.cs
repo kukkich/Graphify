@@ -9,5 +9,5 @@ public class MoveTool : IApplicationTool
     public void MouseDown(Vector2 clickPosition) => throw new NotImplementedException();
 
     public void Cancel() => throw new NotImplementedException();
-    public void Reset(){}
+    public void Reset() { }
 }

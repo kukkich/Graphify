@@ -24,7 +24,7 @@ public class DeleteCommand : ICommand
     }
 
     public void Undo()
-    { 
+    {
         _context.Surface.AddFigure(_figure);
 
         foreach (var point in _figure.ControlPoints)

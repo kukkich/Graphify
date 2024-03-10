@@ -16,6 +16,11 @@ public class AddFigureCommand : ICommand
     public void Execute()
     {
         _context.Surface.AddFigure(_figure);
+
+        foreach (var point in _figure.ControlPoints)
+        {
+            _context.Surface.AddPoint(point);
+        }
     }
 
     public void Undo()

@@ -1,4 +1,3 @@
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Client.Model.Commands;

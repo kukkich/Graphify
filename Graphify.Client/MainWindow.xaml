@@ -9,7 +9,8 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify" Height="1080" Width="1920">
+    Title="Graphify" Height="1080" Width="1920"
+    KeyDown="MainWindow_OnKeyDown">
     <Window.Resources>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Style.Setters>
@@ -118,7 +119,6 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                MouseDown="GlWindow_MouseDown"
-                               KeyDown="GlWindow_KeyDown"
         />
 
     </Grid>

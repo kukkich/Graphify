@@ -5,9 +5,6 @@ using System.Windows.Input;
 using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
-using Graphify.Client.Model.Interfaces;
-using Graphify.Client.Model.Tools;
-using Graphify.Core.Model.IO.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -66,10 +63,9 @@ public class AppViewModel : ReactiveObject
         _application.ToolsController.MouseDown(position);
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> OnKeyDown((Key key, ModifierKeys modifiers) tuple)
     {
-        _application.ShortcutController.KeyPressed(tuple.key, tuple.modifiers);
         return Observable.Return(Unit.Default);
     }
 }

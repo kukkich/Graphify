@@ -28,11 +28,11 @@ public class Surface : IGeometryContext
         {
             _points.Add(point);
         }
-        else if(newObject is IFigure figure)
+        else if (newObject is IFigure figure)
         {
             _figures.Add(figure);
         }
-        
+
     }
 
     public void AddPoint(Point newPoint)

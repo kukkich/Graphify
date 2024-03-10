@@ -9,7 +9,7 @@ namespace Graphify.Client.Model.Tools;
 public class ToolsFactory : IToolsFactory
 {
     private readonly Dictionary<EditMode, Func<IApplicationTool>> _factoryMethods = [];
-    
+
     public ToolsFactory(IServiceProvider serviceProvider)
     {
         InitializeFactoryMethods(serviceProvider);
@@ -22,7 +22,7 @@ public class ToolsFactory : IToolsFactory
         _factoryMethods.Add(EditMode.CreateLine, () => new LineTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreateCircleTwoPoints, () => new CircleTwoPointsTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
     }
-    
+
     public IApplicationTool CreateTool(EditMode editMode)
     {
         return _factoryMethods[editMode]();
