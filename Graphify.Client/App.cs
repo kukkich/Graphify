@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Graphify.Client;
 
+
 public class App : Application
 {
     private readonly MainWindow _mainWindow;
