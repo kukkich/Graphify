@@ -42,7 +42,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
         foreach (IFigure figure in figures)
         {
             FigureExportData figureExportData = figure.GetExportData();
-            ExportFigure(figureExportData, figure.ControlPoints);
+            ExportFigure(figureExportData, figure.ControlPoints.ToList<Point>());
 
             UpdateSvgSize(figureExportData);
         }
@@ -55,14 +55,14 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 
     private void ExportPoint(PointExportData data) => AddPoint(data);
 
-    private void ExportFigure(FigureExportData data, IEnumerable<Point> controlPoints)
+    private void ExportFigure(FigureExportData data, List<Point> controlPoints)
     {
         switch (data.FigureType)
         {
-            case ObjectType.Line: AddLine(data, controlPoints.ToList<Point>()); break;
-            case ObjectType.Circle: AddCircle(data, controlPoints.ToList<Point>()); break;
-            case ObjectType.Polygon:AddPolygon(data, controlPoints.ToList<Point>());  break;
-            case ObjectType.CubicBezier: AddCubicBezier(data, controlPoints.ToList<Point>()); break;
+            case ObjectType.Line: AddLine(data, controlPoints); break;
+            case ObjectType.Circle: AddCircle(data, controlPoints); break;
+            case ObjectType.Polygon:AddPolygon(data, controlPoints);  break;
+            case ObjectType.CubicBezier: AddCubicBezier(data, controlPoints); break;
         }
     }
 
@@ -110,7 +110,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
             throw new ArgumentException("");
         }
 
-        var circlePoints = points.ToVector2();
+        var circlePoints = points.ToListVector2();
 
         float radius = Vector2.Distance(circlePoints[0], circlePoints[1]);
 
@@ -146,7 +146,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
              pointsSVG[2 * i + 1] = x[1];
          }*/
 
-        double[] pointsSVG = points.SelectMany(x => x.PointToArray()).ToArray();
+        double[] pointsSVG = points.ToArrayCoordinates();
 
         _svgElements.AddPolygon(
             polygon => polygon
