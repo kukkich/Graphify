@@ -7,7 +7,6 @@ using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -192,8 +191,8 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
             .ViewBox(
                 LeftBottomBound.X - ExtraSize,
                 -RightTopBound.Y - ExtraSize,
-                distanceBorders,
-                distanceBorders)
+                distanceBorders + ExtraSize,
+                distanceBorders + ExtraSize)
             .Build(document.FirstChild as SVGSVGElement);
 
         var options = new SVGOptimizationOptions
