@@ -117,6 +117,46 @@ namespace Graphify.IO.Exporters
             }
         }
 
+        private void DrawCircle(Graphics graphics, FigureExportData dataCircle, IEnumerable<Point> points)
+        {
+            if (points == null || points.Count() != 2)
+            {
+                _logger.LogError("Invalid number of points to draw a circle.");
+                return;
+            }
+
+            float radius = Vector2.Distance(new Vector2(points.ElementAt(0).X, points.ElementAt(0).Y), new Vector2(points.ElementAt(1).X, points.ElementAt(1).Y));
+
+            PointCoordinates center = new PointCoordinates(points.ElementAt(0).X - radius, points.ElementAt(0).Y - radius);
+            RectangleF rect = new RectangleF(center, new SizeF(radius * 2, radius * 2));
+
+            using (Pen pen = new Pen(dataCircle.Style.PrimaryColor, (dataCircle.Style as CurveStyle ?? CurveStyle.Default).Size))
+            {
+                graphics.DrawEllipse(pen, rect);
+            }
+        }
+
+        private void DrawCubicBezier(Graphics graphics, FigureExportData dataBezier, IEnumerable<Point> points)
+        {
+            if (points == null || points.Count() != 4)
+            {
+                _logger.LogError("Invalid number of points to draw a cubic bezier.");
+                return;
+            }
+
+            PointCoordinates[] bezierPoints = new PointCoordinates[]
+            {
+                new PointCoordinates(points.ElementAt(0).X, points.ElementAt(0).Y),
+                new PointCoordinates(points.ElementAt(1).X, points.ElementAt(1).Y),
+                new PointCoordinates(points.ElementAt(2).X, points.ElementAt(2).Y),
+                new PointCoordinates(points.ElementAt(3).X, points.ElementAt(3).Y)
+            };
+
+            using (Pen pen = new Pen(dataBezier.Style.PrimaryColor, (dataBezier.Style as CurveStyle ?? CurveStyle.Default).Size))
+            {
+                graphics.DrawBezier(pen, bezierPoints[0], bezierPoints[1], bezierPoints[2], bezierPoints[3]);
+            }
+        }
 
 
         private void SaveBitmap(string path)
