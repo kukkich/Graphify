@@ -10,6 +10,5 @@ public class DrawSettings
     public Color PointColor { get; set; }
     public int PointSize { get; set; }
     public Color FillColor { get; set; }
-    public ObjectState ObjectState { get; set; }
     public PointVariant PointVariant { get; set; }
 }

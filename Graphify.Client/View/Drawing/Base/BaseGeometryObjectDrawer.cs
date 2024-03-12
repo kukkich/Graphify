@@ -28,9 +28,9 @@ public abstract class BaseGeometryObjectDrawer<TDrawParams> : IGeometryObjectDra
         return drawActions;
     }
     
-    public void Draw(TDrawParams point, DrawSettings settings)
+    public void Draw(TDrawParams point, ObjectState objectState, DrawSettings settings)
     {
-        _drawActions[settings.ObjectState](point, settings);
+        _drawActions[objectState](point, settings);
     }
 
     protected abstract void DrawDefault(TDrawParams point, DrawSettings settings);

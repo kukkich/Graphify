@@ -2,6 +2,7 @@
 
 namespace Graphify.Client.Model.Interfaces;
 
+// TODO change tools interface
 public interface IApplicationTool
 {
     public void MouseMove(Vector2 newPosition);

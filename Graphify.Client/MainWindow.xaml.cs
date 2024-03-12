@@ -95,14 +95,4 @@ public partial class MainWindow
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
-
-    private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        ViewModel.KeyDown.Execute((e.Key, Keyboard.Modifiers));
-    }
 }

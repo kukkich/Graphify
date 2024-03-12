@@ -23,7 +23,6 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouserMove { get; private set; }
-    public ReactiveCommand<(Key, ModifierKeys), Unit> KeyDown { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
@@ -41,7 +40,6 @@ public class AppViewModel : ReactiveObject
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
         MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
-        KeyDown = ReactiveCommand.CreateFromObservable<(Key key, ModifierKeys modifiers), Unit>(OnKeyDown);
     }
 
     //TODO �����������???????
@@ -61,11 +59,6 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> MouseDownAction(Vector2 position)
     {
         _application.ToolsController.MouseDown(position);
-        return Observable.Return(Unit.Default);
-    }
-
-    private IObservable<Unit> OnKeyDown((Key key, ModifierKeys modifiers) tuple)
-    {
         return Observable.Return(Unit.Default);
     }
 }
