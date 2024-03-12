@@ -17,7 +17,7 @@ public class PointCircleDrawer : BaseGeometryObjectDrawer<Vector2>
 
     protected override void DrawSelected(Vector2 point, DrawSettings settings)
     {
-        defaultDrawer.DrawCircle(point, 10, settings.LineColor, 2);
+        defaultDrawer.DrawCircle(point, 10, settings.PointColor, 2);
         defaultDrawer.DrawPoint(point, settings.PointColor, settings.PointSize);
     }
 }
