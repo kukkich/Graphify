@@ -2,19 +2,24 @@ using Graphify.Geometry.GeometricObjects.Interfaces;
 
 namespace Graphify.Client.Model.Commands;
 
-//TODO
 public class CopyCommand : ICommand
 {
-    private readonly ApplicationContext _context;
-    private readonly IList<IGeometricObject> _objects;
+    private readonly Clipboard _clipboard;
+    private readonly IEnumerable<IGeometricObject> _objects;
 
-    public CopyCommand(ApplicationContext context, IList<IGeometricObject> objects)
+    public CopyCommand(Clipboard clipboard, IEnumerable<IGeometricObject> objects)
     {
-        _context = context;
+        _clipboard = clipboard;
         _objects = objects;
     }
 
-    public void Execute() => throw new NotImplementedException();
+    public void Execute()
+    {
+        _clipboard.CopyObjects(_objects);
+    }
 
-    public void Undo() => throw new NotImplementedException();
+    public void Undo()
+    {
+        _clipboard.Clear();
+    }
 }

@@ -1,9 +1,26 @@
+using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
+
 namespace Graphify.Client.Model.Commands;
 
-//TODO
 public class ReflectCommand : ICommand
 {
-    public void Execute() => throw new NotImplementedException();
+    private readonly IGeometricObject _geometricObject;
+    private readonly Point _point;
 
-    public void Undo() => throw new NotImplementedException();
+    public ReflectCommand(IGeometricObject geometricObject, Point point)
+    {
+        _geometricObject = geometricObject;
+        _point = point;
+    }
+
+    public void Execute()
+    {
+        _geometricObject.Reflect(_point);
+    }
+
+    public void Undo()
+    {
+        Execute();
+    }
 }

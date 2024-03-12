@@ -1,9 +1,28 @@
+using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
+
 namespace Graphify.Client.Model.Commands;
 
-//TODO
 public class RotateCommand : ICommand
 {
-    public void Execute() => throw new NotImplementedException();
+    private readonly IGeometricObject _geometricObject;
+    private readonly Point _point;
+    private readonly float _angle;
 
-    public void Undo() => throw new NotImplementedException();
+    public RotateCommand(IGeometricObject geometricObject, Point point, float angle)
+    {
+        _geometricObject = geometricObject;
+        _point = point;
+        _angle = angle;
+    }
+
+    public void Execute()
+    {
+        _geometricObject.Rotate(_point, _angle);
+    }
+
+    public void Undo()
+    {
+        _geometricObject.Rotate(_point, -_angle);
+    }
 }
