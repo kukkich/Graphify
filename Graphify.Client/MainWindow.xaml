@@ -5,11 +5,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:Graphify.Client"
+    xmlns:local="clr-namespace:Graphify.Client"    
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify" Height="1080" Width="1920">
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Export}" />
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
+    </Window.InputBindings>
     <Window.Resources>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Style.Setters>
@@ -35,6 +42,7 @@
             </Style.Setters>
         </Style>
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
