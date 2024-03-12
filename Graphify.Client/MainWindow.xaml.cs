@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Numerics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,9 +8,12 @@ using System.Windows.Input;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Graphify.Geometry.Drawing;
+using Graphify.Geometry.GeometricObjects.Curves;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
+using Point = Graphify.Geometry.GeometricObjects.Points.Point;
 
 namespace Graphify.Client;
 
