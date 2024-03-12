@@ -248,6 +248,17 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         };
         return exportData;
     }
-    
-    public IGeometricObject Clone() => throw new NotImplementedException();
+
+    public IGeometricObject Clone()
+    {
+        var pointsClones = ControlPoints.Select(c => (Point)c.Clone()).ToArray();
+
+        var polygonClone = 
+            new Polygon(pointsClones, new PolygonStyle(Style.PrimaryColor, Style.LineColor, Style.Name, Style.Size))
+            {
+                ObjectState = ObjectState
+            };
+
+        return polygonClone;
+    }
 }
