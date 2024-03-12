@@ -11,6 +11,8 @@ namespace Graphify.Geometry.GeometricObjects.Curves;
 public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 {
     [Reactive] public CurveStyle Style { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
+    
     public IEnumerable<Point> Attached { get; }
     public IEnumerable<Point> ControlPoints { get; }
 
@@ -28,4 +30,5 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     public void Reflect(Point point) => throw new NotImplementedException();
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
     public FigureExportData GetExportData() => throw new NotImplementedException();
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }

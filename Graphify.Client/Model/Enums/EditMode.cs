@@ -3,6 +3,8 @@
 public enum EditMode
 {
     Move,
+    Select,
     CreatePoint,
-    CreateLine
+    CreateLine,
+    CreateCircleTwoPoints
 }

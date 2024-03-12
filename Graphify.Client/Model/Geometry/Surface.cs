@@ -14,27 +14,30 @@ public class Surface : IGeometryContext
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
 
-    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision) => throw new NotImplementedException();
+    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 
-    public Point? TryGetClosestPoint(Vector2 point, double precision) => throw new NotImplementedException();
+    public Point? TryGetClosestPoint(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 
-    public IFigure? TryGetClosestFigure(Vector2 point, double precision) => throw new NotImplementedException();
+    public IFigure? TryGetClosestFigure(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 
-    private void AddObject(IGeometricObject newObject)
+    public void AddObject(IGeometricObject newObject)
     {
         _objects.Add(newObject);
-    }
 
-    public void AddPoint(Point newPoint)
-    {
-        _points.Add(newPoint);
-        AddObject(newPoint);
-    }
+        if (newObject is Point point)
+        {
+            _points.Add(point);
+        }
+        else if (newObject is IFigure figure)
+        {
+            _figures.Add(figure);
 
-    public void AddFigure(IFigure newFigure)
-    {
-        _figures.Add(newFigure);
-        AddObject(newFigure);
+            foreach (var controlPoint in figure.ControlPoints)
+            {
+                _objects.Add(controlPoint);
+                _points.Add(controlPoint);
+            }
+        }
     }
 
     public bool TryRemove(IGeometricObject target)
@@ -44,14 +47,18 @@ public class Surface : IGeometryContext
             return false;
         }
 
-        if (_points.Remove((Point)target))
+        if (target is Point point)
         {
-            return true;
+            return _points.Remove(point);
         }
 
-        if (_figures.Remove((IFigure)target))
+        if (target is IFigure figure)
         {
-            return true;
+            if (_figures.Remove(figure))
+            {
+                return figure.ControlPoints
+                    .All(controlPoint => _objects.Remove(controlPoint) && _points.Remove(controlPoint));
+            }
         }
 
         throw new ArgumentException("Target object not found");
