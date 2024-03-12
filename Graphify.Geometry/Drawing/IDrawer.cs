@@ -5,11 +5,7 @@ namespace Graphify.Geometry.Drawing;
 
 public interface IDrawer
 {
-    public Color LineColor { get; set; }
-    public int LineThickness { get; set; }
-    public Color PointColor { get; set; }
-    public int PointSize { get; set; }
-    public Color FillColor { get; set; }
+    public DrawSettings Settings { get; }
 
     public void Reset();
     public void DrawCircle(Vector2 center, float radius);

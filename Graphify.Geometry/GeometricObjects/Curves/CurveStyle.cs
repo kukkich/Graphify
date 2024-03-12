@@ -23,7 +23,7 @@ public class CurveStyle : ReactiveObject, IStyle
     }
 
     public virtual void ApplyStyle(IDrawer drawer) {
-        drawer.LineColor = PrimaryColor;
-        drawer.LineThickness = Size;
+        drawer.Settings.LineColor = PrimaryColor;
+        drawer.Settings.LineThickness = Size;
     }
 }

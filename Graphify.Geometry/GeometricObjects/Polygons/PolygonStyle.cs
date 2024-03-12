@@ -26,8 +26,8 @@ public class PolygonStyle : ReactiveObject, IStyle
 
     public void ApplyStyle(IDrawer drawer)
     {
-        drawer.LineColor = LineColor;
-        drawer.FillColor = PrimaryColor;
-        drawer.LineThickness = Size;
+        drawer.Settings.LineColor = LineColor;
+        drawer.Settings.FillColor = PrimaryColor;
+        drawer.Settings.LineThickness = Size;
     }
 }
