@@ -11,10 +11,11 @@ public class BasePolygonDrawer : BaseGeometryObjectDrawer<IEnumerable<Vector2>>
 
     protected override void DrawDefault(IEnumerable<Vector2> point, DrawSettings settings)
     {
+        defaultDrawer.DrawPolygon(point, settings.LineColor, settings.LineThickness);
     }
 
     protected override void DrawSelected(IEnumerable<Vector2> point, DrawSettings settings)
     {
-        
+        defaultDrawer.DrawPolygon(point, settings.LineColor, settings.LineThickness);
     }
 }

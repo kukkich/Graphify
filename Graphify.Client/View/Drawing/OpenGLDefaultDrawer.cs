@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
 using SharpGL;
@@ -14,14 +15,14 @@ public class OpenGLDefaultDrawer : IBaseDrawer
         _gl = gl;
     }
     
-    public void DrawBezierCurve(IEnumerable<Vector2> points, DrawSettings settings)
+    public void DrawBezierCurve(IEnumerable<Vector2> points, Color color, int lineThickness)
     {
-        _gl.PointSize(1);
+        _gl.PointSize(lineThickness);
         _gl.Begin(OpenGL.GL_LINE_STRIP);
 
         var controlPoints = points.ToList();
 
-        _gl.Color(0f, 0f, 0f);
+        _gl.Color(color.R, color.G, color.B);
         for (double t = 0; t <= 1; t += 0.01)
         {
             double x = Math.Pow(1 - t, 3) * controlPoints[0].X +
@@ -39,15 +40,15 @@ public class OpenGLDefaultDrawer : IBaseDrawer
         _gl.End();
     }
 
-    public void DrawCircle(Vector2 center, float radius, DrawSettings settings)
+    public void DrawCircle(Vector2 center, float radius, Color color, int lineThickness)
     {
-        _gl.PointSize(1);
+        _gl.PointSize(lineThickness);
         _gl.Begin(OpenGL.GL_POINTS);
 
         const int numPoints = 1000;
         const double angleStep = (2 * Math.PI) / numPoints;
 
-        _gl.Color(0f, 0f, 0f);
+        _gl.Color(color.R, color.G, color.B);
         for (int i = 0; i < numPoints; i++)
         {
             double angle = i * angleStep;
@@ -59,24 +60,24 @@ public class OpenGLDefaultDrawer : IBaseDrawer
         _gl.End();
     }
 
-    public void DrawPoint(Vector2 point, DrawSettings settings)
+    public void DrawPoint(Vector2 point, Color color, int pointSize)
     {
-        _gl.PointSize(5);
+        _gl.PointSize(pointSize);
         _gl.Begin(OpenGL.GL_POINTS);
-        _gl.Color(1f, 0f, 0f);
+        _gl.Color(color.R, color.G, color.B);
         _gl.Vertex(point.X, point.Y);
         _gl.End();
     }
 
-    public void DrawLine(Vector2 start, Vector2 end, DrawSettings settings)
+    public void DrawLine(Vector2 start, Vector2 end, Color color, int lineThickness)
     {
     }
 
-    public void DrawPolygon(IEnumerable<Vector2> points, DrawSettings settings)
+    public void DrawPolygon(IEnumerable<Vector2> points, Color color, int lineThickness)
     {
-        _gl.PointSize(5);
+        _gl.PointSize(lineThickness);
         _gl.Begin(OpenGL.GL_LINE_LOOP);
-        _gl.Color(0f, 0f, 0f);
+        _gl.Color(color.R, color.G, color.B);
         foreach (var point in points)
         {
             _gl.Vertex(point.X, point.Y);
