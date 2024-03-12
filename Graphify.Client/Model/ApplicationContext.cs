@@ -8,6 +8,8 @@ namespace Graphify.Client.Model;
 public class ApplicationContext
 {
     public Surface Surface { get; private set; }
+    public LinkedList<IGeometricObject> SelectedObjects { get; private set; }
+
     public delegate void OnSurfaceChanged(Surface newSurface);
     public event OnSurfaceChanged OnSurfaceChangedEvent;
 

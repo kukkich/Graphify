@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Numerics;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using SharpGL;
 // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 
@@ -70,6 +71,14 @@ public class OpenGLDrawer : IDrawer
             double y = center.Y + radius * Math.Sin(angle);
             _gl.Vertex(x, y);
         }
+
+        Action<IFigure> ktok = (center) =>
+        {
+            center.Draw();
+            _gl.Begin(OpenGL.GL_POINTS);
+            _gl.Vertex(, y);
+            _gl.End();
+        };
 
         _gl.End();
     }
