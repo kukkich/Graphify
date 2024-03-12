@@ -69,9 +69,8 @@ public class OpenGLDefaultDrawer : IBaseDrawer
         _gl.End();
     }
 
-    public void DrawLine(Vector2 start, Vector2 end, Color color, int lineThickness)
-    {
-    }
+    public void DrawLine(Vector2 start, Vector2 end, Color color, int lineThickness) =>
+        throw new NotImplementedException();
 
     public void DrawPolygon(IEnumerable<Vector2> points, Color color, int lineThickness)
     {

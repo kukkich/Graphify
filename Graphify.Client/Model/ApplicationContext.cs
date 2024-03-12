@@ -1,5 +1,6 @@
 using System.Numerics;
 using Graphify.Client.Model.Geometry;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
@@ -51,11 +52,19 @@ public class ApplicationContext
     {
         var geometricObject = Surface.TryGetClosestObject(position);
 
-        if (geometricObject == null) return null;
+        if (geometricObject is null)
+        {
+            ClearSelected();
+            return null;
+        }
 
-        if (clearPrevious) _selectedObjects.Clear();
+        if (clearPrevious)
+        {
+            ClearSelected();
+        }
 
         _selectedObjects.AddLast(geometricObject);
+        geometricObject.ObjectState = ObjectState.Selected;
 
         return geometricObject;
 
@@ -63,13 +72,24 @@ public class ApplicationContext
 
     public IEnumerable<IGeometricObject> SelectAll()
     {
-        _selectedObjects.Clear();
+        ClearSelected();
 
         foreach (var geometricObject in Surface.Objects)
         {
             _selectedObjects.AddLast(geometricObject);
+            geometricObject.ObjectState = ObjectState.Selected;
         }
 
         return _selectedObjects;
+    }
+
+    private void ClearSelected()
+    {
+        foreach (var geometricObject in _selectedObjects)
+        {
+            geometricObject.ObjectState = ObjectState.Default;
+        }
+        
+        _selectedObjects.Clear();
     }
 }

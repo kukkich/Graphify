@@ -221,4 +221,6 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         return exportData;
     }
+    
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }

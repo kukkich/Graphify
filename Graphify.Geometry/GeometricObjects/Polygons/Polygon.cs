@@ -207,7 +207,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             line.Reflect(point);
         }
     }
-
+    
     /// <summary>
     /// Метод, отрисовывающий на экране полигон и отдельно каждую его грань
     /// </summary>
@@ -248,4 +248,6 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         };
         return exportData;
     }
+    
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }

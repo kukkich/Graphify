@@ -37,7 +37,7 @@ public class CircleTwoPointsTool : IApplicationTool
         {
             _secondPoint = _context.AddPoint(clickPosition);
             IFigure circle = _context.AddFigure(ObjectType.Circle, [_firstPoint, _secondPoint]);
-            _commandsBuffer.AddCommand(new AddFigureCommand(_context, circle));
+            _commandsBuffer.AddCommand(new AddCommand(_context, circle));
             Reset();
         }
     }

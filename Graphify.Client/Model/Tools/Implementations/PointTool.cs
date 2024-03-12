@@ -24,7 +24,7 @@ public class PointTool : IApplicationTool
     public void MouseDown(Vector2 clickPosition)
     {
         Point newPoint = _applicationContext.AddPoint(clickPosition);
-        _commandsBuffer.AddCommand(new AddPointCommand(_applicationContext, newPoint));
+        _commandsBuffer.AddCommand(new AddCommand(_applicationContext, newPoint));
     }
 
     public void Cancel() => throw new NotImplementedException();

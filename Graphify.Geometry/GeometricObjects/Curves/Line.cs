@@ -221,7 +221,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             objPoint.Reflect(point);
         }
     }
-
+    
     public FigureExportData GetExportData()
     {
         var leftBound = new Vector2(Math.Min(_pointA.X, _pointB.X), Math.Min(_pointA.Y, _pointB.Y));
@@ -267,4 +267,6 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         return dist.Length();
     }
+    
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }

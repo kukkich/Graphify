@@ -30,4 +30,5 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     public void Reflect(Point point) => throw new NotImplementedException();
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
     public FigureExportData GetExportData() => throw new NotImplementedException();
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }

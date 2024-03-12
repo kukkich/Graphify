@@ -150,7 +150,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         Update();
     }
-
+    
     /// <summary>
     /// Обновляет фигуры, привязанные к данной точке
     /// </summary>
@@ -260,4 +260,6 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     {
         return new PointExportData(new Vector2(X, Y), Style);
     }
+    
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }
