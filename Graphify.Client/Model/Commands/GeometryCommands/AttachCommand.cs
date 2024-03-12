@@ -1,9 +1,26 @@
+using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
+
 namespace Graphify.Client.Model.Commands;
 
-//TODO
 public class AttachCommand : ICommand
 {
-    public void Execute() => throw new NotImplementedException();
+    private readonly IFigure _figure;
+    private readonly Point _point;
 
-    public void Undo() => throw new NotImplementedException();
+    public AttachCommand(IFigure figure, Point point)
+    {
+        _figure = figure;
+        _point = point;
+    }
+
+    public void Execute()
+    {
+        _figure.ConsumeAttach(_point);
+    }
+
+    public void Undo()
+    { 
+        _figure.ConsumeDetach(_point);
+    }
 }

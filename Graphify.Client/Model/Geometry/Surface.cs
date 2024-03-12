@@ -31,20 +31,13 @@ public class Surface : IGeometryContext
         else if (newObject is IFigure figure)
         {
             _figures.Add(figure);
+
+            foreach (var controlPoint in figure.ControlPoints)
+            {
+                _objects.Add(controlPoint);
+                _points.Add(controlPoint);
+            }
         }
-
-    }
-
-    public void AddPoint(Point newPoint)
-    {
-        _points.Add(newPoint);
-        AddObject(newPoint);
-    }
-
-    public void AddFigure(IFigure newFigure)
-    {
-        _figures.Add(newFigure);
-        AddObject(newFigure);
     }
 
     public bool TryRemove(IGeometricObject target)
@@ -61,7 +54,11 @@ public class Surface : IGeometryContext
 
         if (target is IFigure figure)
         {
-            return _figures.Remove(figure);
+            if (_figures.Remove(figure))
+            {
+                return figure.ControlPoints
+                    .All(controlPoint => _objects.Remove(controlPoint) && _points.Remove(controlPoint));
+            }
         }
 
         throw new ArgumentException("Target object not found");
