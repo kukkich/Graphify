@@ -265,7 +265,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     public IGeometricObject Clone()
     {
         var pointClone = new Point(X, Y,
-            new PointStyle(new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size), Style.Variant, Style.Size))
+            new PointStyle(new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size), Style.Variant))
             {
                 ObjectState = ObjectState
             };
