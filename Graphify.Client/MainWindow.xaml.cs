@@ -80,7 +80,7 @@ public partial class MainWindow
 
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel?.Export.Execute(("", ExportFileType.Svg));
+        ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
     }
 
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
