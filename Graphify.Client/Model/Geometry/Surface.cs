@@ -13,8 +13,20 @@ public class Surface : IGeometryContext
     private readonly HashSet<IGeometricObject> _objects = [];
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
+    
+    // TODO add object filter
+    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 10)
+    {
+        foreach (var geometricObject in _objects)
+        {
+            if (geometricObject.IsNextTo(point, (float)precision))
+            {
+                return geometricObject;
+            }
+        }
 
-    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
+        return null;
+    }
 
     public Point? TryGetClosestPoint(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
 

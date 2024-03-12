@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
+using System.Drawing;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
-using SharpGL;
 
 namespace Graphify.Client.View.Drawing.Line;
 
@@ -16,6 +16,7 @@ public class BaseLineDrawer : BaseGeometryObjectDrawer<(Vector2, Vector2)>
 
     protected override void DrawSelected((Vector2, Vector2) point, DrawSettings settings)
     {
+        defaultDrawer.DrawLine(point.Item1, point.Item2, Color.Aqua, settings.LineThickness + 1);
         defaultDrawer.DrawLine(point.Item1, point.Item2, settings.LineColor, settings.LineThickness);
     }
 }
