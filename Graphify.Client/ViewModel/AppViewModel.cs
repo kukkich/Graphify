@@ -22,7 +22,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> RightMouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseUp { get; private set; }
-    public ReactiveCommand<Vector2, Unit> MouserMove { get; private set; }
+    public ReactiveCommand<Vector2, Unit> MouseMove { get; private set; }
     public ReactiveCommand<(Key, ModifierKeys), Unit> KeyDown { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
