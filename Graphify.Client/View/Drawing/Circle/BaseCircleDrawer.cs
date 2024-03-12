@@ -7,7 +7,7 @@ namespace Graphify.Client.View.Drawing.Circle;
 
 public class BaseCircleDrawer : BaseGeometryObjectDrawer<(Vector2, float)>
 {
-    public BaseCircleDrawer(OpenGL gl, IBaseDrawer defaultDrawer) : base(gl, defaultDrawer) { }
+    public BaseCircleDrawer(IBaseDrawer defaultDrawer) : base(defaultDrawer) { }
 
     protected override void DrawDefault((Vector2, float) point, DrawSettings settings)
     {

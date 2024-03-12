@@ -7,7 +7,7 @@ namespace Graphify.Client.View.Drawing.Polygon;
 
 public class BasePolygonDrawer : BaseGeometryObjectDrawer<IEnumerable<Vector2>>
 {
-    public BasePolygonDrawer(OpenGL gl, IBaseDrawer defaultDrawer) : base(gl, defaultDrawer) { }
+    public BasePolygonDrawer(IBaseDrawer defaultDrawer) : base(defaultDrawer) { }
 
     protected override void DrawDefault(IEnumerable<Vector2> point, DrawSettings settings)
     {

@@ -37,13 +37,13 @@ public class OpenGLDrawer : IDrawer
         
         _defaultDrawer = new OpenGLDefaultDrawer(gl);
         
-        _pointVariantDrawers.Add(PointVariant.Circle, new PointCircleDrawer(_gl, _defaultDrawer));
-        _pointVariantDrawers.Add(PointVariant.Cross, new PointCrossDrawer(_gl, _defaultDrawer));
+        _pointVariantDrawers.Add(PointVariant.Circle, new PointCircleDrawer(_defaultDrawer));
+        _pointVariantDrawers.Add(PointVariant.Cross, new PointCrossDrawer(_defaultDrawer));
 
-        _currentBezierCurveDrawer = new BaseBezierCurveDrawer(gl, _defaultDrawer);
-        _currentPolygonDrawer = new BasePolygonDrawer(gl, _defaultDrawer);
-        _currentCircleDrawer = new BaseCircleDrawer(gl, _defaultDrawer);
-        _currentLineDrawer = new BaseLineDrawer(gl, _defaultDrawer);
+        _currentBezierCurveDrawer = new BaseBezierCurveDrawer(_defaultDrawer);
+        _currentPolygonDrawer = new BasePolygonDrawer(_defaultDrawer);
+        _currentCircleDrawer = new BaseCircleDrawer(_defaultDrawer);
+        _currentLineDrawer = new BaseLineDrawer( _defaultDrawer);
     }
 
     public void Reset()

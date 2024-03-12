@@ -7,7 +7,7 @@ namespace Graphify.Client.View.Drawing.BezierCurve;
 
 public class BaseBezierCurveDrawer : BaseGeometryObjectDrawer<IEnumerable<Vector2>>
 {
-    public BaseBezierCurveDrawer(OpenGL gl, IBaseDrawer defaultDrawer) : base(gl, defaultDrawer) { }
+    public BaseBezierCurveDrawer(IBaseDrawer defaultDrawer) : base(defaultDrawer) { }
 
     protected override void DrawDefault(IEnumerable<Vector2> point, DrawSettings settings)
     {

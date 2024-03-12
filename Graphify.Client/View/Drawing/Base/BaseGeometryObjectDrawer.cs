@@ -6,14 +6,12 @@ namespace Graphify.Client.View.Drawing.Base;
 
 public abstract class BaseGeometryObjectDrawer<TDrawParams> : IGeometryObjectDrawer<TDrawParams>
 {
-    protected readonly OpenGL gl;
     protected readonly IBaseDrawer defaultDrawer;
 
     private readonly Dictionary<ObjectState, Action<TDrawParams, DrawSettings>> _drawActions;
 
-    protected BaseGeometryObjectDrawer(OpenGL gl, IBaseDrawer defaultDrawer)
+    protected BaseGeometryObjectDrawer(IBaseDrawer defaultDrawer)
     {
-        this.gl = gl;
         this.defaultDrawer = defaultDrawer;
 
         _drawActions = GetDrawActions();

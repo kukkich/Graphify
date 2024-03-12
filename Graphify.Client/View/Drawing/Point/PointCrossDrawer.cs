@@ -7,7 +7,7 @@ namespace Graphify.Client.View.Drawing.Point;
 
 public class PointCrossDrawer : BaseGeometryObjectDrawer<Vector2>
 {
-    public PointCrossDrawer(OpenGL gl, IBaseDrawer defaultDrawer) : base(gl, defaultDrawer) { }
+    public PointCrossDrawer(IBaseDrawer defaultDrawer) : base(defaultDrawer) { }
     protected override void DrawDefault(Vector2 point, DrawSettings settings)
     {
         defaultDrawer.DrawPoint(point, settings.PointColor, settings.PointSize);

@@ -10,6 +10,7 @@ public class CurveStyle : ReactiveObject, IStyle
     [Reactive] public Color PrimaryColor { get; set; }
     [Reactive] public string Name { get; set; }
     [Reactive] public int Size { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
 
     public static CurveStyle Default => new(Color.Black, "Default", CurveStyle.DefaultSize);
 
@@ -20,10 +21,13 @@ public class CurveStyle : ReactiveObject, IStyle
         PrimaryColor = primary;
         Name = name;
         Size = size;
+        ObjectState = ObjectState.Default;
     }
 
     public virtual void ApplyStyle(IDrawer drawer) {
         drawer.Settings.LineColor = PrimaryColor;
         drawer.Settings.LineThickness = Size;
+        
+        drawer.Settings.ObjectState = ObjectState;
     }
 }
