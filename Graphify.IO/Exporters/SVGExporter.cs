@@ -31,20 +31,20 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
         IEnumerable<Point> points = context.Points;
         IEnumerable<IFigure> figures = context.Figures;
 
-        foreach (Point point in points)
-        {
-            PointExportData pointExportData = point.GetExportData();
-            ExportPoint(pointExportData);
-
-            UpdateSvgSize(pointExportData);
-        }
-
         foreach (IFigure figure in figures)
         {
             FigureExportData figureExportData = figure.GetExportData();
             ExportFigure(figureExportData, figure.ControlPoints.ToList<Point>());
 
             UpdateSvgSize(figureExportData);
+        }
+
+        foreach (Point point in points)
+        {
+            PointExportData pointExportData = point.GetExportData();
+            ExportPoint(pointExportData);
+
+            UpdateSvgSize(pointExportData);
         }
 
         CreateFile(path);
@@ -135,16 +135,6 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 
             throw new ArgumentException("");
         }
-
-        /* double[] pointsSVG = new double[points.Count * 2];
-
-         for (int i = 0; i < points.Count - 1; i++)
-         {
-             var x = points[i].PointToArray();
-
-             pointsSVG[2 * i] = x[0];
-             pointsSVG[2 * i + 1] = x[1];
-         }*/
 
         double[] pointsSVG = points.ToArrayCoordinates();
 
