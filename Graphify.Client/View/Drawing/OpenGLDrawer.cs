@@ -52,29 +52,34 @@ public class OpenGLDrawer : IDrawer
         _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
     }
     
-    public void DrawBezierCurve(IEnumerable<Vector2> points)
+    public void DrawBezierCurve(IEnumerable<Vector2> points, ObjectState state)
     {
+        Settings.ObjectState = state;
         _currentBezierCurveDrawer.Draw(points, Settings);
     }
 
-    public void DrawCircle(Vector2 center, float radius)
+    public void DrawCircle(Vector2 center, float radius, ObjectState state)
     {
+        Settings.ObjectState = state;
         _currentCircleDrawer.Draw((center, radius), Settings);
     }
 
-    public void DrawLine(Vector2 start, Vector2 end)
+    public void DrawLine(Vector2 start, Vector2 end, ObjectState state)
     {
+        Settings.ObjectState = state;
         _currentLineDrawer.Draw((start, end), Settings);
     }
     
-    public void DrawPoint(Vector2 point)
+    public void DrawPoint(Vector2 point, ObjectState state)
     {
+        Settings.ObjectState = state;
         _currentPointDrawer = _pointVariantDrawers[Settings.PointVariant];
         _currentPointDrawer.Draw(point, Settings);
     }
 
-    public void DrawPolygon(IEnumerable<Vector2> points)
+    public void DrawPolygon(IEnumerable<Vector2> points, ObjectState state)
     {
+        Settings.ObjectState = state;
         _currentPolygonDrawer.Draw(points, Settings);
     }
 }

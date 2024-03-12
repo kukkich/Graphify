@@ -11,6 +11,8 @@ namespace Graphify.Geometry.GeometricObjects.Curves;
 public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 {
     [Reactive] public CurveStyle Style { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
+    
     public IEnumerable<Point> Attached { get; }
     public IEnumerable<Point> ControlPoints { get; }
 

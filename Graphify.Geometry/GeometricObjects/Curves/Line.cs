@@ -25,6 +25,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Стиль прямой
     /// </summary>
     [Reactive] public CurveStyle Style { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
 
     /// <summary>
     /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
@@ -146,7 +147,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         var begin = new Vector2(_pointA.X, _pointA.Y);
         var end = new Vector2(_pointB.X, _pointB.Y);
 
-        drawer.DrawLine(begin, end);
+        drawer.DrawLine(begin, end, ObjectState);
     }
 
     /// <summary>

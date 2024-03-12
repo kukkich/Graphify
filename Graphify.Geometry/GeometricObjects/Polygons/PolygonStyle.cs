@@ -11,8 +11,6 @@ public class PolygonStyle : ReactiveObject, IStyle
     [Reactive] public Color LineColor { get; set; }
     [Reactive] public string Name { get; set; }
     [Reactive] public int Size { get; set; }
-    [Reactive] public ObjectState ObjectState { get; set; }
-
     public static int DefaultSize { get; set; } = 4;
 
     public static PolygonStyle Default => new(Color.Orange, Color.Black, "Default", DefaultSize);
@@ -23,7 +21,6 @@ public class PolygonStyle : ReactiveObject, IStyle
         LineColor = lineColor;
         Name = name;
         Size = size;
-        ObjectState = ObjectState.Default;
     }
 
     public void ApplyStyle(IDrawer drawer)
@@ -31,7 +28,5 @@ public class PolygonStyle : ReactiveObject, IStyle
         drawer.Settings.LineColor = LineColor;
         drawer.Settings.FillColor = PrimaryColor;
         drawer.Settings.LineThickness = Size;
-
-        drawer.Settings.ObjectState = ObjectState;
     }
 }

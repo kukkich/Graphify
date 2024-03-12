@@ -19,7 +19,5 @@ public class PointStyle : CurveStyle
     {
         drawer.Settings.PointColor = PrimaryColor;
         drawer.Settings.PointSize = Size;
-        
-        drawer.Settings.ObjectState = ObjectState;
     }
 }

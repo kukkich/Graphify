@@ -41,6 +41,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         }
     }
     [Reactive] public PolygonStyle Style { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
 
     internal bool CanBeMoved
     {
@@ -220,7 +221,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         {
             points.Add(new Vector2(point.X, point.Y));
         }
-        drawer.DrawPolygon(points);
+        drawer.DrawPolygon(points, ObjectState);
         foreach(var line in _lines)
         {
             line.Draw(drawer);
