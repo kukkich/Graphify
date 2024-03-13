@@ -1,5 +1,4 @@
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -17,7 +16,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
     protected CubicBezierCurve()
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // TODO: реализация логики кривой Безье
     }
 
     public void Update() => throw new NotImplementedException();

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
@@ -28,11 +26,16 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     [Reactive] public CurveStyle Style { get; set; }
 
+    /// <summary>
+    /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
+    /// </summary>
+    internal bool CanBeMoved => !(_pointA.IsAttached || _pointB.IsAttached);
 
-    private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
-    private Point _pointA;
-    private Point _pointB;
+    private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
+
+    private readonly Point _pointA;
+    private readonly Point _pointB;
 
     public Line(Point A, Point B, CurveStyle? style = null)
     {
@@ -44,20 +47,23 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     }
 
 
+
+
     /// <summary>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо присоединить к прямой</param>
+    /// <exception cref="InvalidOperationException"> - если присоединить точку <c>attachable</c> к данной фигуре невозможно</exception>
     public void ConsumeAttach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
-            return;
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка является опорной для данной фигуры");
         }
 
         if (_attached.Find(x => x.Object == attachable) != null)
         {
-            return;
+            throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка уже присоединена к данной фигуре");
         }
 
         // Вычисление нового положения точки на прямой.
@@ -99,13 +105,17 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Удаляет присоединяемую точку <c>attachable</c> из своего множества присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
+    /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
     public void ConsumeDetach(Point attachable)
     {
         AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
         if (maybeAttached != null)
         {
             _attached.Remove(maybeAttached);
+            return;
         }
+
+        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
     }
 
     /// <summary>
@@ -145,7 +155,88 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="point"> - точка, относительно которой проверяется расстояние</param>
     /// <param name="distance"> - расстояние, в пределах которого выполняется проверка</param>
     /// <returns><c>true</c>, если точка <c>point</c> находится в пределах расстояния <c>distance</c> от прямой; <c>false</c> в ином случае</returns>
+    /// <exception cref="ArgumentException"> - в случае, если <c>distance</c> не является строго положительным числом</exception>
     public bool IsNextTo(Vector2 point, float distance)
+    {
+        if (distance <= 0)
+        {
+            throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
+        }
+
+        return distance > DistanceTo(point);
+    }
+
+    /// <summary>
+    /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
+    /// </summary>
+    /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными)</exception>
+    public void Move(Vector2 shift)
+    {
+        if (!CanBeMoved)
+        {
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
+        }
+
+        foreach (var point in ControlPoints)
+        {
+            point.Move(shift);
+        }
+    }
+
+    /// <summary>
+    /// Метод, позволяющий вращать прямую относительно опорной точки <c>shift</c> на угол <c>angle</c> по часовой стрелке.
+    /// </summary>
+    /// <param name="shift"> - опорная точка, относительно которой осуществляется вращение прямой</param>
+    /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
+    public void Rotate(Point shift, float angle)
+    {
+        if (!CanBeMoved)
+        {
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
+        }
+
+        foreach (var point in ControlPoints)
+        {
+            point.Rotate(shift, angle);
+        }
+    }
+
+    /// <summary>
+    /// Метод, позволяющий сделать зеркальное отражение с переворотом относительно заданной точки.
+    /// </summary>
+    /// <param name="point"> - точка, относительно которой происходит отражение</param>
+    /// <exception cref="InvalidOperationException"> - если фигуру нельзя переместить (одна или несколько точек фигуры являются закреплёнными</exception>
+    public void Reflect(Point point)
+    {
+        if (!CanBeMoved)
+        {
+            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
+        }
+
+        foreach (var objPoint in ControlPoints)
+        {
+            objPoint.Reflect(point);
+        }
+    }
+
+    public FigureExportData GetExportData()
+    {
+        var leftBound = new Vector2(Math.Min(_pointA.X, _pointB.X), Math.Min(_pointA.Y, _pointB.Y));
+        var rightBound = new Vector2(Math.Max(_pointA.X, _pointB.X), Math.Max(_pointA.Y, _pointB.Y));
+
+        var exportData = new FigureExportData()
+        {
+            FigureType = ObjectType.Line,
+            Style = Style,
+            LeftBottomBound = leftBound,
+            RightTopBound = rightBound,
+        };
+        return exportData;
+    }
+
+    internal float DistanceTo(Vector2 point)
     {
         // Точка будет располагаться на прямой, по кратчайшему расстоянию к этой прямой
         var A = new Vector2(_pointA.X, _pointA.Y); // Вспомогательные векторы для упрощения записи
@@ -161,11 +252,11 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         // Если точка point лежит левее точки A
         if (x < 0)
         {
-            return _pointA.IsNextTo(point, distance);
+            return (A - point).Length();
         }
         else if (x > 1) // Если точка point лежит правее точки B
         {
-            return _pointB.IsNextTo(point, distance);
+            return (B - point).Length();
         }
 
         // Если точка point лежит между точками A и B
@@ -173,48 +264,6 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         var y = (A.X + x * ab.X - T.X) / ab.Y;
         var dist = y * n;  // Определяем расстояние от точки до прямой
 
-        return distance > dist.Length();
+        return dist.Length();
     }
-
-    /// <summary>
-    /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>
-    /// </summary>
-    /// <param name="shift"> - вектор, относительно которого будет осуществляться сдвиг прямой</param>
-    public void Move(Vector2 shift)
-    {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
-        foreach (var point in ControlPoints)
-        {
-            point.Move(shift);
-        }
-    }
-
-    /// <summary>
-    /// Метод, позволяющий вращать прямую относительно опорной точки <c>shift</c> на угол <c>angle</c> по часовой стрелке.
-    /// </summary>
-    /// <param name="shift"> - опорная точка, относительно которой осуществляется вращение прямой</param>
-    /// <param name="angle"> - угол в градусах, на который поворачивается прямая по часовой стрелке</param>
-    public void Rotate(Point shift, float angle)
-    {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
-        foreach (var point in ControlPoints)
-        {
-            point.Rotate(shift, angle);
-        }
-    }
-
-    /// <summary>
-    /// Метод, позволяющий сделать зеркальное отражение с переворотом относительно заданной точки.
-    /// </summary>
-    /// <param name="point"> - точка, относительно которой происходит отражение</param>
-    public void Reflect(Point point)
-    {
-        // TODO: запретить действие, если одна или несколько точек являются прикреплёнными
-        foreach (var objPoint in ControlPoints)
-        {
-            objPoint.Reflect(point);
-        }
-    }
-
-    public FigureExportData GetExportData() => throw new NotImplementedException();
 }

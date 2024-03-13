@@ -44,7 +44,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// </summary>
     [Reactive] public PointStyle Style { get; set; }
 
-    private List<IFigure> _controlFor;
+    private readonly List<IFigure> _controlFor;
 
     public Point(float x, float y, PointStyle? style = null)
     {
@@ -52,7 +52,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         Y = y;
         Style = style ?? PointStyle.Default;
 
-        _controlFor = new List<IFigure>(); 
+        _controlFor = new List<IFigure>();
     }
 
     /// <summary>
@@ -61,8 +61,14 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="point"> - точка, относительно которой выполняется проверка</param>
     /// <param name="distance"> - расстояние, в радиусе которого выполняется проверка</param>
     /// <returns>логическое значение: находится ли точка <c>point</c> в радиусе <c>distance</c> от текущей точки</returns>
+    /// <exception cref="ArgumentException"> - в случае, если <c>distance</c> не является строго положительным числом</exception>
     public bool IsNextTo(Vector2 point, float distance)
     {
+        if (distance <= 0)
+        {
+            throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
+        }
+
         var dx = X - point.X;
         var dy = Y - point.Y;
 
@@ -75,7 +81,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// Вместе со своим перемещением, обновляет все фигуры, которые к точке привязаны, вызовом метода <c>Point.Update()</c>
     /// </summary>
     /// <param name="shift"> - вектор сдвига точки в пространстве</param>
-    public void Move(Vector2 shift) 
+    public void Move(Vector2 shift)
     {
         if (IsAttached)
         {
@@ -99,35 +105,40 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
     /// <summary>
     /// Метод, вращающий точку относительно точки <c>shift</c> на угол <c>angle</c> по часовой стрелке.
-    /// В случае, если точка закреплена на фигуре, этот метод не сделает ничего
     /// </summary>
     /// <param name="shift"> - точка, относительно которой будет совершаться вращение текущей точки</param>
     /// <param name="angle"> - угол вращения точки в градусах</param>
+    /// <exception cref="InvalidOperationException"> - если точка является закреплённой</exception>
     public void Rotate(Point shift, float angle)
     {
         if (IsAttached)
         {
-            return;
+            throw new InvalidOperationException("Невозможно повернуть точку: точка является закреплённой");
         }
 
-        var radians = angle * Math.PI / 180.0;
+        var x = X - shift.X;
+        var y = Y - shift.Y;
+
+        var radians = -angle * Math.PI / 180.0;
         var s = (float)Math.Sin(radians);
         var c = (float)Math.Cos(radians);
 
-        (X, Y) = (c * X - s * Y, s * X + c * Y);
+        (x, y) = (c * x - s * y, s * x + c * y);
+        (X, Y) = (x + shift.X, y + shift.Y);
+
         Update();
     }
 
     /// <summary>
     /// Метод, симметрично отражающий текущую точку относительно точки <c>point</c>.
-    /// Если точка является закреплённой к фигуре, то метод не сделает ничего.
     /// </summary>
     /// <param name="point" - точка, относительно которой будет происходить отражение></param>
+    /// <exception cref="InvalidOperationException"> - если точка является закреплённой</exception>
     public void Reflect(Point point)
     {
         if (IsAttached)
         {
-            return;
+            throw new InvalidOperationException("Невозможно отразить точку: точка является закреплённой");
         }
 
         var dx = point.X - X;
@@ -154,7 +165,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// Проверяет, может ли точка быть присоединённой к фигуре <c>consumer</c>
     /// </summary>
     /// <param name="consumer"> - фигура, к которой необходимо выполнить проверку присоединения точки</param>
-    /// <returns> true, если присоединить точку возможно</returns>
+    /// <returns> <c>true</c>, если присоединить точку возможно; <c>else</c> в ином случае</returns>
     public bool CanAttachTo(IFigure consumer)
     {
         if (AttachedTo != null)
@@ -173,14 +184,14 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
             var figure = figures.First();
 
             var points = figure.ControlPoints;
-            foreach(var point in points)
+            foreach (var point in points)
             {
                 if (point == this)
                 {
                     return false;
                 }
 
-                foreach(var fig in point.ControlFor)
+                foreach (var fig in point.ControlFor)
                 {
                     bool isAdded = visitedFigures.Add(fig);
                     if (isAdded)
@@ -199,30 +210,30 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
     /// <summary>
     /// Метод, побуждающий точку присоединиться к фигуре <c>consumer</c>.
-    /// В случае невозможности присоединения не делает ничего.
     /// </summary>
     /// <param name="consumer"> - фигура, к которой необходимо присоединить текущую точку</param>
+    /// <exception cref="InvalidOperationException"> - если закрепление точки невозможно</exception>
     public void AttachTo(IFigure consumer)
     {
         if (!CanAttachTo(consumer))
         {
-            return;
+            throw new InvalidOperationException("Закрепление точки невозможно: точка является закреплённой либо имеет косвенную зависимость от прикрепляемой фигуры");
         }
-        AttachedTo = consumer;
         consumer.ConsumeAttach(this);
+        AttachedTo = consumer;
 
         Update();
     }
 
     /// <summary>
     /// Метод, побуждающий точку отсоединиться от фигуры.
-    /// Если точка ни к кому не присоединена, то ничего не произойдёт.
     /// </summary>
+    /// <exception cref="InvalidOperationException"> - если открепить точку невозможно</exception>
     public void Detach()
     {
         if (AttachedTo == null)
         {
-            return;
+            throw new InvalidOperationException("Открепление точки невозможно: точка ни к кому не закреплена");
         }
         AttachedTo.ConsumeDetach(this);
         AttachedTo = null;
@@ -243,5 +254,9 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         drawer.DrawPoint(p);
     }
 
-    public PointExportData GetExportData() => throw new NotImplementedException();
+
+    public PointExportData GetExportData()
+    {
+        return new PointExportData(new Vector2(X, Y), Style);
+    }
 }

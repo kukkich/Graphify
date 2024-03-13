@@ -11,6 +11,7 @@ public interface IDrawer
     public int PointSize { get; set; }
     public Color FillColor { get; set; }
 
+    public void Reset();
     public void DrawCircle(Vector2 center, float radius);
     public void DrawPoint(Vector2 point);
     public void DrawLine(Vector2 start, Vector2 end);

@@ -1,10 +1,16 @@
 using System.IO;
-using Graphify.Client.View.Drawing;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Commands;
+using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Geometry;
+using Graphify.Client.Model.Interfaces;
+using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Graphify.Core.Model.IO.Export;
+using Graphify.Core.Model.IO.Import;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,19 +61,32 @@ public class Program
         services.AddSingleton<App>();
         services.AddSingleton<MainWindow>();
         services.AddTransient<AppViewModel>();
-       
-        services.AddIO();
-        services.AddSingleton<OpenGLDrawer>();
 
+        services.AddIO();
+        services.AddScoped<OpenGLDrawer>();
+
+        ConfigureExportImport(services);
         ConfigureApplication(services);
+    }
+
+    private static void ConfigureExportImport(IServiceCollection services)
+    {
+        services.AddSingleton<Exporter>();
+        services.AddSingleton<Importer>();
+
+        services.AddSingleton<IImporterFactory, ImporterFactory>();
+        services.AddSingleton<IExporterFactory, ExporterFactory>();
     }
 
     private static void ConfigureApplication(IServiceCollection services)
     {
-        services.AddSingleton<ApplicationContext>();
-        services.AddSingleton<Surface>();
-        services.AddSingleton<IGeometryFactory, GeometryFactory>();
-        services.AddScoped<CommandsBuffer>();
         services.AddSingleton<Application>();
+        services.AddSingleton<ApplicationContext>();
+        services.AddScoped<DrawLoop>();
+        services.AddScoped<Surface>();
+        services.AddScoped<IGeometryFactory, GeometryFactory>();
+        services.AddScoped<IDrawer, OpenGLDrawer>();
+
+        services.AddScoped<CommandsBuffer>();
     }
 }
