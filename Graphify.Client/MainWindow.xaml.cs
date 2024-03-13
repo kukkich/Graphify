@@ -9,8 +9,11 @@ using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
 using ReactiveUI;
 using SharpGL;
-using System.Windows.Controls;
-using System.Windows;
+using SharpGL.WPF;
+using Graphify.Geometry.GeometricObjects.Points;
+using System.Drawing;
+using ReactiveUI.Fody.Helpers;
+using Microsoft.VisualBasic;
 
 namespace Graphify.Client;
 
@@ -61,11 +64,11 @@ public partial class MainWindow
                 Type = "LightGray"
             }
         };
-        this.listGeometryObjects.ItemsSource = listObjects; //temporarily
+        //this.listGeometryObjects.ItemsSource = listObjects; //temporarily
     }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
+        ContextMenu? cm = this.FindResource("cmButton") as ContextMenu;
         cm.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
@@ -134,7 +137,7 @@ public partial class MainWindow
   
     public class Figure //temporarily
     {
-        public string Data { get; set; }
-        public string Type { get; set; }
+        public string? Data { get; set; }
+        public string? Type { get; set; }
     }
 }
