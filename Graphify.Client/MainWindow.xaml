@@ -8,6 +8,9 @@
     xmlns:local="clr-namespace:Graphify.Client"    
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
+    xmlns:points="clr-namespace:Graphify.Geometry.GeometricObjects.Points;assembly=Graphify.Geometry"
+    xmlns:curves="clr-namespace:Graphify.Geometry.GeometricObjects.Curves;assembly=Graphify.Geometry"
+    xmlns:polygons="clr-namespace:Graphify.Geometry.GeometricObjects.Polygons;assembly=Graphify.Geometry"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify">
     <Window.InputBindings>
@@ -252,7 +255,9 @@
         <ListBox Background="White"
                  Grid.Row="1"
                  Grid.Column="0"
-                 x:Name="listGeometryObjects">
+                 x:Name="listGeometryObjects"
+                 DataContext="{DynamicResource appViewModel}"
+                 ItemsSource="{Binding GeometryObjects}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
@@ -275,14 +280,39 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="30"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Ellipse Fill="{Binding Path=Type}"
+                        <Ellipse Fill="{Binding Path=Color}"
                                  Width="15" 
                                  Height="15"
                                  HorizontalAlignment="Left"/>
-                        <TextBlock Text="{Binding Path=Data}"
-                                   Margin="0"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1"/>
+                        <ContentControl DataContext="{DynamicResource appViewModel}"
+                                        Content="{Binding GeometryObjects}"
+                                        Margin="0"
+                                        VerticalAlignment="Center"
+                                        Grid.Column="1">
+                            <ContentControl.Resources>
+                                <DataTemplate DataType="{x:Type points:PointStyle}">
+                                    <StackPanel>
+                                        <TextBox Text="{Binding PrimaryColor}" />
+                                        <TextBox Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type polygons:PolygonStyle}">
+                                    <StackPanel>
+                                        <TextBox Text="{Binding PrimaryColor}" />
+                                        <TextBox Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type curves:CurveStyle}">
+                                    <StackPanel>
+                                        <TextBox Text="{Binding PrimaryColor}" />
+                                        <TextBox Text="{Binding Name}" />
+                                        <TextBox Text="{Binding Size}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ContentControl.Resources>
+                        </ContentControl>
                         <Button Padding="0"
                                 Margin="0"
                                 Width="30"
