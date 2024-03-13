@@ -68,10 +68,11 @@ public class DrawLoop
             return;
         }
 
-        _drawer.Reset();
+        _drawer.Start();
         foreach (IGeometricObject geometricObject in _context.Objects)
         {
             geometricObject.Draw(_drawer);
         }
+        _drawer.End();
     }
 }
