@@ -2,7 +2,7 @@ using Graphify.IO.Exporters;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Graphify.IO;
+namespace Graphify.IO.Extention;
 
 public static class ServicesExtention
 {

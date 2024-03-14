@@ -1,7 +1,8 @@
 using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.IO.Extention;
 
-namespace Graphify.IO;
+namespace Graphify.IO.Extention;
 
 public static class ListExtention
 {
