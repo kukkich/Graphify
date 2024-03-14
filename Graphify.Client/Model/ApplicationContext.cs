@@ -15,6 +15,7 @@ public class ApplicationContext
     public event OnSurfaceChanged OnSurfaceChangedEvent;
 
     private readonly IGeometryFactory _factory;
+
     private readonly LinkedList<IGeometricObject> _selectedObjects;
 
     public ApplicationContext(Surface surface, IGeometryFactory factory)
@@ -32,7 +33,7 @@ public class ApplicationContext
         OnSurfaceChangedEvent?.Invoke(newSurface);
     }
 
-    public Point AddPoint(Vector2 pointCoords)
+    public Point CreatePoint(Vector2 pointCoords)
     {
         Point newPoint = _factory.Create(pointCoords);
         Surface.AddObject(newPoint);
@@ -40,12 +41,17 @@ public class ApplicationContext
         return newPoint;
     }
 
-    public IFigure AddFigure(ObjectType type, Point[] points)
+    public IFigure CreateFigure(ObjectType type, Point[] points)
     {
         IFigure newFigure = _factory.Create(type, points);
         Surface.AddObject(newFigure);
 
         return newFigure;
+    }
+
+    public void AddObject(IGeometricObject geometricObject)
+    {
+        Surface.AddObject(geometricObject);
     }
 
     public IGeometricObject? Select(Vector2 position, bool clearPrevious)

@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
@@ -23,7 +23,7 @@ public class PointTool : IApplicationTool
 
     public void MouseDown(Vector2 clickPosition)
     {
-        Point newPoint = _applicationContext.AddPoint(clickPosition);
+        Point newPoint = _applicationContext.CreatePoint(clickPosition);
         _commandsBuffer.AddCommand(new AddCommand(_applicationContext, newPoint));
     }
 

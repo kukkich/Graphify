@@ -84,9 +84,11 @@ public class Program
     {
         services.AddSingleton<Application>();
         services.AddSingleton<ApplicationContext>();
-        services.AddScoped<DrawLoop>();
         services.AddScoped<Surface>();
+        services.AddScoped<Clipboard>();
         services.AddScoped<IGeometryFactory, GeometryFactory>();
+
+        services.AddScoped<DrawLoop>();
         services.AddScoped<IDrawer, OpenGLDrawer>();
 
         services.AddScoped<CommandsBuffer>();
