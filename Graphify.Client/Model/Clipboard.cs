@@ -30,8 +30,7 @@ public class Clipboard
 
     public IEnumerable<IGeometricObject> PasteObjects()
     {
-        var pastedObjects = _copiedObjects.Select(c => c.Clone()).ToList();
-        _copiedObjects.Clear();
+        var pastedObjects = _copiedObjects.Select(c => c.Clone());
 
         return pastedObjects;
     }

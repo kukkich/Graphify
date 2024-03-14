@@ -82,7 +82,7 @@ public class AppViewModel : ReactiveObject
         _currentTool.RightMouseUp(position);
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> MouseDownAction(Vector2 position)
     {
         _currentTool.MouseDown(position);
@@ -98,8 +98,6 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> MouseMoveAction(Vector2 position)
     {
         _currentTool.MouseMove(position);
-        return Observable.Return(Unit.Default);
-    }
     
     private IObservable<Unit> UndoChanges()
     {
