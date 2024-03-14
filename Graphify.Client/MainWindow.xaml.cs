@@ -86,7 +86,7 @@ public partial class MainWindow
         {
             return;
         }
-        ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
+        //ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
     }
 
     private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
@@ -104,7 +104,7 @@ public partial class MainWindow
         {
             return;
         }
-        ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+        //ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
