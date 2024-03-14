@@ -2,7 +2,6 @@
 using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
-using SharpGL;
 
 namespace Graphify.Client.View.Drawing.Point;
 
@@ -17,7 +16,6 @@ public class PointCircleDrawer : BasePointDrawer
 
     protected override void DrawSelected(Vector2 point, DrawSettings settings)
     {
-        defaultDrawer.DrawCircle(point, 10, settings.PointColor, 2);
         defaultDrawer.DrawPoint(point, settings.PointColor, settings.PointSize);
         defaultDrawer.DrawFilledCircle(point, settings.PointSize, settings.PointColor);
         defaultDrawer.DrawBorderOfCircle(point, 10, settings.PointColor, 2);
@@ -25,7 +23,6 @@ public class PointCircleDrawer : BasePointDrawer
 
     protected override void DrawControlPoint(Vector2 point, DrawSettings settings)
     {
-        defaultDrawer.DrawCircle(point, 10, Color.Aqua, 2);
         defaultDrawer.DrawPoint(point, Color.Aqua, settings.PointSize);
     }
 }

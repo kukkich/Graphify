@@ -6,9 +6,9 @@ public class Clipboard
 {
     private readonly LinkedList<IGeometricObject> _copiedObjects;
 
-    public Clipboard(LinkedList<IGeometricObject> copiedObjects) 
+    public Clipboard() 
     {
-        _copiedObjects = copiedObjects;
+        _copiedObjects = new LinkedList<IGeometricObject>();
     }
 
     public void CopyObject(IGeometricObject geometricObject)
@@ -30,7 +30,7 @@ public class Clipboard
 
     public IEnumerable<IGeometricObject> PasteObjects()
     {
-        var pastedObjects = _copiedObjects.Select(c => c.Clone());
+        var pastedObjects = _copiedObjects.Select(c => c.Clone()).ToList();
         _copiedObjects.Clear();
 
         return pastedObjects;
