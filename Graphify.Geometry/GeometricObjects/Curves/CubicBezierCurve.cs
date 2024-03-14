@@ -24,18 +24,11 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     {
         get
         {
-            foreach (var point in _points)
-            {
-                if (point.IsAttached)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return _points.All(point => !point.IsAttached);
         }
     }
 
-    private List<AttachedPoint> _attached;
+    private readonly List<AttachedPoint> _attached;
 
     private readonly List<Point> _points;
 
@@ -114,12 +107,14 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
             var point = CurveFunction(t);
             var distV = new Vector2(attachable.X - point.X, attachable.Y - point.Y);
             var dist = distV.Length();
-            if (dist < minDst)
+            if (!(dist < minDst))
             {
-                minV = distV;
-                minDst = dist;
-                minT = t;
+                continue;
             }
+
+            minV = distV;
+            minDst = dist;
+            minT = t;
         }
 
         var attachedPoint = new AttachedPoint(attachable, minT);
@@ -130,13 +125,13 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     public void ConsumeDetach(Point attachable)
     {
         AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
-        if (maybeAttached != null) 
+        if (maybeAttached is null)
         {
-            _attached.Remove(maybeAttached);
-            return;
+            throw new InvalidOperationException(
+                "Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре"
+             );
         }
-
-        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
+        _attached.Remove(maybeAttached);
     }
 
     public bool IsNextTo(Vector2 point, float distance)

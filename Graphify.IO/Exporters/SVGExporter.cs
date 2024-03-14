@@ -10,20 +10,24 @@ using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.IO.Extension;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Graphify.IO.Exporters;
 
-public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
+public sealed class SVGExporter : IExporter
 {
     private const byte ExtraSize = 50;
 
-    private readonly ILogger<SVGExporter> _logger = logger;
+    private readonly ILogger<SVGExporter> _logger;
 
     private SVGSVGElementBuilder _svgElements = null!;
-
     private Vector2 LeftBottomBound { get; set; }
-
     private Vector2 RightTopBound { get; set; }
+    
+    public SVGExporter(ILogger<SVGExporter> logger) 
+    {
+        _logger = logger;
+    }
 
     public void Export(IGeometryContext context, string path)
     {

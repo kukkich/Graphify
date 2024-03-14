@@ -46,13 +46,15 @@ public class LineTool : IApplicationTool
             newPoint = _context.CreatePoint(clickPosition);
         }
         _points.Add(newPoint);
-        
-        if (_currentClicks >= RequiredClicks)
+
+        if (_currentClicks < RequiredClicks)
         {
-            IFigure line = _context.CreateFigure(ObjectType.Line, _points.ToArray());
-            _commandsBuffer.AddCommand(new AddCommand(_context, line));
-            OnToolChanged();
+            return;
         }
+
+        IFigure line = _context.CreateFigure(ObjectType.Line, _points.ToArray());
+        _commandsBuffer.AddCommand(new AddCommand(_context, line));
+        OnToolChanged();
     }
 
     public void MouseUp(Vector2 clickPosition)

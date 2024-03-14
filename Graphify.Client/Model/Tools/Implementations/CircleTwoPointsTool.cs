@@ -46,18 +46,20 @@ public class CircleTwoPointsTool : IApplicationTool
             newPoint = _context.CreatePoint(clickPosition);
         }
         _points.Add(newPoint);
-        
-        if (_currentClicks >= RequiredClicks)
+
+        if (_currentClicks < RequiredClicks)
         {
-            IFigure circle = _context.CreateFigure(ObjectType.Circle, _points.ToArray());
-            _commandsBuffer.AddCommand(new AddCommand(_context, circle));
-            OnToolChanged();
+            return;
         }
+
+        IFigure circle = _context.CreateFigure(ObjectType.Circle, _points.ToArray());
+        _commandsBuffer.AddCommand(new AddCommand(_context, circle));
+        OnToolChanged();
     }
 
     public void MouseUp(Vector2 clickPosition)
     {
-        return;
+        
     }
 
     public bool InProgress()

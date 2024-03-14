@@ -15,32 +15,29 @@ using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace Graphify.IO.Exporters
+namespace Graphify.IO.Exporters;
+
+public sealed class PNGExporter : IExporter
 {
-    public sealed class PNGExporter : IExporter
+    private readonly SVGExporter _svgExporter; 
+
+    public PNGExporter(SVGExporter svgExporter)
     {
-        private readonly SVGExporter _svgExporter; 
+        _svgExporter = svgExporter; 
+    }
 
-        public PNGExporter(SVGExporter svgExporter)
-        {
-            _svgExporter = svgExporter; 
-        }
+    public void Export(IGeometryContext context, string path)
+    {
+        _svgExporter.Export(context, path);
 
-        public void Export(IGeometryContext context, string path)
-        {
-            _svgExporter.Export(context, path);
+        ConvertSvgToPng(path);
+    }
 
-            ConvertSvgToPng(path);
-        }
+    private static void ConvertSvgToPng(string svgPath)
+    {
+        using var document = new SVGDocument(svgPath);
+        var pngSaveOptions = new ImageSaveOptions();
 
-        private static void ConvertSvgToPng(string svgPath)
-        {
-            using (var document = new SVGDocument(svgPath))
-            {
-                var pngSaveOptions = new ImageSaveOptions();
-
-                Converter.ConvertSVG(document, pngSaveOptions, Path.ChangeExtension(svgPath, ".png"));
-            }
-        }
+        Converter.ConvertSVG(document, pngSaveOptions, Path.ChangeExtension(svgPath, ".png"));
     }
 }

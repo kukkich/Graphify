@@ -38,10 +38,10 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     private float Radius => (float)Math.Sqrt(Math.Pow(_centerPoint.X - _radiusPoint.X, 2) + Math.Pow(_centerPoint.Y - _radiusPoint.Y, 2));
 
 
-    private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
+    private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
-    private Point _centerPoint;
-    private Point _radiusPoint;
+    private readonly Point _centerPoint;
+    private readonly Point _radiusPoint;
 
     public Circle(Point center, Point radius, CurveStyle? style = null)
     {

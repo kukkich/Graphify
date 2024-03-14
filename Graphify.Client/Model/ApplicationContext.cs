@@ -91,11 +91,13 @@ public class ApplicationContext
             ClearSelected();
         }
 
-        if (!_selectedObjects.Contains(geometricObject))
+        if (_selectedObjects.Contains(geometricObject))
         {
-            _selectedObjects.AddLast(geometricObject);
-            geometricObject.ObjectState = ObjectState.Selected;
+            return;
         }
+
+        _selectedObjects.AddLast(geometricObject);
+        geometricObject.ObjectState = ObjectState.Selected;
     }
 
     public void UnSelect(IGeometricObject geometricObject)
@@ -105,11 +107,13 @@ public class ApplicationContext
             return;
         }
 
-        if (_selectedObjects.Contains(geometricObject))
+        if (!_selectedObjects.Contains(geometricObject))
         {
-            _selectedObjects.Remove(geometricObject);
-            geometricObject.ObjectState = ObjectState.Default;
+            return;
         }
+
+        _selectedObjects.Remove(geometricObject);
+        geometricObject.ObjectState = ObjectState.Default;
     }
 
     public IEnumerable<IGeometricObject> SelectAll()
