@@ -65,7 +65,6 @@ public partial class MainWindow
         {
             return;
         }
-
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
@@ -77,7 +76,33 @@ public partial class MainWindow
         }
         ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
     }
+    
+    private void CreatePolygonModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
+    }
 
+    private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCircle);
+    }
+
+    private void CreateCurveModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+    }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));

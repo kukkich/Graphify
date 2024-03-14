@@ -9,6 +9,7 @@ using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat.ModeDetection;
 
 namespace Graphify.Client.ViewModel;
 
@@ -88,7 +89,10 @@ public class AppViewModel : ReactiveObject
     {
         return Observable.Return(Unit.Default);
     }
-
+    private IObservable<Unit> CopyObject()
+    {
+        return Observable.Return(Unit.Default);
+    }
     private IObservable<Unit> CopyObject()
     {
         return Observable.Return(Unit.Default);
@@ -99,4 +103,17 @@ public class AppViewModel : ReactiveObject
         _application.AddPoint(position);
         return Observable.Return(Unit.Default);
     }
+    public enum EditMode
+{
+        Move,
+        CreatePoint,
+        CreateLine,
+        CreatePolygon,
+        CreateCircle,
+        CreateCurve
+    }
+
+public enum ExportFileFormat
+{
+
 }
