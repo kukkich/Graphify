@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -34,13 +34,13 @@ public class CircleTwoPointsTool : IApplicationTool
     {
         if (_currentClicks < RequiredClicks)
         {
-            _firstPoint = _context.AddPoint(clickPosition);
+            _firstPoint = _context.CreatePoint(clickPosition);
             ++_currentClicks;
         }
         else
         {
-            _secondPoint = _context.AddPoint(clickPosition);
-            IFigure circle = _context.AddFigure(ObjectType.Circle, [_firstPoint, _secondPoint]);
+            _secondPoint = _context.CreatePoint(clickPosition);
+            IFigure circle = _context.CreateFigure(ObjectType.Circle, [_firstPoint, _secondPoint]);
             _commandsBuffer.AddCommand(new AddCommand(_context, circle));
             OnToolChanged();
         }

@@ -31,6 +31,8 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> Paste { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
+    public ReactiveCommand<Unit, Unit> Cut { get; private set; }
+
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
@@ -57,8 +59,9 @@ public class AppViewModel : ReactiveObject
 
         Undo = ReactiveCommand.CreateFromObservable(UndoChanges);
         Redo = ReactiveCommand.CreateFromObservable(RedoChanges);
-        Copy = ReactiveCommand.CreateFromObservable(CopyObject);
-        Paste = ReactiveCommand.CreateFromObservable(PasteObject);
+        Copy = ReactiveCommand.CreateFromObservable(CopyObjects);
+        Cut = ReactiveCommand.CreateFromObservable(CutObjects);
+        Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
     }
 
     private IObservable<Unit> SetMode(EditMode mode)
@@ -120,8 +123,21 @@ public class AppViewModel : ReactiveObject
         return Observable.Return(Unit.Default);
     }   
 
-    public enum ExportFileFormat
+    private IObservable<Unit> CopyObjects()
     {
+        _application.Copy();
+        return Observable.Return(Unit.Default);
+    }
 
+    private IObservable<Unit> CutObjects()
+    {
+        _application.Cut();
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> PasteObjects()
+    {
+        _application.Paste();
+        return Observable.Return(Unit.Default);
     }
 }
