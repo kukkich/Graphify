@@ -7,7 +7,8 @@ public interface IDrawer
 {
     public DrawSettings Settings { get; }
 
-    public void Reset();
+    public void Start();
+    public void End();
     public void DrawCircle(Vector2 center, float radius, ObjectState state);
     public void DrawPoint(Vector2 point, ObjectState state);
     public void DrawLine(Vector2 start, Vector2 end, ObjectState state);

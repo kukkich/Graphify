@@ -127,9 +127,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var line in _lines)
+        foreach (var p in ControlPoints)
         {
-            line.Move(shift);
+            p.Move(shift);
         }
     }
 
@@ -183,9 +183,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach(var line in _lines)
+        foreach(var p in ControlPoints)
         {
-            line.Rotate(shift, angle);
+            p.Rotate(shift, angle);
         }
     }
 
@@ -202,9 +202,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var line in _lines)
+        foreach (var p in ControlPoints)
         {
-            line.Reflect(point);
+            p.Reflect(point);
         }
     }
     
@@ -248,6 +248,17 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         };
         return exportData;
     }
-    
-    public IGeometricObject Clone() => throw new NotImplementedException();
+
+    public IGeometricObject Clone()
+    {
+        var pointsClones = ControlPoints.Select(c => (Point)c.Clone()).ToArray();
+
+        var polygonClone = 
+            new Polygon(pointsClones, new PolygonStyle(Style.PrimaryColor, Style.LineColor, Style.Name, Style.Size))
+            {
+                ObjectState = ObjectState
+            };
+
+        return polygonClone;
+    }
 }

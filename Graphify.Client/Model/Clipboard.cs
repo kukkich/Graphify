@@ -6,9 +6,9 @@ public class Clipboard
 {
     private readonly LinkedList<IGeometricObject> _copiedObjects;
 
-    public Clipboard(LinkedList<IGeometricObject> copiedObjects) 
+    public Clipboard() 
     {
-        _copiedObjects = copiedObjects;
+        _copiedObjects = new LinkedList<IGeometricObject>();
     }
 
     public void CopyObject(IGeometricObject geometricObject)
@@ -35,6 +35,7 @@ public class Clipboard
         return pastedObjects;
     }
 
+    // TODO remove if unused
     public void RemoveObjects(IEnumerable<IGeometricObject> geometricObjects)
     {
         foreach (var _ in geometricObjects)

@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -22,29 +22,46 @@ public class LineTool : IApplicationTool
         _commandsBuffer = commandsBuffer;
     }
 
-    public void MouseMove(Vector2 newPosition) => throw new NotImplementedException();
+    public void RightMouseDown(Vector2 clickPosition) { }
+
+    public void RightMouseUp(Vector2 clickPosition) { }
+
+    public void MouseMove(Vector2 newPosition)
+    {
+        
+    }
 
     public void MouseDown(Vector2 clickPosition)
     {
         if (_currentClicks < RequiredClicks)
         {
-            _firstPoint = _context.AddPoint(clickPosition);
+            _firstPoint = _context.CreatePoint(clickPosition);
             ++_currentClicks;
         }
         else
         {
-            _secondPoint = _context.AddPoint(clickPosition);
-            IFigure line = _context.AddFigure(ObjectType.Line, [_firstPoint, _secondPoint]);
+            _secondPoint = _context.CreatePoint(clickPosition);
+            IFigure line = _context.CreateFigure(ObjectType.Line, [_firstPoint, _secondPoint]);
             _commandsBuffer.AddCommand(new AddCommand(_context, line));
-            Reset();
+            OnToolChanged();
         }
+    }
+
+    public void MouseUp(Vector2 clickPosition)
+    {
+        
+    }
+
+    public bool InProgress()
+    {
+        return true;
     }
 
     public void Cancel()
     {
     }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         _currentClicks = 0;
         _firstPoint = null;

@@ -46,40 +46,39 @@ public class OpenGLDrawer : IDrawer
         _currentLineDrawer = new BaseLineDrawer( _defaultDrawer);
     }
 
-    public void Reset()
+    public void Start()
     {
         _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
     }
-    
+    public void End()
+    {
+        _gl.Flush();
+    }
+
     public void DrawBezierCurve(IEnumerable<Vector2> points, ObjectState state)
     {
-        Settings.ObjectState = state;
-        _currentBezierCurveDrawer.Draw(points, Settings);
+        _currentBezierCurveDrawer.Draw(points, state, Settings);
     }
 
     public void DrawCircle(Vector2 center, float radius, ObjectState state)
     {
-        Settings.ObjectState = state;
-        _currentCircleDrawer.Draw((center, radius), Settings);
+        _currentCircleDrawer.Draw((center, radius), state, Settings);
     }
 
     public void DrawLine(Vector2 start, Vector2 end, ObjectState state)
     {
-        Settings.ObjectState = state;
-        _currentLineDrawer.Draw((start, end), Settings);
+        _currentLineDrawer.Draw((start, end), state, Settings);
     }
     
     public void DrawPoint(Vector2 point, ObjectState state)
     {
-        Settings.ObjectState = state;
         _currentPointDrawer = _pointVariantDrawers[Settings.PointVariant];
-        _currentPointDrawer.Draw(point, Settings);
+        _currentPointDrawer.Draw(point, state, Settings);
     }
 
     public void DrawPolygon(IEnumerable<Vector2> points, ObjectState state)
     {
-        Settings.ObjectState = state;
-        _currentPolygonDrawer.Draw(points, Settings);
+        _currentPolygonDrawer.Draw(points, state, Settings);
     }
 }

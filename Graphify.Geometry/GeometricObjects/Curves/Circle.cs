@@ -222,5 +222,14 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         return exportData;
     }
     
-    public IGeometricObject Clone() => throw new NotImplementedException();
+    public IGeometricObject Clone()
+    {
+        var circleClone = new Circle((Point)_centerPoint.Clone(), (Point)_radiusPoint.Clone(),
+            new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size))
+            {
+                ObjectState = ObjectState
+            };
+
+        return circleClone;
+    }
 }
