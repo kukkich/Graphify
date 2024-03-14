@@ -3,40 +3,36 @@ using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Text;
 using Newtonsoft.Json;
-using System.Reactive;
-using Newtonsoft.Json.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Graphify.IO.Exporters;
 
 public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
 {
     private readonly ILogger<GraphifyExporter> _logger = logger;
+
     private readonly List<JsonPointObject> _points = [];
     private readonly List<JsonFigureObject> _figures = [];
 
+    private readonly Dictionary<Point, uint> _completedPoints = [];
+
     public void Export(IGeometryContext context, string path)
     {
-        uint i = 1;
+        uint id = 1;
 
-        IEnumerable<Point> points = context.Points;
-        IEnumerable<IFigure> figures = context.Figures;
-
-        List<Point>? independentPoints = points.Where(p => !p.IsAttached).ToList();
+        List<Point>? independentPoints = context.Points.Where(p => !p.IsAttached).ToList();
 
         if (independentPoints is not null)
         {
-            AddPoints(independentPoints, ref i);
+            AddPoints(independentPoints, ref id);
         }
 
-        foreach (IFigure figure in figures)
+        foreach (IFigure figure in context.Figures)
         {
             FigureExportData exportFigureData = figure.GetExportData();
 
-            uint[] idControlPoints = AddPoints(figure.ControlPoints.ToList(), ref i);
-            uint[] idAttachedPoints = AddPoints(figure.Attached.ToList(), ref i);
+            uint[] idControlPoints = AddPoints(figure.ControlPoints.ToList(), ref id);
+            uint[] idAttachedPoints = AddPoints(figure.Attached.ToList(), ref id);
 
             _figures.Add(new JsonFigureObject(
                                              exportFigureData.FigureType,
@@ -48,20 +44,29 @@ public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
         CreateFile(path);
 
         _points.Clear();
+        _figures.Clear();
     }
 
-    private uint[] AddPoints(List<Point> points, ref uint i)
+    private uint[] AddPoints(List<Point> points, ref uint id)
     {
         List<uint> result = [];
 
         foreach (Point point in points)
         {
+            if (_completedPoints.TryGetValue(point, out uint idPoint))
+            {
+                result.Add(idPoint);
+                continue;
+            }
+
             PointExportData data = point.GetExportData();
 
-            _points.Add(new JsonPointObject(i, data.Position, data.Style));
-            result.Add(i);
+            result.Add(id);
 
-            ++i;
+            _points.Add(new JsonPointObject(id, data.Position, data.Style));
+            _completedPoints.Add(point, id);
+
+            ++id;
         }
 
         return [.. result];
@@ -69,7 +74,7 @@ public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
 
     private void CreateFile(string path)
     {
-        string json = JsonConvert.SerializeObject((_points,_figures), Formatting.Indented);
+        string json = JsonConvert.SerializeObject((_points, _figures), Formatting.Indented);
 
         File.WriteAllText(path, json);
     }
