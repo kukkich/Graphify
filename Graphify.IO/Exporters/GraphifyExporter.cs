@@ -6,23 +6,20 @@ using Microsoft.Extensions.Logging;
 using System.Text;
 using Newtonsoft.Json;
 using System.Reactive;
+using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Graphify.IO.Exporters;
 
 public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
 {
     private readonly ILogger<GraphifyExporter> _logger = logger;
-
     private readonly List<JsonPointObject> _points = [];
     private readonly List<JsonFigureObject> _figures = [];
-
-    private StringBuilder _jsonElements = null!;
 
     public void Export(IGeometryContext context, string path)
     {
         uint i = 1;
-
-        _jsonElements = new StringBuilder();
 
         IEnumerable<Point> points = context.Points;
         IEnumerable<IFigure> figures = context.Figures;
@@ -62,6 +59,7 @@ public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
             PointExportData data = point.GetExportData();
 
             _points.Add(new JsonPointObject(i, data.Position, data.Style));
+            result.Add(i);
 
             ++i;
         }
@@ -71,6 +69,8 @@ public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
 
     private void CreateFile(string path)
     {
-        File.WriteAllText(path, _jsonElements.ToString());
+        string json = JsonConvert.SerializeObject((_points,_figures), Formatting.Indented);
+
+        File.WriteAllText(path, json);
     }
 }
