@@ -233,7 +233,7 @@
                                 BorderBrush="White"
                                 Grid.Column="2"
                                 Content="︙"
-                                Click="ObjectOptionsButton_Click"/> />
+                                Click="ObjectOptionsButton_Click"/>
                     </Grid>                    
                 </DataTemplate>
             </ListBox.ItemTemplate>

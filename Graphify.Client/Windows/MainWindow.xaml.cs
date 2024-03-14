@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
@@ -130,8 +132,43 @@ public partial class MainWindow
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
-    }       
+        if (sender is not Button)
+        {
+            return;
+        }
+        SaveFileDialog exportFileDialog = new SaveFileDialog();
+        exportFileDialog.FileName = "test.svg";
+        exportFileDialog.DefaultExt = ".svg";
+        exportFileDialog.Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify*)|*.grafify*";
+        exportFileDialog.InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+        exportFileDialog.CheckFileExists = false;
+        if (exportFileDialog.ShowDialog() == true)
+        {
+            string filePath = exportFileDialog.FileName;
+            string selectedExtension = Path.GetExtension(filePath);
+            ExportFileType fileType = SelectfileType(selectedExtension);
+            ViewModel?.Export.Execute((filePath, fileType));
+        }
+    }
+
+    // что возвращать, если пришла белиберда? TODO
+    private ExportFileType SelectfileType(string selectedExtension)
+    {
+        ExportFileType fileType = 0; 
+        if (selectedExtension == ".svg")
+        {
+             fileType = ExportFileType.Svg;
+        }
+        else if (selectedExtension == ".png")
+        {
+            fileType = ExportFileType.Png;
+        }
+        else if (selectedExtension == ".grafify")
+        {
+             fileType = ExportFileType.Custom;
+        }
+        return fileType;
+    }
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
     {
