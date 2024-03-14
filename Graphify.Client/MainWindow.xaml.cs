@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
@@ -36,8 +38,9 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
         });
-    }
 
+    }    
+  
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -65,7 +68,6 @@ public partial class MainWindow
         {
             return;
         }
-
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
@@ -78,11 +80,109 @@ public partial class MainWindow
         ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
     }
 
-    private void ExportButton_Click(object sender, RoutedEventArgs e)
+    private void CreatePolygonModeButton_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
     }
 
+    private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCircleTwoPoints);
+    }
+
+    private void CreateCurveModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+    }
+    private void ExportButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        SaveFileDialog exportFileDialog = new SaveFileDialog();
+        exportFileDialog.FileName = "test.svg";
+        exportFileDialog.DefaultExt = ".svg";
+        exportFileDialog.Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify*)|*.grafify*";
+        exportFileDialog.InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+        exportFileDialog.CheckFileExists = false;
+        if (exportFileDialog.ShowDialog() == true)
+        {
+            string filePath = exportFileDialog.FileName;
+            string selectedExtension = Path.GetExtension(filePath);
+            ExportFileType fileType = SelectfileType(selectedExtension);
+            ViewModel?.Export.Execute((filePath, fileType));
+        }
+    }
+
+    // что возвращать, если пришла белиберда? TODO
+    private ExportFileType SelectfileType(string selectedExtension)
+    {
+        ExportFileType fileType = 0; 
+        if (selectedExtension == ".svg")
+        {
+             fileType = ExportFileType.Svg;
+        }
+        else if (selectedExtension == ".png")
+        {
+            fileType = ExportFileType.Png;
+        }
+        else if (selectedExtension == ".grafify")
+        {
+             fileType = ExportFileType.Custom;
+        }
+        return fileType;
+    }
+
+    private void UndoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.Undo.Execute();
+    }
+
+    private void RedoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.Redo.Execute();
+    }
+
+    private void ZoomOutButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void ZoomInButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
     {
         if (ViewModel is null)

@@ -127,9 +127,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var line in _lines)
+        foreach (var p in ControlPoints)
         {
-            line.Move(shift);
+            p.Move(shift);
         }
     }
 
@@ -183,9 +183,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach(var line in _lines)
+        foreach(var p in ControlPoints)
         {
-            line.Rotate(shift, angle);
+            p.Rotate(shift, angle);
         }
     }
 
@@ -202,9 +202,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var line in _lines)
+        foreach (var p in ControlPoints)
         {
-            line.Reflect(point);
+            p.Reflect(point);
         }
     }
     
