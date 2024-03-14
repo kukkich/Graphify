@@ -151,7 +151,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         Update();
     }
-    
+
     /// <summary>
     /// Обновляет фигуры, привязанные к данной точке
     /// </summary>
@@ -266,9 +266,9 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     {
         var pointClone = new Point(X, Y,
             new PointStyle(new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size), Style.Variant))
-            {
-                ObjectState = ObjectState
-            };
+        {
+            ObjectState = ObjectState
+        };
 
         return pointClone;
     }

@@ -1,5 +1,5 @@
-using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 
 namespace Graphify.IO;
 

@@ -18,12 +18,12 @@ public class BaseCircleDrawer : BaseGeometryObjectDrawer<(Vector2, float)>
     {
         defaultDrawer.DrawBorderOfCircle(point.Item1, point.Item2, settings.LineColor, settings.LineThickness);
 
-        defaultDrawer.DrawBorderOfCircle(point.Item1, 
+        defaultDrawer.DrawBorderOfCircle(point.Item1,
                                          point.Item2,
                                          Color.FromArgb(50,
                                                         settings.LineColor.R,
                                                         settings.LineColor.G,
-                                                        settings.LineColor.B), 
+                                                        settings.LineColor.B),
                                          settings.LineThickness + 10);
     }
 }

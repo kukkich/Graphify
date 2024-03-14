@@ -8,16 +8,16 @@ namespace Graphify.Client.View.Drawing;
 public class OpenGLDefaultDrawer : IBaseDrawer
 {
     private readonly OpenGL _gl;
-    
+
     public OpenGLDefaultDrawer(OpenGL gl)
     {
         _gl = gl;
-        
+
         _gl.Enable(OpenGL.GL_BLEND);
         _gl.BlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
         _gl.Enable(OpenGL.GL_LINE_SMOOTH);
     }
-    
+
     public void DrawBezierCurve(IEnumerable<Vector2> points, Color color, int lineThickness)
     {
         _gl.LineWidth(lineThickness);

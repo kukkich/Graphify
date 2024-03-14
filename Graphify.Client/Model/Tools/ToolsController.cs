@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Graphify.Client.Model.Enums;
+﻿using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 
 namespace Graphify.Client.Model.Tools;
@@ -30,7 +29,7 @@ public class ToolsController
             {
                 _currentTool.Cancel();
             }
-            
+
             _currentTool.OnToolChanged();
         }
 

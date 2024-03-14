@@ -15,7 +15,7 @@ public class MoveTool : IApplicationTool
     private Vector2 MoveShift = Vector2.Zero;
     private const float SmallShift = 0.5f;
 
-    public MoveTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer) 
+    public MoveTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer)
     {
         _applicationContext = applicationContext;
         _commandsBuffer = commandsBuffer;
@@ -43,10 +43,10 @@ public class MoveTool : IApplicationTool
     {
         foreach (var geometricObject in _applicationContext.SelectedObjects)
         {
-            geometricObject.Move(newPosition - _previousMousePosition);   
+            geometricObject.Move(newPosition - _previousMousePosition);
         }
     }
-    
+
     public void MouseDown(Vector2 clickPosition)
     {
         IGeometricObject closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);

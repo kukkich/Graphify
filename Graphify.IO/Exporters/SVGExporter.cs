@@ -10,7 +10,6 @@ using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.IO.Extension;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Graphify.IO.Exporters;
 
@@ -23,8 +22,8 @@ public sealed class SVGExporter : IExporter
     private SVGSVGElementBuilder _svgElements = null!;
     private Vector2 LeftBottomBound { get; set; }
     private Vector2 RightTopBound { get; set; }
-    
-    public SVGExporter(ILogger<SVGExporter> logger) 
+
+    public SVGExporter(ILogger<SVGExporter> logger)
     {
         _logger = logger;
     }
@@ -66,7 +65,7 @@ public sealed class SVGExporter : IExporter
         {
             case ObjectType.Line: AddLine(data, controlPoints); break;
             case ObjectType.Circle: AddCircle(data, controlPoints); break;
-            case ObjectType.Polygon:AddPolygon(data, controlPoints);  break;
+            case ObjectType.Polygon: AddPolygon(data, controlPoints); break;
             case ObjectType.CubicBezier: AddCubicBezier(data, controlPoints); break;
         }
     }

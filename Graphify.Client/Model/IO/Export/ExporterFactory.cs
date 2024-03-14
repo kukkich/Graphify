@@ -3,7 +3,6 @@ using Graphify.Client.Model.Interfaces;
 using Graphify.IO.Exporters;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Graphify.Core.Model.IO.Export;
 

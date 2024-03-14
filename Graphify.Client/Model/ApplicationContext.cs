@@ -78,14 +78,14 @@ public class ApplicationContext
 
         Select(geometricObject, false);
     }
-    
+
     public void Select(IGeometricObject geometricObject, bool clearPrevious)
     {
         if (!Surface.Objects.Contains(geometricObject))
         {
             return;
         }
-        
+
         if (clearPrevious)
         {
             ClearSelected();
@@ -135,7 +135,7 @@ public class ApplicationContext
         {
             geometricObject.ObjectState = ObjectState.Default;
         }
-        
+
         _selectedObjects.Clear();
     }
 }

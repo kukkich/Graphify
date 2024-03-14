@@ -204,7 +204,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         drawer.DrawCircle(centerPoint, Radius, ObjectState);
     }
-    
+
     public FigureExportData GetExportData()
     {
         var exportData = new FigureExportData
@@ -221,14 +221,14 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         return exportData;
     }
-    
+
     public IGeometricObject Clone()
     {
         var circleClone = new Circle((Point)_centerPoint.Clone(), (Point)_radiusPoint.Clone(),
             new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size))
-            {
-                ObjectState = ObjectState
-            };
+        {
+            ObjectState = ObjectState
+        };
 
         return circleClone;
     }

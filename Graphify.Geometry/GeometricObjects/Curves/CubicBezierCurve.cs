@@ -1,6 +1,4 @@
-using System.Net.NetworkInformation;
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
@@ -34,14 +32,14 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
     private Vector2 CurveFunction(float t)
     {
-        var tc = new float[4] 
+        var tc = new float[4]
         {
             (1f-t)*(1f-t)*(1f-t),
             3f*t*(1f-t)*(1f-t),
             3f*t*t*(1f-t),
             t*t*t
         };
-        Vector2 p = new Vector2 { X=0f, Y=0f };
+        Vector2 p = new Vector2 { X = 0f, Y = 0f };
         for (int i = 0; i < 4; i++)
         {
             p.X += tc[i] * _points[i].X;
@@ -75,13 +73,13 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
     public void Update()
     {
-        foreach (var attachedPoint in _attached) 
+        foreach (var attachedPoint in _attached)
         {
             var point = attachedPoint.Object;
             var t = attachedPoint.T;
             var newPos = CurveFunction(t);
             var dV = new Vector2(newPos.X - point.X, newPos.Y - point.Y);
-        
+
             point.Move(dV);
         }
     }
@@ -102,7 +100,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
         Vector2 minV = new Vector2();
         float minDst = float.PositiveInfinity;
         float minT = -1f;
-        for(float t = 0f; t < 1f; t += 0.01f)
+        for (float t = 0f; t < 1f; t += 0.01f)
         {
             var point = CurveFunction(t);
             var distV = new Vector2(attachable.X - point.X, attachable.Y - point.Y);
@@ -154,7 +152,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
         return false;
     }
-    
+
     public void Move(Vector2 shift)
     {
         if (!CanBeMoved)
@@ -195,7 +193,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     }
 
     public void Draw(IDrawer drawer) => throw new NotImplementedException();
-    
+
     public FigureExportData GetExportData()
     {
         var exportData = new FigureExportData

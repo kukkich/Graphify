@@ -173,7 +173,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach(var p in ControlPoints)
+        foreach (var p in ControlPoints)
         {
             p.Rotate(shift, angle);
         }
@@ -197,7 +197,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             p.Reflect(point);
         }
     }
-    
+
     /// <summary>
     /// Метод, отрисовывающий на экране полигон и отдельно каждую его грань
     /// </summary>
@@ -210,7 +210,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             .ToList();
 
         drawer.DrawPolygon(points, ObjectState);
-        foreach(var line in _lines)
+        foreach (var line in _lines)
         {
             line.Draw(drawer);
         }
@@ -241,7 +241,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     {
         var pointsClones = ControlPoints.Select(c => (Point)c.Clone()).ToArray();
 
-        var polygonClone = 
+        var polygonClone =
             new Polygon(pointsClones, new PolygonStyle(Style.PrimaryColor, Style.LineColor, Style.Name, Style.Size))
             {
                 ObjectState = ObjectState

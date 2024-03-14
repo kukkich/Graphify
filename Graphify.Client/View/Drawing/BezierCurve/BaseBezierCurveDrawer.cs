@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
-using SharpGL;
 
 namespace Graphify.Client.View.Drawing.BezierCurve;
 

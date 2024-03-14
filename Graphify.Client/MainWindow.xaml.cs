@@ -39,8 +39,8 @@ public partial class MainWindow
                 .DisposeWith(disposables);
         });
 
-    }    
-  
+    }
+
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -86,7 +86,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
     }
 
@@ -189,7 +189,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         var position = args.GetPosition((OpenGLControl)sender);
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
@@ -202,7 +202,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         var position = args.GetPosition((OpenGLControl)sender);
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;

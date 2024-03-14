@@ -34,14 +34,14 @@ public class PointTool : IApplicationTool
         _commandsBuffer.AddCommand(new AddCommand(_applicationContext, newPoint));
     }
 
-    public void MouseUp(Vector2 clickPosition){ }
+    public void MouseUp(Vector2 clickPosition) { }
 
     public bool InProgress()
     {
         return false;
     }
 
-    public void Cancel(){ }
+    public void Cancel() { }
 
-    public void OnToolChanged(){ }
+    public void OnToolChanged() { }
 }
