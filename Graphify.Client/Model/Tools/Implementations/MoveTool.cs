@@ -74,6 +74,7 @@ public class MoveTool : IApplicationTool
         if (MoveShift.Length() >= SmallShift)
         {
             _commandsBuffer.AddCommand(new MoveCommand(_applicationContext.SelectedObjects, MoveShift));
+            MoveShift = Vector2.Zero;
         }
     }
 
