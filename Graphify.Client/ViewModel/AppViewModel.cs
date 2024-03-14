@@ -94,11 +94,13 @@ public class AppViewModel : ReactiveObject
         _currentTool.MouseUp(position);
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> MouseMoveAction(Vector2 position)
     {
         _currentTool.MouseMove(position);
-    
+        return Observable.Return(Unit.Default);
+    }
+
     private IObservable<Unit> UndoChanges()
     {
         _application.CommandsBuffer.Undo();

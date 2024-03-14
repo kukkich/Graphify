@@ -59,7 +59,7 @@ public partial class MainWindow
             return;
         }
 
-        ViewModel?.SetEditMode.Execute(EditMode.Move);
+        ViewModel?.SetEditMode.Execute(EditMode.Rotate);
     }
 
     private void CreatePointModeButton_Click(object sender, RoutedEventArgs e)
