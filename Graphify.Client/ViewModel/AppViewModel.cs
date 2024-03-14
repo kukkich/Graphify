@@ -58,7 +58,7 @@ public class AppViewModel : ReactiveObject
         _application.RedoAction();
     }
 
-   
+
 
     //TODO �����������???????
     private IObservable<Unit> SetMode(EditMode mode)
@@ -93,10 +93,6 @@ public class AppViewModel : ReactiveObject
     {
         return Observable.Return(Unit.Default);
     }
-    private IObservable<Unit> CopyObject()
-    {
-        return Observable.Return(Unit.Default);
-    }
     //TODO Implement for other figures
     private IObservable<Unit> MouseDownAction(Vector2 position)
     {
@@ -104,7 +100,7 @@ public class AppViewModel : ReactiveObject
         return Observable.Return(Unit.Default);
     }
     public enum EditMode
-{
+    {
         Move,
         CreatePoint,
         CreateLine,
@@ -113,7 +109,8 @@ public class AppViewModel : ReactiveObject
         CreateCurve
     }
 
-public enum ExportFileFormat
-{
+    public enum ExportFileFormat
+    {
 
+    }
 }

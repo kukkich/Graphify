@@ -42,7 +42,7 @@
             </Style.Setters>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
@@ -93,24 +93,24 @@
                     Click="CreateLineModeButton_Click">
                 <Image Source="/Icons/line.png" Stretch="Uniform"/>
             </Button>
-                        <Button x:Name="CreatePolygonModeButton"
-        Width="25"
-        Height="25"
-        Margin="0, 0, 14, 5"
-        Style="{StaticResource RoundButtonStyle}"
-        Click="CreatePolygonModeButton_Click"/>
-<Button x:Name="CreateCircleModeButton"
-        Width="25"
-        Height="25"
-        Margin="0, 0, 14, 5"
-        Style="{StaticResource RoundButtonStyle}"
-        Click="CreateCircleModeButton_Click"/>
-<Button x:Name="CreateCurveModeButton"
-        Width="25"
-        Height="25"
-        Margin="0, 0, 14, 5"
-        Style="{StaticResource RoundButtonStyle}"
-        Click="CreateCurveModeButton_Click"/>
+            <Button x:Name="CreatePolygonModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreatePolygonModeButton_Click"/>
+            <Button x:Name="CreateCircleModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCircleModeButton_Click"/>
+            <Button x:Name="CreateCurveModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCurveModeButton_Click"/>
         </StackPanel>
         <StackPanel Grid.Row="0"
             Grid.Column="2"
@@ -151,10 +151,10 @@
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="ZoomOutButton_Click">
-                    <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
+                <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
             </Button>
-                    
-            
+
+
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
