@@ -1,5 +1,6 @@
 using System.Net.NetworkInformation;
 using System.Numerics;
+using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Attachment;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
@@ -17,12 +18,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
     public IEnumerable<Point> Attached => _attached.Select(x => x.Object);
 
-    public IEnumerable<Point> ControlPoints {
-        get
-        {
-            return _points;
-        }
-    }
+    public IEnumerable<Point> ControlPoints => _points;
 
     internal bool CanBeMoved
     {
@@ -42,6 +38,24 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     private List<AttachedPoint> _attached;
 
     private readonly List<Point> _points;
+
+    private Vector2 CurveFunction(float t)
+    {
+        var tc = new float[4] 
+        {
+            (1f-t)*(1f-t)*(1f-t),
+            3f*t*(1f-t)*(1f-t),
+            3f*t*t*(1f-t),
+            t*t*t
+        };
+        Vector2 p = new Vector2 { X=0f, Y=0f };
+        for (int i = 0; i < 4; i++)
+        {
+            p.X += tc[i] * _points[i].X;
+            p.Y += tc[i] * _points[i].Y;
+        }
+        return p;
+    }
 
     /// <summary>
     /// Конструктор класса CubicBezierCurve
@@ -68,11 +82,15 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
 
     public void Update()
     {
-        foreach (var point in _points) 
+        foreach (var attachedPoint in _attached) 
         {
-            point.Update();
+            var point = attachedPoint.Object;
+            var t = attachedPoint.T;
+            var newPos = CurveFunction(t);
+            var dV = new Vector2(newPos.X - point.X, newPos.Y - point.Y);
+        
+            point.Move(dV);
         }
-        // TODO _attached renew (look at Circle.cs)
     }
 
     public void ConsumeAttach(Point attachable)
@@ -87,7 +105,26 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
             throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка уже присоединена к данной фигуре");
         }
 
-        // find where to move attachable point, move and add to _attached
+        // Stupid Linear Method (Should use logarithmical find)
+        Vector2 minV = new Vector2();
+        float minDst = float.PositiveInfinity;
+        float minT = -1f;
+        for(float t = 0f; t < 1f; t += 0.01f)
+        {
+            var point = CurveFunction(t);
+            var distV = new Vector2(attachable.X - point.X, attachable.Y - point.Y);
+            var dist = distV.Length();
+            if (dist < minDst)
+            {
+                minV = distV;
+                minDst = dist;
+                minT = t;
+            }
+        }
+
+        var attachedPoint = new AttachedPoint(attachable, minT);
+        _attached.Add(attachedPoint);
+        attachable.Move(minV);
     }
 
     public void ConsumeDetach(Point attachable)
@@ -109,7 +146,17 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
             throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
         }
 
-        // TODO fond closest distance to point
+        // Stupid Linear Method (Should use logarithmical find)
+        for (float t = 0f; t < 1f; t += 0.01f)
+        {
+            var curPoint = CurveFunction(t);
+            var distV = new Vector2(point.X - curPoint.X, point.Y - curPoint.Y);
+            if (distV.Length() < distance)
+            {
+                return true;
+            }
+        }
+
         return false;
     }
     
@@ -162,9 +209,28 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
             Style = Style
         };
 
-        // TODO find LeftBottomBound and RightTopBound
+        // Stupid Linear Method (Should use logarithmical find)
+        Vector2 leftBottom = new Vector2(float.MaxValue, float.MaxValue); ;
+        Vector2 rightTop = new Vector2(float.MaxValue, float.MaxValue); ;
+        for (float t = 0f; t < 1f; t += 0.01f)
+        {
+            var point = CurveFunction(t);
+            // TODO else if?
+            if (point.X < leftBottom.X)
+                leftBottom.X = point.X;
+            if (point.X > rightTop.X)
+                rightTop.X = point.X;
+            if (point.Y < leftBottom.Y)
+                leftBottom.Y = point.Y;
+            if (point.Y > rightTop.Y)
+                rightTop.Y = point.Y;
+        }
+
+        exportData.LeftBottomBound = leftBottom;
+        exportData.RightTopBound = rightTop;
 
         return exportData;
     }
+
     public IGeometricObject Clone() => throw new NotImplementedException();
 }
