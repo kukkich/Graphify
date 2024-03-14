@@ -19,12 +19,10 @@ namespace Graphify.IO.Exporters
 {
     public sealed class PNGExporter : IExporter
     {
-        private readonly ILogger<PNGExporter> _logger;
         private readonly SVGExporter _svgExporter; 
 
-        public PNGExporter(ILogger<PNGExporter> logger, SVGExporter svgExporter)
+        public PNGExporter(SVGExporter svgExporter)
         {
-            _logger = logger;
             _svgExporter = svgExporter; 
         }
 
