@@ -5,16 +5,12 @@ namespace Graphify.Geometry.Drawing;
 
 public interface IDrawer
 {
-    public Color LineColor { get; set; }
-    public int LineThickness { get; set; }
-    public Color PointColor { get; set; }
-    public int PointSize { get; set; }
-    public Color FillColor { get; set; }
+    public DrawSettings Settings { get; }
 
     public void Reset();
-    public void DrawCircle(Vector2 center, float radius);
-    public void DrawPoint(Vector2 point);
-    public void DrawLine(Vector2 start, Vector2 end);
-    public void DrawPolygon(IEnumerable<Vector2> points);
-    public void DrawBezierCurve(IEnumerable<Vector2> points);
+    public void DrawCircle(Vector2 center, float radius, ObjectState state);
+    public void DrawPoint(Vector2 point, ObjectState state);
+    public void DrawLine(Vector2 start, Vector2 end, ObjectState state);
+    public void DrawPolygon(IEnumerable<Vector2> points, ObjectState state);
+    public void DrawBezierCurve(IEnumerable<Vector2> points, ObjectState state);
 }

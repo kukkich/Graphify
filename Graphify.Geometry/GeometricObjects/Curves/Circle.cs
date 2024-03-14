@@ -25,6 +25,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Стиль окружности
     /// </summary>
     [Reactive] public CurveStyle Style { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
 
     /// <summary>
     /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
@@ -201,9 +202,9 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         Style.ApplyStyle(drawer);
         var centerPoint = new Vector2(_centerPoint.X, _centerPoint.Y);
 
-        drawer.DrawCircle(centerPoint, Radius);
+        drawer.DrawCircle(centerPoint, Radius, ObjectState);
     }
-
+    
     public FigureExportData GetExportData()
     {
         var exportData = new FigureExportData
@@ -220,4 +221,6 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         return exportData;
     }
+    
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }

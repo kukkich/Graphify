@@ -43,6 +43,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// Стиль точки
     /// </summary>
     [Reactive] public PointStyle Style { get; set; }
+    [Reactive] public ObjectState ObjectState { get; set; }
 
     private readonly List<IFigure> _controlFor;
 
@@ -149,7 +150,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         Update();
     }
-
+    
     /// <summary>
     /// Обновляет фигуры, привязанные к данной точке
     /// </summary>
@@ -251,7 +252,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         var p = new Vector2(X, Y);
 
-        drawer.DrawPoint(p);
+        drawer.DrawPoint(p, ObjectState);
     }
 
 
@@ -259,4 +260,6 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     {
         return new PointExportData(new Vector2(X, Y), Style);
     }
+    
+    public IGeometricObject Clone() => throw new NotImplementedException();
 }
