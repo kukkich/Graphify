@@ -36,8 +36,9 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
         });
-    }
 
+    }    
+  
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -65,7 +66,6 @@ public partial class MainWindow
         {
             return;
         }
-
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
@@ -78,11 +78,74 @@ public partial class MainWindow
         ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
     }
 
+    private void CreatePolygonModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
+    }
+
+    private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCircleTwoPoints);
+    }
+
+    private void CreateCurveModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+    }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
+    }       
+
+    private void UndoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.Undo.Execute();
     }
 
+    private void RedoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.Redo.Execute();
+    }
+
+    private void ZoomOutButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void ZoomInButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
     {
         if (ViewModel is null)

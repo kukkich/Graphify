@@ -5,12 +5,52 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:Graphify.Client"
+    xmlns:local="clr-namespace:Graphify.Client"    
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify" Height="1080" Width="1920">
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Export}" />
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
+    </Window.InputBindings>
     <Window.Resources>
+        <ContextMenu x:Key="ObjectOptionsButton">
+            <MenuItem Header="Удалить"
+                      Click="DeleteObjectButton_Click"/>
+            <MenuItem Header="Клонировать"
+                      Click="CloneObjectButton_Click"/>
+        </ContextMenu>
+        <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True" />
+            <Setter Property="HasDropShadow"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border x:Name="Border"
+                                Background="White"
+                                BorderBrush="LightGray"
+                                BorderThickness="1">
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasDropShadow"
+                                     Value="true">
+                                <Setter TargetName="Border"
+                                        Property="CornerRadius"
+                                        Value="4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Style.Setters>
                 <Setter Property="Template">
@@ -35,6 +75,7 @@
             </Style.Setters>
         </Style>
     </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46"/>
@@ -47,8 +88,8 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0"
-                    Grid.ColumnSpan="3"
-                    Background="White"
+                    Grid.ColumnSpan="2"
+                    Background="#F5F5F5"
                     Orientation="Horizontal"
                     >
             <Button x:Name="ExportButton"
@@ -65,10 +106,10 @@
                     Height="30"
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"                    
-                    Click="MoveModeButton_Click">
+                    Click="MoveModeButton_Click"
+                    >
                 <Image Source="/Icons/move.png" Stretch="Uniform"/>
             </Button>
-
             <Button x:Name="CreatePointModeButton"
                     Width="30"
                     Height="30"
@@ -85,39 +126,127 @@
                     Click="CreateLineModeButton_Click">
                 <Image Source="/Icons/line.png" Stretch="Uniform"/>
             </Button>
-
+            <Button x:Name="CreatePolygonModeButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreatePolygonModeButton_Click"/>
+            <Button x:Name="CreateCircleModeButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCircleModeButton_Click"/>
+            <Button x:Name="CreateCurveModeButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCurveModeButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0"
+            Grid.Column="2"
+            Background="#F5F5F5"
+            Orientation="Horizontal"
+            >
             <Button x:Name="UndoButton"
                     Width="50"
                     Height="30"
                     Margin="0, 0, 14, 5"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateLineModeButton_Click">
+                    Click="UndoButton_Click">
                 <Image Source="/Icons/undo.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="RedoButton"
                     Width="50"
                     Height="30"
+                    Margin="0, 0, 100, 5"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="RedoButton_Click">
+                <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="ZoomInButton"
+                    Width="30"
+                    Height="30"
                     Margin="0, 0, 14, 5"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateLineModeButton_Click">
-                <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
+                    Click="ZoomInButton_Click">
+                <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
             </Button>
-            <TextBox Padding="5" Height="30" Width="40" HorizontalAlignment="Center" x:Name="ValueBox" />
+            <Button x:Name="ZoomOutButton"
+                    Width="30"
+                    Height="30"
+                    Margin="0, 0, 14, 5"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="ZoomOutButton_Click">
+                <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+
+
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
-                 Grid.Column="0">
+                 Grid.Column="0"
+                 x:Name="listGeometryObjects">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding"
+                            Value="10"/>
+                    <Setter Property="BorderBrush"
+                            Value="LightGray"/>
+                    <Setter Property="BorderThickness"
+                            Value="1"/>
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Fill="{Binding Path=Type}"
+                                 Width="15" 
+                                 Height="15"
+                                 HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding Path=Data}"
+                                   Margin="0"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                        <Button Padding="0"
+                                Margin="0"
+                                Width="30"
+                                FontSize="25"
+                                FontWeight="Bold"
+                                HorizontalContentAlignment="Center"
+                                Background="White"
+                                BorderBrush="White"
+                                Grid.Column="2"
+                                Content="︙"
+                                Click="ObjectOptionsButton_Click"/>
+                    </Grid>                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow" 
-                               Resized="GlWindow_Resized"
-                               OpenGLDraw="GlWindow_OpenGLDraw"
-                               Height="1080"
-                               MinWidth="1920"
-                               Grid.Row="1"
-                               Grid.Column="1"
-                               MouseDown="GlWindow_MouseDown"
+                       Resized="GlWindow_Resized"
+                       OpenGLDraw="GlWindow_OpenGLDraw"
+                       Height="1080"
+                       MinWidth="1920"
+                       Grid.Row="1"
+                       Grid.Column="1"   
+                       Grid.ColumnSpan="2"
+                       MouseDown="GlWindow_MouseDown"
         />
 
     </Grid>
