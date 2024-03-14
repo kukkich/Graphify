@@ -18,11 +18,11 @@
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
     </Window.InputBindings>
     <Window.Resources>
-        <ContextMenu x:Key="cmButton">
+        <ContextMenu x:Key="ObjectOptionsButton">
             <MenuItem Header="Удалить"
-                      Click="Delete_Click"/>
+                      Click="DeleteObjectButton_Click"/>
             <MenuItem Header="Клонировать"
-                      Click="Clone_Click"/>
+                      Click="CloneObjectButton_Click"/>
         </ContextMenu>
         <Style TargetType="{x:Type ContextMenu}">
             <Setter Property="SnapsToDevicePixels"
@@ -233,7 +233,7 @@
                                 BorderBrush="White"
                                 Grid.Column="2"
                                 Content="︙"
-                                Click="Button_Click"/>
+                                Click="ObjectOptionsButton_Click"/> />
                     </Grid>                    
                 </DataTemplate>
             </ListBox.ItemTemplate>

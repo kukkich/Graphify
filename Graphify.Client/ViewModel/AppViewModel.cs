@@ -98,16 +98,7 @@ public class AppViewModel : ReactiveObject
     {
         _application.AddPoint(position);
         return Observable.Return(Unit.Default);
-    }
-    public enum EditMode
-    {
-        Move,
-        CreatePoint,
-        CreateLine,
-        CreatePolygon,
-        CreateCircle,
-        CreateCurve
-    }
+    }   
 
     public enum ExportFileFormat
     {

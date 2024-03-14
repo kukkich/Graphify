@@ -9,8 +9,6 @@ using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
 using ReactiveUI;
 using SharpGL;
-using System.Windows.Controls;
-using System.Windows;
 using SharpGL.WPF;
 
 namespace Graphify.Client;
@@ -63,17 +61,7 @@ public partial class MainWindow
             }
         };
         this.listGeometryObjects.ItemsSource = listObjects; //temporarily
-    }
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-        ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
-        cm.PlacementTarget = sender as Button;
-        cm.IsOpen = true;
-    }
-    private void Delete_Click(object sender, RoutedEventArgs e)
-    { }
-    private void Clone_Click(object sender, RoutedEventArgs e)
-    { }
+    }    
   
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
@@ -129,7 +117,7 @@ public partial class MainWindow
         {
             return;
         }
-        ViewModel?.SetEditMode.Execute(EditMode.CreateCircle);
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCircleTwoPoints);
     }
 
     private void CreateCurveModeButton_Click(object sender, RoutedEventArgs e)
@@ -143,20 +131,7 @@ public partial class MainWindow
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
-    }
-
-    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-    
-        var position = args.GetPosition((OpenGLControl)sender);
-        position.X -= GlWindow.ActualWidth / 2;
-        position.Y = GlWindow.ActualHeight / 2 - position.Y;
-        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
-    }
+    }       
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
     {
@@ -185,7 +160,28 @@ public partial class MainWindow
     {
 
     }
-  
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
     public class Figure //temporarily
     {
         public string Data { get; set; }
