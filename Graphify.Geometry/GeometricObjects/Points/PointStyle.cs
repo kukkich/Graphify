@@ -17,7 +17,7 @@ public class PointStyle : CurveStyle
 
     public override void ApplyStyle(IDrawer drawer)
     {
-        drawer.PointColor = PrimaryColor;
-        drawer.PointSize = Size;
+        drawer.Settings.PointColor = PrimaryColor;
+        drawer.Settings.PointSize = Size;
     }
 }

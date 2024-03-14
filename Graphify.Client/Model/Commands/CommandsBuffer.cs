@@ -2,6 +2,7 @@ namespace Graphify.Client.Model.Commands;
 
 public class CommandsBuffer
 {
+    private const int StackSize = 10;
     private readonly LinkedList<ICommand> _commands;
     private readonly LinkedList<ICommand> _cancelledCommands;
 
@@ -13,7 +14,7 @@ public class CommandsBuffer
 
     public void AddCommand(ICommand command)
     {
-        if (_commands.Count >= 10)
+        if (_commands.Count >= StackSize)
         {
             _commands.RemoveLast();
         }
@@ -29,7 +30,7 @@ public class CommandsBuffer
         _commands.RemoveFirst();
         command.Undo();
 
-        if (_cancelledCommands.Count < 10)
+        if (_cancelledCommands.Count < StackSize)
         {
             _cancelledCommands.AddFirst(command);
         }

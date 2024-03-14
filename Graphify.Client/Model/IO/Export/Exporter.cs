@@ -7,12 +7,12 @@ namespace Graphify.Core.Model.IO.Export;
 
 public class Exporter
 {
-    private readonly Application _application;
+    private readonly ApplicationContext _context;
     private readonly Dictionary<ExportFileType, IExporter> _exporters = [];
 
-    public Exporter(Application application, IExporterFactory exporterFactory)
+    public Exporter(ApplicationContext context, IExporterFactory exporterFactory)
     {
-        _application = application;
+        _context = context;
         CreateExporters(exporterFactory);
     }
 
@@ -26,7 +26,7 @@ public class Exporter
 
     public SaveResult Export(ExportFileType fileType, string path)
     {
-        _exporters[fileType].Export(_application.Context.Surface, path);
+        _exporters[fileType].Export(_context.Surface, path);
         return SaveResult.Success;
     }
 }

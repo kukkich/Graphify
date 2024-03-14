@@ -1,6 +1,12 @@
-using System.Drawing;
 using System.Numerics;
+using Graphify.Client.View.Drawing.Base;
+using Graphify.Client.View.Drawing.BezierCurve;
+using Graphify.Client.View.Drawing.Circle;
+using Graphify.Client.View.Drawing.Line;
+using Graphify.Client.View.Drawing.Point;
+using Graphify.Client.View.Drawing.Polygon;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.GeometricObjects.Points;
 using SharpGL;
 // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 
@@ -11,89 +17,64 @@ public class OpenGLDrawer : IDrawer
     public bool GlInitialized => _gl is not null;
 
     private OpenGL _gl;
+    private IBaseDrawer _defaultDrawer;
+    
+    private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentBezierCurveDrawer;
+    private IGeometryObjectDrawer<(Vector2, float)> _currentCircleDrawer;
+    private IGeometryObjectDrawer<(Vector2, Vector2)> _currentLineDrawer;
+    
+    private readonly Dictionary<PointVariant, IGeometryObjectDrawer<Vector2>> _pointVariantDrawers = [];
+    private IGeometryObjectDrawer<Vector2> _currentPointDrawer;
+    
+    private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentPolygonDrawer;
+
+    public DrawSettings Settings { get; private set; }
 
     public void InitGl(OpenGL gl)
     {
         _gl = gl;
-    }
+        Settings = new DrawSettings();
+        
+        _defaultDrawer = new OpenGLDefaultDrawer(gl);
+        
+        _pointVariantDrawers.Add(PointVariant.Circle, new PointCircleDrawer(_defaultDrawer));
+        _pointVariantDrawers.Add(PointVariant.Cross, new PointCrossDrawer(_defaultDrawer));
 
-    public Color LineColor { get; set; }
-    public int LineThickness { get; set; }
-    public Color PointColor { get; set; }
-    public int PointSize { get; set; }
-    public Color FillColor { get; set; }
+        _currentBezierCurveDrawer = new BaseBezierCurveDrawer(_defaultDrawer);
+        _currentPolygonDrawer = new BasePolygonDrawer(_defaultDrawer);
+        _currentCircleDrawer = new BaseCircleDrawer(_defaultDrawer);
+        _currentLineDrawer = new BaseLineDrawer( _defaultDrawer);
+    }
 
     public void Reset()
     {
         _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
     }
-
-    public void DrawBezierCurve(IEnumerable<Vector2> points)
+    
+    public void DrawBezierCurve(IEnumerable<Vector2> points, ObjectState state)
     {
-        _gl.PointSize(1);
-        _gl.Begin(OpenGL.GL_LINE_STRIP);
-
-        var controlPoints = points.ToList();
-
-        _gl.Color(0f, 0f, 0f);
-        for (double t = 0; t <= 1; t += 0.01)
-        {
-            double x = Math.Pow(1 - t, 3) * controlPoints[0].X +
-                       3 * t * Math.Pow(1 - t, 2) * controlPoints[1].X +
-                       3 * Math.Pow(t, 2) * (1 - t) * controlPoints[2].X +
-                       Math.Pow(t, 3) * controlPoints[3].X;
-
-            double y = Math.Pow(1 - t, 3) * controlPoints[0].Y +
-                       3 * t * Math.Pow(1 - t, 2) * controlPoints[1].Y +
-                       3 * Math.Pow(t, 2) * (1 - t) * controlPoints[2].Y +
-                       Math.Pow(t, 3) * controlPoints[3].Y;
-            _gl.Vertex(x, y);
-        }
-
-        _gl.End();
+        _currentBezierCurveDrawer.Draw(points, state, Settings);
     }
 
-    public void DrawCircle(Vector2 center, float radius)
+    public void DrawCircle(Vector2 center, float radius, ObjectState state)
     {
-        _gl.PointSize(1);
-        _gl.Begin(OpenGL.GL_POINTS);
-
-        const int numPoints = 1000;
-        const double angleStep = (2 * Math.PI) / numPoints;
-
-        _gl.Color(0f, 0f, 0f);
-        for (int i = 0; i < numPoints; i++)
-        {
-            double angle = i * angleStep;
-            double x = center.X + radius * Math.Cos(angle);
-            double y = center.Y + radius * Math.Sin(angle);
-            _gl.Vertex(x, y);
-        }
-
-        _gl.End();
+        _currentCircleDrawer.Draw((center, radius), state, Settings);
     }
 
-    public void DrawPoint(Vector2 point)
+    public void DrawLine(Vector2 start, Vector2 end, ObjectState state)
     {
-        _gl.PointSize(5);
-        _gl.Begin(OpenGL.GL_POINTS);
-        _gl.Color(1f, 0f, 0f);
-        _gl.Vertex(point.X, point.Y);
-        _gl.End();
+        _currentLineDrawer.Draw((start, end), state, Settings);
+    }
+    
+    public void DrawPoint(Vector2 point, ObjectState state)
+    {
+        _currentPointDrawer = _pointVariantDrawers[Settings.PointVariant];
+        _currentPointDrawer.Draw(point, state, Settings);
     }
 
-    public void DrawLine(Vector2 start, Vector2 end) => throw new NotImplementedException();
-
-    public void DrawPolygon(IEnumerable<Vector2> points)
+    public void DrawPolygon(IEnumerable<Vector2> points, ObjectState state)
     {
-        _gl.PointSize(5);
-        _gl.Begin(OpenGL.GL_LINE_LOOP);
-        _gl.Color(0f, 0f, 0f);
-        foreach (var point in points)
-        {
-            _gl.Vertex(point.X, point.Y);
-        }
-        _gl.End();
+        _currentPolygonDrawer.Draw(points, state, Settings);
     }
 }
