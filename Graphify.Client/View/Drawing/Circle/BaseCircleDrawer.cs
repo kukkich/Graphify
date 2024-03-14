@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+using System.Drawing;
+using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
 using SharpGL;
@@ -11,11 +12,19 @@ public class BaseCircleDrawer : BaseGeometryObjectDrawer<(Vector2, float)>
 
     protected override void DrawDefault((Vector2, float) point, DrawSettings settings)
     {
-        defaultDrawer.DrawCircle(point.Item1, point.Item2, settings.LineColor, settings.LineThickness);
+        defaultDrawer.DrawBorderOfCircle(point.Item1, point.Item2, settings.LineColor, settings.LineThickness);
     }
 
     protected override void DrawSelected((Vector2, float) point, DrawSettings settings)
     {
-        defaultDrawer.DrawCircle(point.Item1, point.Item2, settings.LineColor, settings.LineThickness);
+        defaultDrawer.DrawBorderOfCircle(point.Item1, point.Item2, settings.LineColor, settings.LineThickness);
+
+        defaultDrawer.DrawBorderOfCircle(point.Item1, 
+                                         point.Item2,
+                                         Color.FromArgb(50,
+                                                        settings.LineColor.R,
+                                                        settings.LineColor.G,
+                                                        settings.LineColor.B), 
+                                         settings.LineThickness + 10);
     }
 }
