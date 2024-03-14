@@ -9,6 +9,7 @@ using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat.ModeDetection;
 
 namespace Graphify.Client.ViewModel;
 
@@ -71,7 +72,10 @@ public enum EditMode
 {
     Move,
     CreatePoint,
-    CreateLine
+    CreateLine,
+    CreatePolygon,
+    CreateCircle,
+    CreateCurve
 }
 
 public enum ExportFileFormat

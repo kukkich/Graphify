@@ -31,41 +31,56 @@ public partial class MainWindow
 
     private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
-        Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (sender is not Button)
         {
-            EditMode selectedMode = EditMode.Move;
-            if (ViewModel != null)
-            {
-                ViewModel.SetEditMode.Execute(selectedMode);
-            }
+            return;
         }
+        ViewModel?.SetEditMode.Execute(EditMode.Move);        
     }
 
     private void CreatePointModeButton_Click(object sender, RoutedEventArgs e)
     {
-        Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (sender is not Button)
         {
-            EditMode selectedMode = EditMode.CreatePoint;
-            if (ViewModel != null)
-            {
-                ViewModel.SetEditMode.Execute(selectedMode);
-            }
+            return;
         }
+        ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
     {
-        Button? clickedButton = sender as Button;
-        if (clickedButton != null)
+        if (sender is not Button)
         {
-            EditMode selectedMode = EditMode.CreateLine;
-            if (ViewModel != null)
-            {
-                ViewModel.SetEditMode.Execute(selectedMode);
-            }
+            return;
         }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
+    }
+    
+    private void CreatePolygonModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
+    }
+
+    private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCircle);
+    }
+
+    private void CreateCurveModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
@@ -83,5 +98,6 @@ public partial class MainWindow
             ViewModel.MouseDown.Execute();
         }
     }
+
     
 }

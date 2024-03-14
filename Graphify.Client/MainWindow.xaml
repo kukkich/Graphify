@@ -77,7 +77,24 @@
                     Margin="0, 0, 14, 5"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="CreateLineModeButton_Click"/>
-            <TextBox Padding="5" Height="30" Width="40" HorizontalAlignment="Center" x:Name="ValueBox" />
+            <Button x:Name="CreatePolygonModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreatePolygonModeButton_Click"/>
+            <Button x:Name="CreateCircleModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCircleModeButton_Click"/>
+            <Button x:Name="CreateCurveModeButton"
+                    Width="25"
+                    Height="25"
+                    Margin="0, 0, 14, 5"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCurveModeButton_Click"/>
         </StackPanel>
         <ListBox Background="White"
                  Grid.Row="1"
