@@ -31,7 +31,7 @@ public class ToolsController
                 _currentTool.Cancel();
             }
             
-            _currentTool.Reset();
+            _currentTool.OnToolChanged();
         }
 
         _currentTool = GetTool(editMode);

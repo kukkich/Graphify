@@ -42,7 +42,7 @@ public class CircleTwoPointsTool : IApplicationTool
             _secondPoint = _context.AddPoint(clickPosition);
             IFigure circle = _context.AddFigure(ObjectType.Circle, [_firstPoint, _secondPoint]);
             _commandsBuffer.AddCommand(new AddCommand(_context, circle));
-            Reset();
+            OnToolChanged();
         }
     }
 
@@ -61,7 +61,7 @@ public class CircleTwoPointsTool : IApplicationTool
 
     }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         _currentClicks = 0;
         _firstPoint = null;

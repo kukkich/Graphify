@@ -43,7 +43,7 @@ public class LineTool : IApplicationTool
             _secondPoint = _context.AddPoint(clickPosition);
             IFigure line = _context.AddFigure(ObjectType.Line, [_firstPoint, _secondPoint]);
             _commandsBuffer.AddCommand(new AddCommand(_context, line));
-            Reset();
+            OnToolChanged();
         }
     }
 
@@ -61,7 +61,7 @@ public class LineTool : IApplicationTool
     {
     }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         _currentClicks = 0;
         _firstPoint = null;

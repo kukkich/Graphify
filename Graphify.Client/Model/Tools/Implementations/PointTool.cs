@@ -43,5 +43,5 @@ public class PointTool : IApplicationTool
 
     public void Cancel(){ }
 
-    public void Reset(){ }
+    public void OnToolChanged(){ }
 }

@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Windows.Input;
+using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 
@@ -8,11 +9,16 @@ namespace Graphify.Client.Model.Tools.Implementations;
 public class MoveTool : IApplicationTool
 {
     private readonly ApplicationContext _applicationContext;
+    private readonly CommandsBuffer _commandsBuffer;
     private Vector2 _previousMousePosition;
 
-    public MoveTool(ApplicationContext applicationContext) 
+    private Vector2 MoveShift = Vector2.Zero;
+    private const float SmallShift = 0.5f;
+
+    public MoveTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer) 
     {
         _applicationContext = applicationContext;
+        _commandsBuffer = commandsBuffer;
     }
 
     public void RightMouseDown(Vector2 clickPosition) { }
@@ -26,6 +32,7 @@ public class MoveTool : IApplicationTool
             foreach (var geometricObject in _applicationContext.SelectedObjects)
             {
                 geometricObject.Move((newPosition - _previousMousePosition));
+                MoveShift += newPosition - _previousMousePosition;
             }
         }
 
@@ -62,7 +69,13 @@ public class MoveTool : IApplicationTool
         }
     }
 
-    public void MouseUp(Vector2 clickPosition) { }
+    public void MouseUp(Vector2 clickPosition)
+    {
+        if (MoveShift.Length() >= SmallShift)
+        {
+            _commandsBuffer.AddCommand(new MoveCommand(_applicationContext.SelectedObjects, MoveShift));
+        }
+    }
 
     public bool InProgress()
     {
@@ -70,5 +83,9 @@ public class MoveTool : IApplicationTool
     }
 
     public void Cancel() { }
-    public void Reset() { }
+
+    public void OnToolChanged()
+    {
+        MoveShift = Vector2.Zero;
+    }
 }

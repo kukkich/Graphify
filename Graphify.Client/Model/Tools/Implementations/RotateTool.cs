@@ -86,7 +86,7 @@ public class RotateTool : IApplicationTool
 
     public void Cancel() { }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         if (_point is null)
         {
