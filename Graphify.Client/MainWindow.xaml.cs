@@ -96,7 +96,20 @@ public partial class MainWindow
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
-    private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+    private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseUp.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    private void GlWindow_MouseMove(object sender, MouseEventArgs args)
     {
         if (ViewModel is null)
         {

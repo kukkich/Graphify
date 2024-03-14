@@ -31,7 +31,6 @@ public class Clipboard
     public IEnumerable<IGeometricObject> PasteObjects()
     {
         var pastedObjects = _copiedObjects.Select(c => c.Clone());
-        _copiedObjects.Clear();
 
         return pastedObjects;
     }

@@ -56,8 +56,30 @@ public class AppViewModel : ReactiveObject
         _application.Exporter.Export(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
     }
+    
+    private IObservable<Unit> RightMouseDownAction(Vector2 position)
+    {
+        _currentTool.RightMouseDown(position);
+        return Observable.Return(Unit.Default);
+    }
+    
+    private IObservable<Unit> RightMouseUpAction(Vector2 position)
+    {
+        _currentTool.RightMouseUp(position);
+        return Observable.Return(Unit.Default);
+    }
 
-    //TODO Implement for other figures
+    private IObservable<Unit> UndoChanges()
+    {
+        _application.CommandsBuffer.Undo();
+        return Observable.Return(Unit.Default);
+    }
+    private IObservable<Unit> RedoChanges()
+    {
+        _application.CommandsBuffer.Redo();
+        return Observable.Return(Unit.Default);
+    }
+
     private IObservable<Unit> MouseDownAction(Vector2 position)
     {
         _application.ToolsController.MouseDown(position);
