@@ -12,7 +12,7 @@ using Graphify.Core.Model.IO.Import;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.IO;
+using Graphify.IO.Extention;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
