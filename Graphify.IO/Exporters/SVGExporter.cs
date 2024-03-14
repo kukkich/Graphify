@@ -216,7 +216,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 
         if (data.Position.Y > RightTopBound.Y)
         {
-            RightTopBound = new Vector2(data.Position.X, data.Position.Y);
+            RightTopBound = new Vector2(RightTopBound.X, data.Position.Y);
         }
     }
 
