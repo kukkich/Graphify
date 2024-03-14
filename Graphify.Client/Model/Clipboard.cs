@@ -6,9 +6,9 @@ public class Clipboard
 {
     private readonly LinkedList<IGeometricObject> _copiedObjects;
 
-    public Clipboard(LinkedList<IGeometricObject> copiedObjects) 
+    public Clipboard() 
     {
-        _copiedObjects = copiedObjects;
+        _copiedObjects = new LinkedList<IGeometricObject>();
     }
 
     public void CopyObject(IGeometricObject geometricObject)
