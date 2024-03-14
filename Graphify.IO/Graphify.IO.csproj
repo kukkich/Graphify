@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Aspose.Imaging" Version="24.3.0" />
     <PackageReference Include="Aspose.SVG" Version="24.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
