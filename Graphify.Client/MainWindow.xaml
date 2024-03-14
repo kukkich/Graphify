@@ -11,11 +11,13 @@
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify">
     <Window.InputBindings>
-        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Export}" />
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
+        <KeyBinding Key="X" Modifiers="Control" Command="{Binding Cut}" />
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectAll}" />
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Export}" />
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="ObjectOptionsButton">

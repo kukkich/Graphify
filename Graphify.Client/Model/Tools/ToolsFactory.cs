@@ -21,6 +21,7 @@ public class ToolsFactory : IToolsFactory
         _factoryMethods.Add(EditMode.Rotate, () => new RotateTool(serviceProvider.GetRequiredService<ApplicationContext>()));
         _factoryMethods.Add(EditMode.CreatePoint, () => new PointTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreateLine, () => new LineTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
+        _factoryMethods.Add(EditMode.CreatePolygon, () => new PolygonTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreateCircleTwoPoints, () => new CircleTwoPointsTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
     }
 
