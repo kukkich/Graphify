@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
 using System.Windows.Input;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Geometry.Drawing;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Client.Model.Tools.Implementations;
@@ -47,13 +49,32 @@ public class RotateTool : IApplicationTool
     
     public void MouseDown(Vector2 clickPosition)
     {
-        foreach (var geometricObject in _applicationContext.SelectedObjects)
+        IGeometricObject closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
+
+        if (Keyboard.IsKeyDown(Key.LeftCtrl))
         {
-            if (geometricObject.IsNextTo(clickPosition, 1) && geometricObject is Point point)
+            if (_applicationContext.SelectedObjects.Contains(closestObject) && closestObject != _point)
             {
-                _point = point;
+                _applicationContext.UnSelect(closestObject);
+                return;
             }
+
+            _applicationContext.Select(closestObject, false);
+            return;
         }
+
+        if (!_applicationContext.SelectedObjects.Contains(closestObject) || closestObject is not Point point)
+        {
+            return;
+        }
+        
+        if (_point is not null)
+        {
+            _point.ObjectState = ObjectState.Selected;
+        }
+            
+        _point = point;
+        _point.ObjectState = ObjectState.ControlPoint;
     }
 
     public void MouseUp(Vector2 clickPosition) { }
@@ -67,6 +88,12 @@ public class RotateTool : IApplicationTool
 
     public void Reset()
     {
+        if (_point is null)
+        {
+            return;
+        }
+        
+        _point.ObjectState = ObjectState.Selected;
         _point = null;
     }
 }

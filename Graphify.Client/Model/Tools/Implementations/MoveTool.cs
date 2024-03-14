@@ -49,19 +49,15 @@ public class MoveTool : IApplicationTool
             _applicationContext.ClearSelected();
         }
 
-        if (_applicationContext.SelectedObjects.Contains(closestObject))
+        if (Keyboard.IsKeyDown(Key.LeftCtrl))
         {
-            return;
+            _applicationContext.ToggleSelection(closestObject);
         }
         else
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            if (!_applicationContext.SelectedObjects.Contains(closestObject))
             {
-                _applicationContext.Select(clickPosition, false);
-            }
-            else
-            {
-                _applicationContext.Select(clickPosition, true);
+                _applicationContext.Select(closestObject, true);
             }
         }
     }

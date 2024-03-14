@@ -3,5 +3,6 @@
 public enum ObjectState
 {
     Default,
-    Selected
+    Selected,
+    ControlPoint
 }
