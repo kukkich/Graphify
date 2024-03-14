@@ -58,16 +58,52 @@ public class ApplicationContext
             return null;
         }
 
+        Select(geometricObject, clearPrevious);
+        return geometricObject;
+    }
+
+    public void ToggleSelection(IGeometricObject geometricObject)
+    {
+        if (SelectedObjects.Contains(geometricObject))
+        {
+            UnSelect(geometricObject);
+            return;
+        }
+
+        Select(geometricObject, false);
+    }
+    
+    public void Select(IGeometricObject geometricObject, bool clearPrevious)
+    {
+        if (!Surface.Objects.Contains(geometricObject))
+        {
+            return;
+        }
+        
         if (clearPrevious)
         {
             ClearSelected();
         }
 
-        _selectedObjects.AddLast(geometricObject);
-        geometricObject.ObjectState = ObjectState.Selected;
+        if (!_selectedObjects.Contains(geometricObject))
+        {
+            _selectedObjects.AddLast(geometricObject);
+            geometricObject.ObjectState = ObjectState.Selected;
+        }
+    }
 
-        return geometricObject;
+    public void UnSelect(IGeometricObject geometricObject)
+    {
+        if (!Surface.Objects.Contains(geometricObject))
+        {
+            return;
+        }
 
+        if (_selectedObjects.Contains(geometricObject))
+        {
+            _selectedObjects.Remove(geometricObject);
+            geometricObject.ObjectState = ObjectState.Default;
+        }
     }
 
     public IEnumerable<IGeometricObject> SelectAll()
@@ -83,7 +119,7 @@ public class ApplicationContext
         return _selectedObjects;
     }
 
-    private void ClearSelected()
+    public void ClearSelected()
     {
         foreach (var geometricObject in _selectedObjects)
         {

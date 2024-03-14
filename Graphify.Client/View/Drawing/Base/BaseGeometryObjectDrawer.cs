@@ -17,7 +17,7 @@ public abstract class BaseGeometryObjectDrawer<TDrawParams> : IGeometryObjectDra
         _drawActions = GetDrawActions();
     }
     
-    public Dictionary<ObjectState, Action<TDrawParams, DrawSettings>> GetDrawActions()
+    public virtual Dictionary<ObjectState, Action<TDrawParams, DrawSettings>> GetDrawActions()
     {
         var drawActions = new Dictionary<ObjectState, Action<TDrawParams, DrawSettings>>
         {

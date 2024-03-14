@@ -36,6 +36,7 @@ public class Clipboard
         return pastedObjects;
     }
 
+    // TODO remove if unused
     public void RemoveObjects(IEnumerable<IGeometricObject> geometricObjects)
     {
         foreach (var _ in geometricObjects)

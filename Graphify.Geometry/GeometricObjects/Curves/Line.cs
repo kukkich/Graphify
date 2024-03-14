@@ -268,5 +268,14 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         return dist.Length();
     }
     
-    public IGeometricObject Clone() => throw new NotImplementedException();
+    public IGeometricObject Clone()
+    {
+        var lineClone = new Line((Point)_pointA.Clone(), (Point)_pointB.Clone(),
+            new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size))
+            {
+                ObjectState = this.ObjectState
+            };
+
+        return lineClone;
+    }
 }

@@ -21,6 +21,10 @@ public class CircleTwoPointsTool : IApplicationTool
         _commandsBuffer = commandsBuffer;
     }
 
+    public void RightMouseDown(Vector2 clickPosition) => throw new NotImplementedException();
+
+    public void RightMouseUp(Vector2 clickPosition) => throw new NotImplementedException();
+
     public void MouseMove(Vector2 newPosition)
     {
 
@@ -38,8 +42,18 @@ public class CircleTwoPointsTool : IApplicationTool
             _secondPoint = _context.AddPoint(clickPosition);
             IFigure circle = _context.AddFigure(ObjectType.Circle, [_firstPoint, _secondPoint]);
             _commandsBuffer.AddCommand(new AddCommand(_context, circle));
-            Reset();
+            OnToolChanged();
         }
+    }
+
+    public void MouseUp(Vector2 clickPosition)
+    {
+        return;
+    }
+
+    public bool InProgress()
+    {
+        return false;
     }
 
     public void Cancel()
@@ -47,7 +61,7 @@ public class CircleTwoPointsTool : IApplicationTool
 
     }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         _currentClicks = 0;
         _firstPoint = null;
