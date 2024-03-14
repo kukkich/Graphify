@@ -6,7 +6,7 @@ public enum EditMode
     Select,
     CreatePoint,
     CreateLine,
-    CreatePolygon,
+    //CreatePolygon,
     CreateCircleTwoPoints,
-    CreateCurve
+    //CreateCurve
 }

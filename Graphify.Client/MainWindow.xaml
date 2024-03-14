@@ -93,57 +93,63 @@
                     Orientation="Horizontal"
                     >
             <Button x:Name="ExportButton"
-                    Width="30"
-                    Height="30"
-                    Margin="14, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="14, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="ExportButton_Click"
                     >
                 <Image Source="/Icons/save.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="MoveModeButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"                    
                     Click="MoveModeButton_Click"
                     >
                 <Image Source="/Icons/move.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreatePointModeButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="CreatePointModeButton_Click">
                 <Image Source="/Icons/point.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateLineModeButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="CreateLineModeButton_Click">
                 <Image Source="/Icons/line.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreatePolygonModeButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreatePolygonModeButton_Click"/>
+                    Click="CreatePolygonModeButton_Click">
+                <Image Source="/Icons/polygon.png" Stretch="Uniform"/>
+            </Button>
             <Button x:Name="CreateCircleModeButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateCircleModeButton_Click"/>
+                    Click="CreateCircleModeButton_Click">
+                <Image Source="/Icons/circle.png" Stretch="Uniform"/>
+            </Button>
             <Button x:Name="CreateCurveModeButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateCurveModeButton_Click"/>
+                    Click="CreateCurveModeButton_Click">
+                <Image Source="/Icons/curve.png" Stretch="Uniform"/>
+            </Button>
         </StackPanel>
         <StackPanel Grid.Row="0"
             Grid.Column="2"
@@ -152,8 +158,8 @@
             >
             <Button x:Name="UndoButton"
                     Width="50"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="UndoButton_Click">
@@ -161,26 +167,26 @@
             </Button>
             <Button x:Name="RedoButton"
                     Width="50"
-                    Height="30"
-                    Margin="0, 0, 100, 5"
+                    Height="40"
+                    Margin="0, 0, 100, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="RedoButton_Click">
                 <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ZoomInButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="ZoomInButton_Click">
                 <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ZoomOutButton"
-                    Width="30"
-                    Height="30"
-                    Margin="0, 0, 14, 5"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="ZoomOutButton_Click">

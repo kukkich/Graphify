@@ -43,15 +43,34 @@ public class OpenGLDefaultDrawer : IBaseDrawer
         _gl.End();
     }
 
-    public void DrawCircle(Vector2 center, float radius, Color color, int lineThickness)
+    public void DrawBorderOfCircle(Vector2 center, float radius, Color color, int lineThickness)
     {
         _gl.LineWidth(lineThickness);
         _gl.Begin(OpenGL.GL_LINE_LOOP);
 
+        const int numPoints = 100;
+        const double angleStep = (2 * Math.PI) / numPoints;
+
+        _gl.Color(color.R, color.G, color.B, color.A);
+        for (int i = 0; i < numPoints; i++)
+        {
+            double angle = i * angleStep;
+            double x = center.X + radius * Math.Cos(angle);
+            double y = center.Y + radius * Math.Sin(angle);
+            _gl.Vertex(x, y);
+        }
+
+        _gl.End();
+    }
+
+    public void DrawFilledCircle(Vector2 center, float radius, Color color)
+    {
+        _gl.Begin(OpenGL.GL_POLYGON);
+
         const int numPoints = 20;
         const double angleStep = (2 * Math.PI) / numPoints;
 
-        _gl.Color(color.R, color.G, color.B);
+        _gl.Color(color.R, color.G, color.B, color.A);
         for (int i = 0; i < numPoints; i++)
         {
             double angle = i * angleStep;
@@ -67,7 +86,7 @@ public class OpenGLDefaultDrawer : IBaseDrawer
     {
         _gl.PointSize(pointSize);
         _gl.Begin(OpenGL.GL_POINTS);
-        _gl.Color(color.R, color.G, color.B);
+        _gl.Color(color.R, color.G, color.B, color.A);
         _gl.Vertex(point.X, point.Y);
         _gl.End();
     }
@@ -76,7 +95,7 @@ public class OpenGLDefaultDrawer : IBaseDrawer
     {
         _gl.LineWidth(lineThickness);
         _gl.Begin(OpenGL.GL_LINE_LOOP);
-        _gl.Color(color.R, color.G, color.B);
+        _gl.Color(color.R, color.G, color.B, color.A);
         _gl.Vertex(start.X, start.Y);
         _gl.Vertex(end.X, end.Y);
         _gl.End();

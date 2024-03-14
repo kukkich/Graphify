@@ -46,12 +46,16 @@ public class OpenGLDrawer : IDrawer
         _currentLineDrawer = new BaseLineDrawer( _defaultDrawer);
     }
 
-    public void Reset()
+    public void Start()
     {
         _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
     }
-    
+    public void End()
+    {
+        _gl.Flush();
+    }
+
     public void DrawBezierCurve(IEnumerable<Vector2> points, ObjectState state)
     {
         _currentBezierCurveDrawer.Draw(points, state, Settings);

@@ -51,10 +51,6 @@ public class AppViewModel : ReactiveObject
         Redo = ReactiveCommand.CreateFromObservable(RedoChanges);
         Copy = ReactiveCommand.CreateFromObservable(CopyObject);
         Paste = ReactiveCommand.CreateFromObservable(PasteObject);
-
-        _application.AddPoint(new Vector2(1f, 1f));
-        _application.UndoAction();
-        _application.RedoAction();
     }
 
     private IObservable<Unit> SetMode(EditMode mode)
