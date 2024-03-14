@@ -1,7 +1,6 @@
 using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows.Input;
 using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
@@ -10,7 +9,6 @@ using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat.ModeDetection;
 
 namespace Graphify.Client.ViewModel;
 
@@ -22,18 +20,24 @@ public class AppViewModel : ReactiveObject
 
     public ReactiveCommand<Vector2, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> RightMouseDown { get; private set; }
+    
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseMove { get; private set; }
+    
     public ReactiveCommand<Unit, Unit> Redo { get; private set; }
     public ReactiveCommand<Unit, Unit> Undo { get; private set; }
+    
     public ReactiveCommand<Unit, Unit> Copy { get; private set; }
     public ReactiveCommand<Unit, Unit> Paste { get; private set; }
+    public ReactiveCommand<Unit, Unit> Cut { get; private set; }
+    
+    public ReactiveCommand<Unit, Unit> SelectAll { get; private set; }
+    
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
-    public ReactiveCommand<Unit, Unit> Cut { get; private set; }
-
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
+    
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
@@ -59,21 +63,12 @@ public class AppViewModel : ReactiveObject
 
         Undo = ReactiveCommand.CreateFromObservable(UndoChanges);
         Redo = ReactiveCommand.CreateFromObservable(RedoChanges);
+        
         Copy = ReactiveCommand.CreateFromObservable(CopyObjects);
         Cut = ReactiveCommand.CreateFromObservable(CutObjects);
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
-    }
 
-    private IObservable<Unit> SetMode(EditMode mode)
-    {
-        _currentTool = _application.ToolsController.ChangeTool(mode);
-        return Observable.Return(Unit.Default);
-    }
-
-    private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
-    {
-        _application.Exporter.Export(tuple.Format, tuple.Path);
-        return Task.FromResult(Unit.Default);
+        SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
     }
     
     private IObservable<Unit> RightMouseDownAction(Vector2 position)
@@ -87,24 +82,7 @@ public class AppViewModel : ReactiveObject
         _currentTool.RightMouseUp(position);
         return Observable.Return(Unit.Default);
     }
-
-    private IObservable<Unit> UndoChanges()
-    {
-        return Observable.Return(Unit.Default);
-    }
-    private IObservable<Unit> RedoChanges()
-    {
-        return Observable.Return(Unit.Default);
-    }
-    private IObservable<Unit> PasteObject()
-    {
-        return Observable.Return(Unit.Default);
-    }
-    private IObservable<Unit> CopyObject()
-    {
-        return Observable.Return(Unit.Default);
-    }
-
+    
     private IObservable<Unit> MouseDownAction(Vector2 position)
     {
         _currentTool.MouseDown(position);
@@ -121,8 +99,20 @@ public class AppViewModel : ReactiveObject
     {
         _currentTool.MouseMove(position);
         return Observable.Return(Unit.Default);
-    }   
-
+    }
+    
+    private IObservable<Unit> UndoChanges()
+    {
+        _application.CommandsBuffer.Undo();
+        return Observable.Return(Unit.Default);
+    }
+    
+    private IObservable<Unit> RedoChanges()
+    {
+        _application.CommandsBuffer.Redo();
+        return Observable.Return(Unit.Default);
+    }
+    
     private IObservable<Unit> CopyObjects()
     {
         _application.Copy();
@@ -138,6 +128,24 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> PasteObjects()
     {
         _application.Paste();
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> SetMode(EditMode mode)
+    {
+        _currentTool = _application.ToolsController.ChangeTool(mode);
+        return Observable.Return(Unit.Default);
+    }
+
+    private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
+    {
+        _application.Exporter.Export(tuple.Format, tuple.Path);
+        return Task.FromResult(Unit.Default);
+    }
+    
+    private IObservable<Unit> SelectAllObject()
+    {
+        _application.Context.SelectAll();
         return Observable.Return(Unit.Default);
     }
 }

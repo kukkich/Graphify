@@ -6,7 +6,7 @@ public enum EditMode
     Rotate,
     CreatePoint,
     CreateLine,
-    //CreatePolygon,
+    CreatePolygon,
     CreateCircleTwoPoints,
     //CreateCurve
 }
