@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Numerics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -8,12 +7,9 @@ using System.Windows.Input;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
-using Graphify.Geometry.Drawing;
-using Graphify.Geometry.GeometricObjects.Curves;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
-using Point = Graphify.Geometry.GeometricObjects.Points.Point;
 
 namespace Graphify.Client;
 
@@ -93,10 +89,23 @@ public partial class MainWindow
         {
             return;
         }
-
+        
         var position = args.GetPosition((OpenGLControl)sender);
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    private void GlWindow_MouseMove(object sender, MouseEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+        
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 }

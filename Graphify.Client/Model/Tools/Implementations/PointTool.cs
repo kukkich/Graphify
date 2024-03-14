@@ -16,6 +16,13 @@ public class PointTool : IApplicationTool
         _commandsBuffer = commandsBuffer;
     }
 
+    public void RightMouseDown(Vector2 clickPosition)
+    {
+        MouseDown(clickPosition);
+    }
+
+    public void RightMouseUp(Vector2 clickPosition) { }
+
     public void MouseMove(Vector2 newPosition)
     {
 
@@ -27,10 +34,14 @@ public class PointTool : IApplicationTool
         _commandsBuffer.AddCommand(new AddCommand(_applicationContext, newPoint));
     }
 
-    public void Cancel() => throw new NotImplementedException();
+    public void MouseUp(Vector2 clickPosition){ }
 
-    public void Reset()
+    public bool InProgress()
     {
-
+        return false;
     }
+
+    public void Cancel(){ }
+
+    public void Reset(){ }
 }

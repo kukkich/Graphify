@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Windows.Input;
 using Graphify.Client.Model.Interfaces;
 
 namespace Graphify.Client.Model.Tools.Implementations;
@@ -12,14 +13,28 @@ public class SelectTool : IApplicationTool
         _applicationContext = applicationContext;
     }
 
-    public void MouseMove(Vector2 newPosition) => throw new NotImplementedException();
+    public void RightMouseDown(Vector2 clickPosition) { }
+
+    public void RightMouseUp(Vector2 clickPosition) { }
+
+    public void MouseMove(Vector2 newPosition)
+    {
+
+    }
 
     public void MouseDown(Vector2 clickPosition)
     {
         _applicationContext.Select(clickPosition, false);
     }
 
-    public void Cancel() => throw new NotImplementedException();
+    public void MouseUp(Vector2 clickPosition) { }
 
-    public void Reset() => throw new NotImplementedException();
+    public bool InProgress()
+    {
+        return Keyboard.IsKeyDown(Key.LeftCtrl);
+    }
+
+    public void Cancel() { }
+
+    public void Reset() { }
 }

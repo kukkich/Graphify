@@ -28,9 +28,8 @@ public class Surface : IGeometryContext
         return null;
     }
 
-    public Point? TryGetClosestPoint(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
-
-    public IFigure? TryGetClosestFigure(Vector2 point, double precision = 1e-3) => throw new NotImplementedException();
+    public Point? TryGetClosestPoint(Vector2 point, double precision = 10) => throw new NotImplementedException();
+    public IFigure? TryGetClosestFigure(Vector2 point, double precision = 10) => throw new NotImplementedException();
 
     public void AddObject(IGeometricObject newObject)
     {

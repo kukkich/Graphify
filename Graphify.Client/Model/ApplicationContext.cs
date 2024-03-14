@@ -83,7 +83,7 @@ public class ApplicationContext
         return _selectedObjects;
     }
 
-    private void ClearSelected()
+    public void ClearSelected()
     {
         foreach (var geometricObject in _selectedObjects)
         {

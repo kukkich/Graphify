@@ -22,7 +22,14 @@ public class LineTool : IApplicationTool
         _commandsBuffer = commandsBuffer;
     }
 
-    public void MouseMove(Vector2 newPosition) => throw new NotImplementedException();
+    public void RightMouseDown(Vector2 clickPosition) { }
+
+    public void RightMouseUp(Vector2 clickPosition) { }
+
+    public void MouseMove(Vector2 newPosition)
+    {
+        
+    }
 
     public void MouseDown(Vector2 clickPosition)
     {
@@ -38,6 +45,16 @@ public class LineTool : IApplicationTool
             _commandsBuffer.AddCommand(new AddCommand(_context, line));
             Reset();
         }
+    }
+
+    public void MouseUp(Vector2 clickPosition)
+    {
+        
+    }
+
+    public bool InProgress()
+    {
+        return true;
     }
 
     public void Cancel()
