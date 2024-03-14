@@ -7,7 +7,7 @@ using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.IO.Extention;
+using Graphify.IO.Extension;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
 
