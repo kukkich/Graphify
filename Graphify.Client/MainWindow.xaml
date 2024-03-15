@@ -5,14 +5,295 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:Graphify.Client"
+    xmlns:local="clr-namespace:Graphify.Client"    
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
-    Title="Graphify" Height="450" Width="800">
+    xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+    Title="Graphify">
+    <Window.InputBindings>
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
+        <KeyBinding Key="X" Modifiers="Control" Command="{Binding Cut}" />
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectAll}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding OpenExportDialogCommand}" />
+    </Window.InputBindings>
+    <Window.Resources>
+        <ContextMenu x:Key="ObjectOptionsButton">
+            <MenuItem Header="Удалить"
+                      Click="DeleteObjectButton_Click"/>
+            <MenuItem Header="Клонировать"
+                      Click="CloneObjectButton_Click"/>
+        </ContextMenu>
+        <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True" />
+            <Setter Property="HasDropShadow"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border x:Name="Border"
+                                Background="White"
+                                BorderBrush="LightGray"
+                                BorderThickness="1">
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasDropShadow"
+                                     Value="true">
+                                <Setter TargetName="Border"
+                                        Property="CornerRadius"
+                                        Value="4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" BorderBrush="#D9D9D9" BorderThickness="1" CornerRadius="2" Background="White">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="CahgeButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" BorderBrush="#D9D9D9" BorderThickness="1" CornerRadius="2" Background="White">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#4169E1"/>
+                                    <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                                </Trigger>
+
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <StackPanel>
-            <TextBox Padding="5" Height="30" Width="40" Margin="0 30 0 0" HorizontalAlignment="Center" x:Name="ValueBox" />
-            <Button x:Name="IncrementButton" Height="30" Width="120" Margin="0 10 0 0">Increment</Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="46"/>
+            <RowDefinition MinHeight="722"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="244"/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Background="#F5F5F5"
+                    Orientation="Horizontal"
+                    >
+            <Button x:Name="ExportButton"
+                    Width="40"
+                    Height="40"
+                    Margin="14, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="ExportButton_Click"
+                    >
+                <Image Source="/Icons/save.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="MoveModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"                    
+                    Click="MoveModeButton_Click"
+                    >
+                <Image Source="/Icons/move.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="CreatePointModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreatePointModeButton_Click">
+                <Image Source="/Icons/point.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="CreateLineModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateLineModeButton_Click">
+                <Image Source="/Icons/line.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="CreatePolygonModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreatePolygonModeButton_Click">
+                <Image Source="/Icons/polygon.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="CreateCircleModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCircleModeButton_Click">
+                <Image Source="/Icons/circle.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="CreateCurveModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="CreateCurveModeButton_Click">
+                <Image Source="/Icons/curve.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="RotateModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="20, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="RotateModeButton_Click">
+                <Image Source="/Icons/rotate.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="ReflectModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="ReflectModeButton_Click">
+                
+            </Button>
         </StackPanel>
+        <StackPanel Grid.Row="0"
+            Grid.Column="2"
+            Background="#F5F5F5"
+            Orientation="Horizontal"
+            >            
+            <Button x:Name="UndoButton"
+                    Width="50"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource CahgeButtonStyle}"
+                    Click="UndoButton_Click">
+                <Image Source="/Icons/undo.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="RedoButton"
+                    Width="50"
+                    Height="40"
+                    Margin="0, 0, 100, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource CahgeButtonStyle}"
+                    Click="RedoButton_Click">
+                <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="ZoomInButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource CahgeButtonStyle}"
+                    Click="ZoomInButton_Click">
+                <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="ZoomOutButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource CahgeButtonStyle}"
+                    Click="ZoomOutButton_Click">
+                <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+
+
+        </StackPanel>
+        <ListBox Background="White"
+                 Grid.Row="1"
+                 Grid.Column="0"
+                 x:Name="listGeometryObjects">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding"
+                            Value="10"/>
+                    <Setter Property="BorderBrush"
+                            Value="LightGray"/>
+                    <Setter Property="BorderThickness"
+                            Value="1"/>
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Fill="{Binding Path=Type}"
+                                 Width="15" 
+                                 Height="15"
+                                 HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding Path=Data}"
+                                   Margin="0"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                        <Button Padding="0"
+                                Margin="0"
+                                Width="30"
+                                FontSize="25"
+                                FontWeight="Bold"
+                                HorizontalContentAlignment="Center"
+                                Background="White"
+                                BorderBrush="White"
+                                Grid.Column="2"
+                                Content="︙"
+                                Click="ObjectOptionsButton_Click"/>
+                    </Grid>                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <sharpGL:OpenGLControl x:Name="GlWindow" 
+                               Resized="GlWindow_Resized"
+                               OpenGLDraw="GlWindow_OpenGLDraw"
+                               Grid.Row="1"
+                               Grid.Column="1"
+                               MouseDown="GlWindow_MouseDown"
+                               MouseUp="GlWindow_MouseUp"
+                               MouseMove="GlWindow_MouseMove"
+                               Grid.ColumnSpan="2"
+                               />
+
     </Grid>
 </reactiveUi:ReactiveWindow>

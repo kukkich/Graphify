@@ -1,6 +1,6 @@
-using System.Drawing;
 using System.Numerics;
 using Graphify.Geometry.Drawing;
+using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Geometry.GeometricObjects.Interfaces;
 
@@ -10,4 +10,6 @@ public interface IGeometricObject : IDrawable
     public void Move(Vector2 shift);
     public void Rotate(Point shift, float angle);
     public void Reflect(Point point);
+    //temporary
+    public IGeometricObject Clone();
 }
