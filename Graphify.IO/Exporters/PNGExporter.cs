@@ -17,17 +17,18 @@ public sealed class PNGExporter : IExporter
 
     public void Export(IGeometryContext context, string path)
     {
-        string svgPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + "_temporary.svg");
+        string svgPath = Path.ChangeExtension(path, ".svg");
+        string svgPathWW = string.Join('\\', Path.GetDirectoryName(svgPath), Path.GetFileNameWithoutExtension(svgPath) + "WW.svg");
 
         _svgExporter.Export(context, svgPath);
 
-        ConvertSvgToPng(path, svgPath);
+        ConvertSvgToPng(path, svgPathWW);
 
         File.Delete(svgPath);
+        File.Delete(svgPathWW);
     }
 
     private static void ConvertSvgToPng(string path, string svgPath)
-
     {
         using var document = new SVGDocument(svgPath);
         var pngSaveOptions = new ImageSaveOptions();
