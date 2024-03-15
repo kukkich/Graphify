@@ -10,10 +10,7 @@ public class ApplicationContext
 {
     public Surface Surface { get; private set; }
     public IEnumerable<IGeometricObject> SelectedObjects => _selectedObjects;
-
-    public delegate void OnSurfaceChanged(Surface newSurface);
-    public event OnSurfaceChanged OnSurfaceChangedEvent;
-
+    
     private readonly IGeometryFactory _factory;
 
     private readonly LinkedList<IGeometricObject> _selectedObjects;
@@ -23,21 +20,18 @@ public class ApplicationContext
         Surface = surface;
         _factory = factory;
         _selectedObjects = new LinkedList<IGeometricObject>();
-
-        OnSurfaceChangedEvent?.Invoke(surface);
     }
 
     public void SetSurface(Surface newSurface)
     {
         Surface = newSurface;
-        OnSurfaceChangedEvent?.Invoke(newSurface);
     }
 
     public Point CreatePoint(Vector2 pointCoords)
     {
         Point newPoint = _factory.Create(pointCoords);
         Surface.AddObject(newPoint);
-
+        
         return newPoint;
     }
 

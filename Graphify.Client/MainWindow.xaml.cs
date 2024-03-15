@@ -105,7 +105,7 @@ public partial class MainWindow
         {
             return;
         }
-        //ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+        ViewModel?.SetEditMode.Execute(EditMode.CreateBezierCurve);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
@@ -194,6 +194,19 @@ public partial class MainWindow
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseUp.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
     private void GlWindow_MouseMove(object sender, MouseEventArgs args)

@@ -69,6 +69,9 @@ public class AppViewModel : ReactiveObject
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
 
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
+
+        EditingObject = null;
+        GeometryObjects = new SourceList<IGeometricObject>();
     }
 
     private IObservable<Unit> RightMouseDownAction(Vector2 position)
