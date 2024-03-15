@@ -256,7 +256,7 @@
                  Grid.Row="1"
                  Grid.Column="0"
                  x:Name="listGeometryObjects"
-                 ItemsSource="{Binding GeometryObjects}"> <!-- dont work -->
+                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}"> <!-- dont work -->
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
@@ -271,74 +271,50 @@
                             Value="Stretch"/>
                 </Style>
             </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>                    
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <!--<Ellipse Fill="{Binding Path=Color}"
-                                 Width="15" 
-                                 Height="15"
-                                 HorizontalAlignment="Left"/>-->
-                        <ContentControl Content="{Binding GeometryObjects}"
-                                        Margin="0"
-                                        VerticalAlignment="Center"
-                                        Grid.Column="1">
-                            <ContentControl.Resources>
+            <ListBox.Resources>
                                 <DataTemplate DataType="{x:Type points:Point}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding X}" />
-                                        <TextBox Text="{Binding Y}" />
+                                        <TextBox Text="{Binding X, Mode=OneWay}" />
+                                        <TextBox Text="{Binding Y, Mode=OneWay}" />
                                         <TextBox Text="Точка" />
                                     </StackPanel>
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type polygons:Polygon}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding ControlPoints}" />
                                         <TextBox Text="Полигон" />
                                     </StackPanel>
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type curves:Circle}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <!--<TextBox Text="{Binding ControlPoints}" />-->
                                         <TextBox Text="Окружность" />
                                     </StackPanel>
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <!--<TextBox Text="{Binding ControlPoints}" />-->
                                         <TextBox Text="Кубическая кривая Безье" />
                                     </StackPanel>
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type curves:Line}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <!--<TextBox Text="{Binding ControlPoints}" />-->
                                         <TextBox Text="Линия" />
                                     </StackPanel>
                                 </DataTemplate>
-                            </ContentControl.Resources>
-                        </ContentControl>
-                        <Button Padding="0"
-                                Margin="0"
-                                Width="30"
-                                FontSize="25"
-                                FontWeight="Bold"
-                                HorizontalContentAlignment="Center"
-                                Background="White"
-                                BorderBrush="White"
-                                Grid.Column="2"
-                                Content="︙"
-                                Click="ObjectOptionsButton_Click"/>
-                    </Grid>                    
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+                            </ListBox.Resources>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <ContentControl Content="{Binding}"/>
+                                                    <Button Click="Button_Click"/>
+                                                </StackPanel>
+                                            </DataTemplate>                                            
+                                        </ListBox.ItemTemplate>
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow" 
                                Resized="GlWindow_Resized"

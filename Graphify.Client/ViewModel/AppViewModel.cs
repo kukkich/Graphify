@@ -19,7 +19,7 @@ public class AppViewModel : ReactiveObject
 {
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
-    public SourceList<IGeometricObject> GeometryObjects { get; set; }
+    public SourceCache<IGeometricObject, IGeometricObject> GeometryObjects { get; set; }
 
     public ReactiveCommand<Vector2, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> RightMouseDown { get; private set; }
