@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -22,10 +22,10 @@
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Core\" />
-    <Folder Include="Client\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Graphify.Client\Graphify.Client.csproj" />
     <ProjectReference Include="..\Graphify.Geometry\Graphify.Geometry.csproj" />
   </ItemGroup>
 
