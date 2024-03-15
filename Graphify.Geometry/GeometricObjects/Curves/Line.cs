@@ -38,10 +38,10 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     private readonly Point _pointA;
     private readonly Point _pointB;
 
-    public Line(Point A, Point B, CurveStyle? style = null)
+    public Line(Point a, Point b, CurveStyle? style = null)
     {
-        _pointA = A;
-        _pointB = B;
+        _pointA = a;
+        _pointB = b;
 
         Style = style ?? CurveStyle.Default;
         _attached = [];
@@ -79,13 +79,13 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         x /= ab.X * ab.X + ab.Y * ab.Y;
 
         var attachObj = new AttachedPoint(attachable);
-        if (x < 0) // Если точка лежит левее точки A
+        if (x < 0) // Если точка лежит левее точки a
         {
             var dv = new Vector2(A.X - T.X, A.Y - T.Y);
             attachable.Move(dv);
             attachObj.T = 0.0f;
         }
-        else if (x > 1) // Если точка лежит левее точки B
+        else if (x > 1) // Если точка лежит левее точки b
         {
             var dv = new Vector2(B.X - T.X, B.Y - T.Y);
             attachable.Move(dv);
@@ -221,7 +221,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             objPoint.Reflect(point);
         }
     }
-    
+
     public FigureExportData GetExportData()
     {
         var leftBound = new Vector2(Math.Min(_pointA.X, _pointB.X), Math.Min(_pointA.Y, _pointB.Y));
@@ -250,31 +250,31 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         var x = (T.Y - A.Y) * ab.Y + (-A.X + T.X) * ab.X;
         x /= ab.X * ab.X + ab.Y * ab.Y;
 
-        // Если точка point лежит левее точки A
+        // Если точка point лежит левее точки a
         if (x < 0)
         {
             return (A - point).Length();
         }
-        else if (x > 1) // Если точка point лежит правее точки B
+        else if (x > 1) // Если точка point лежит правее точки b
         {
             return (B - point).Length();
         }
 
-        // Если точка point лежит между точками A и B
+        // Если точка point лежит между точками a и b
         // Определяем растяжение нормали n
         var y = (A.X + x * ab.X - T.X) / ab.Y;
         var dist = y * n;  // Определяем расстояние от точки до прямой
 
         return dist.Length();
     }
-    
+
     public IGeometricObject Clone()
     {
         var lineClone = new Line((Point)_pointA.Clone(), (Point)_pointB.Clone(),
             new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size))
-            {
-                ObjectState = this.ObjectState
-            };
+        {
+            ObjectState = this.ObjectState
+        };
 
         return lineClone;
     }

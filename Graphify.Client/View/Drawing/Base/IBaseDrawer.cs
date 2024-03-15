@@ -1,6 +1,5 @@
 using System.Drawing;
 using System.Numerics;
-using Graphify.Geometry.Drawing;
 
 namespace Graphify.Client.View.Drawing.Base;
 

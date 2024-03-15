@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using Graphify.Geometry.Drawing;
-using SharpGL;
+﻿using Graphify.Geometry.Drawing;
 
 namespace Graphify.Client.View.Drawing.Base;
 
@@ -16,7 +14,7 @@ public abstract class BaseGeometryObjectDrawer<TDrawParams> : IGeometryObjectDra
 
         _drawActions = GetDrawActions();
     }
-    
+
     public virtual Dictionary<ObjectState, Action<TDrawParams, DrawSettings>> GetDrawActions()
     {
         var drawActions = new Dictionary<ObjectState, Action<TDrawParams, DrawSettings>>
@@ -27,7 +25,7 @@ public abstract class BaseGeometryObjectDrawer<TDrawParams> : IGeometryObjectDra
 
         return drawActions;
     }
-    
+
     public void Draw(TDrawParams point, ObjectState objectState, DrawSettings settings)
     {
         _drawActions[objectState](point, settings);

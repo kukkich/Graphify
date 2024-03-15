@@ -20,7 +20,7 @@ public class AttachCommand : ICommand
     }
 
     public void Undo()
-    { 
+    {
         _figure.ConsumeDetach(_point);
     }
 }

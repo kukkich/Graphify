@@ -11,9 +11,9 @@ public class ApplicationContext
     public Surface Surface { get; private set; }
     public IEnumerable<IGeometricObject> SelectedObjects => _selectedObjects;
 
-    public delegate void OnSurfaceChanged(Surface newSurface);
+    public delegate void OnSurfaceChanged();
     public event OnSurfaceChanged OnSurfaceChangedEvent;
-
+    
     private readonly IGeometryFactory _factory;
 
     private readonly LinkedList<IGeometricObject> _selectedObjects;
@@ -23,21 +23,20 @@ public class ApplicationContext
         Surface = surface;
         _factory = factory;
         _selectedObjects = new LinkedList<IGeometricObject>();
-
-        OnSurfaceChangedEvent?.Invoke(surface);
     }
 
     public void SetSurface(Surface newSurface)
     {
         Surface = newSurface;
-        OnSurfaceChangedEvent?.Invoke(newSurface);
+        OnSurfaceChangedEvent?.Invoke();
     }
 
     public Point CreatePoint(Vector2 pointCoords)
     {
         Point newPoint = _factory.Create(pointCoords);
         Surface.AddObject(newPoint);
-
+        OnSurfaceChangedEvent?.Invoke();
+        
         return newPoint;
     }
 
@@ -45,6 +44,7 @@ public class ApplicationContext
     {
         IFigure newFigure = _factory.Create(type, points);
         Surface.AddObject(newFigure);
+        OnSurfaceChangedEvent?.Invoke();
 
         return newFigure;
     }
@@ -52,6 +52,7 @@ public class ApplicationContext
     public void AddObject(IGeometricObject geometricObject)
     {
         Surface.AddObject(geometricObject);
+        OnSurfaceChangedEvent?.Invoke();
     }
 
     public IGeometricObject? Select(Vector2 position, bool clearPrevious)
@@ -78,24 +79,27 @@ public class ApplicationContext
 
         Select(geometricObject, false);
     }
-    
+
     public void Select(IGeometricObject geometricObject, bool clearPrevious)
     {
         if (!Surface.Objects.Contains(geometricObject))
         {
             return;
         }
-        
+
         if (clearPrevious)
         {
             ClearSelected();
         }
 
-        if (!_selectedObjects.Contains(geometricObject))
+        if (_selectedObjects.Contains(geometricObject))
         {
-            _selectedObjects.AddLast(geometricObject);
-            geometricObject.ObjectState = ObjectState.Selected;
+            return;
         }
+
+        _selectedObjects.AddLast(geometricObject);
+        geometricObject.ObjectState = ObjectState.Selected;
+        OnSurfaceChangedEvent?.Invoke();
     }
 
     public void UnSelect(IGeometricObject geometricObject)
@@ -105,11 +109,14 @@ public class ApplicationContext
             return;
         }
 
-        if (_selectedObjects.Contains(geometricObject))
+        if (!_selectedObjects.Contains(geometricObject))
         {
-            _selectedObjects.Remove(geometricObject);
-            geometricObject.ObjectState = ObjectState.Default;
+            return;
         }
+
+        _selectedObjects.Remove(geometricObject);
+        geometricObject.ObjectState = ObjectState.Default;
+        OnSurfaceChangedEvent?.Invoke();
     }
 
     public IEnumerable<IGeometricObject> SelectAll()
@@ -122,16 +129,18 @@ public class ApplicationContext
             geometricObject.ObjectState = ObjectState.Selected;
         }
 
+        OnSurfaceChangedEvent?.Invoke();
         return _selectedObjects;
     }
 
     public void ClearSelected()
     {
+        OnSurfaceChangedEvent?.Invoke();
         foreach (var geometricObject in _selectedObjects)
         {
             geometricObject.ObjectState = ObjectState.Default;
         }
-        
+
         _selectedObjects.Clear();
     }
 }

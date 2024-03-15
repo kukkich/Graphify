@@ -13,9 +13,9 @@ public class CircleTwoPointsTool : IApplicationTool
 
     private const int RequiredClicks = 2;
     private int _currentClicks = 0;
-    
+
     private readonly List<Point> _points = [];
-    
+
     public CircleTwoPointsTool(ApplicationContext context, CommandsBuffer commandsBuffer)
     {
         _context = context;
@@ -34,8 +34,8 @@ public class CircleTwoPointsTool : IApplicationTool
     public void MouseDown(Vector2 clickPosition)
     {
         _currentClicks++;
-        IGeometricObject geometricObject =  _context.Surface.TryGetClosestObject(clickPosition);
-        
+        IGeometricObject geometricObject = _context.Surface.TryGetClosestObject(clickPosition);
+
         Point newPoint;
         if (geometricObject is Point point)
         {
@@ -46,18 +46,20 @@ public class CircleTwoPointsTool : IApplicationTool
             newPoint = _context.CreatePoint(clickPosition);
         }
         _points.Add(newPoint);
-        
-        if (_currentClicks >= RequiredClicks)
+
+        if (_currentClicks < RequiredClicks)
         {
-            IFigure circle = _context.CreateFigure(ObjectType.Circle, _points.ToArray());
-            _commandsBuffer.AddCommand(new AddCommand(_context, circle));
-            OnToolChanged();
+            return;
         }
+
+        IFigure circle = _context.CreateFigure(ObjectType.Circle, _points.ToArray());
+        _commandsBuffer.AddCommand(new AddCommand(_context, circle));
+        OnToolChanged();
     }
 
     public void MouseUp(Vector2 clickPosition)
     {
-        return;
+
     }
 
     public bool InProgress()

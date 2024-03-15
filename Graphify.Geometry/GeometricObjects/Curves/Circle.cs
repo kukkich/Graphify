@@ -38,10 +38,10 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     private float Radius => (float)Math.Sqrt(Math.Pow(_centerPoint.X - _radiusPoint.X, 2) + Math.Pow(_centerPoint.Y - _radiusPoint.Y, 2));
 
 
-    private List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
+    private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
-    private Point _centerPoint;
-    private Point _radiusPoint;
+    private readonly Point _centerPoint;
+    private readonly Point _radiusPoint;
 
     public Circle(Point center, Point radius, CurveStyle? style = null)
     {
@@ -204,7 +204,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         drawer.DrawCircle(centerPoint, Radius, ObjectState);
     }
-    
+
     public FigureExportData GetExportData()
     {
         var exportData = new FigureExportData
@@ -221,14 +221,14 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         return exportData;
     }
-    
+
     public IGeometricObject Clone()
     {
         var circleClone = new Circle((Point)_centerPoint.Clone(), (Point)_radiusPoint.Clone(),
             new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size))
-            {
-                ObjectState = ObjectState
-            };
+        {
+            ObjectState = ObjectState
+        };
 
         return circleClone;
     }

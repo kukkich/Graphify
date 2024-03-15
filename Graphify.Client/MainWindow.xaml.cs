@@ -39,8 +39,8 @@ public partial class MainWindow
                 .DisposeWith(disposables);
         });
 
-    }    
-  
+    }
+
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -86,7 +86,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
     }
 
@@ -113,37 +113,36 @@ public partial class MainWindow
         {
             return;
         }
-        SaveFileDialog exportFileDialog = new SaveFileDialog();
-        exportFileDialog.FileName = "test.svg";
-        exportFileDialog.DefaultExt = ".svg";
-        exportFileDialog.Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify*)|*.grafify*";
-        exportFileDialog.InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-        exportFileDialog.CheckFileExists = false;
-        if (exportFileDialog.ShowDialog() == true)
+        SaveFileDialog exportFileDialog = new SaveFileDialog
         {
-            string filePath = exportFileDialog.FileName;
-            string selectedExtension = Path.GetExtension(filePath);
-            ExportFileType fileType = SelectfileType(selectedExtension);
-            ViewModel?.Export.Execute((filePath, fileType));
+            FileName = "test.svg",
+            DefaultExt = ".svg",
+            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            CheckFileExists = false
+        };
+
+        if (exportFileDialog.ShowDialog() != true)
+        {
+            return;
         }
+
+        string filePath = exportFileDialog.FileName;
+        string selectedExtension = Path.GetExtension(filePath);
+        ExportFileType fileType = SelectFileType(selectedExtension);
+        ViewModel?.Export.Execute((filePath, fileType));
     }
 
     // что возвращать, если пришла белиберда? TODO
-    private ExportFileType SelectfileType(string selectedExtension)
+    private ExportFileType SelectFileType(string selectedExtension)
     {
-        ExportFileType fileType = 0; 
-        if (selectedExtension == ".svg")
+        ExportFileType fileType = selectedExtension switch
         {
-             fileType = ExportFileType.Svg;
-        }
-        else if (selectedExtension == ".png")
-        {
-            fileType = ExportFileType.Png;
-        }
-        else if (selectedExtension == ".grafify")
-        {
-             fileType = ExportFileType.Custom;
-        }
+            ".svg" => ExportFileType.Svg,
+            ".png" => ExportFileType.Png,
+            ".grafify" => ExportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
         return fileType;
     }
 
@@ -190,7 +189,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         var position = args.GetPosition((OpenGLControl)sender);
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
@@ -216,7 +215,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         var position = args.GetPosition((OpenGLControl)sender);
         position.X -= GlWindow.ActualWidth / 2;
         position.Y = GlWindow.ActualHeight / 2 - position.Y;

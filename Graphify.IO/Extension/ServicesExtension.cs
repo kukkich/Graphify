@@ -2,9 +2,9 @@ using Graphify.IO.Exporters;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Graphify.IO;
+namespace Graphify.IO.Extension;
 
-public static class ServicesExtention
+public static class ServicesExtension
 {
     public static void AddIO(this IServiceCollection services)
     {

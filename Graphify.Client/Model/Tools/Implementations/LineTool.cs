@@ -13,7 +13,7 @@ public class LineTool : IApplicationTool
 
     private const int RequiredClicks = 2;
     private int _currentClicks = 0;
-    
+
     private readonly List<Point> _points = [];
 
     public LineTool(ApplicationContext context, CommandsBuffer commandsBuffer)
@@ -28,14 +28,14 @@ public class LineTool : IApplicationTool
 
     public void MouseMove(Vector2 newPosition)
     {
-        
+
     }
 
     public void MouseDown(Vector2 clickPosition)
     {
         _currentClicks++;
-        IGeometricObject geometricObject =  _context.Surface.TryGetClosestObject(clickPosition);
-        
+        IGeometricObject geometricObject = _context.Surface.TryGetClosestObject(clickPosition);
+
         Point newPoint;
         if (geometricObject is Point point)
         {
@@ -46,18 +46,20 @@ public class LineTool : IApplicationTool
             newPoint = _context.CreatePoint(clickPosition);
         }
         _points.Add(newPoint);
-        
-        if (_currentClicks >= RequiredClicks)
+
+        if (_currentClicks < RequiredClicks)
         {
-            IFigure line = _context.CreateFigure(ObjectType.Line, _points.ToArray());
-            _commandsBuffer.AddCommand(new AddCommand(_context, line));
-            OnToolChanged();
+            return;
         }
+
+        IFigure line = _context.CreateFigure(ObjectType.Line, _points.ToArray());
+        _commandsBuffer.AddCommand(new AddCommand(_context, line));
+        OnToolChanged();
     }
 
     public void MouseUp(Vector2 clickPosition)
     {
-        
+
     }
 
     public bool InProgress()
