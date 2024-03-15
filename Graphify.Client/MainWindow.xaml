@@ -256,8 +256,7 @@
                  Grid.Row="1"
                  Grid.Column="0"
                  x:Name="listGeometryObjects"
-                 DataContext="{DynamicResource appViewModel}"
-                 ItemsSource="{Binding GeometryObjects}">
+                 ItemsSource="{Binding GeometryObjects}"> <!-- dont work -->
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
@@ -280,35 +279,48 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="30"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Ellipse Fill="{Binding Path=Color}"
+                        <!--<Ellipse Fill="{Binding Path=Color}"
                                  Width="15" 
                                  Height="15"
-                                 HorizontalAlignment="Left"/>
-                        <ContentControl DataContext="{DynamicResource appViewModel}"
-                                        Content="{Binding GeometryObjects}"
+                                 HorizontalAlignment="Left"/>-->
+                        <ContentControl Content="{Binding GeometryObjects}"
                                         Margin="0"
                                         VerticalAlignment="Center"
                                         Grid.Column="1">
                             <ContentControl.Resources>
-                                <DataTemplate DataType="{x:Type points:PointStyle}">
+                                <DataTemplate DataType="{x:Type points:Point}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding PrimaryColor}" />
-                                        <TextBox Text="{Binding Name}" />
+                                        <TextBox Text="{Binding X}" />
+                                        <TextBox Text="{Binding Y}" />
+                                        <TextBox Text="Точка" />
                                     </StackPanel>
                                 </DataTemplate>
 
-                                <DataTemplate DataType="{x:Type polygons:PolygonStyle}">
+                                <DataTemplate DataType="{x:Type polygons:Polygon}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding PrimaryColor}" />
-                                        <TextBox Text="{Binding Name}" />
+                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <TextBox Text="Полигон" />
                                     </StackPanel>
                                 </DataTemplate>
 
-                                <DataTemplate DataType="{x:Type curves:CurveStyle}">
+                                <DataTemplate DataType="{x:Type curves:Circle}">
                                     <StackPanel>
-                                        <TextBox Text="{Binding PrimaryColor}" />
-                                        <TextBox Text="{Binding Name}" />
-                                        <TextBox Text="{Binding Size}" />
+                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <TextBox Text="Окружность" />
+                                    </StackPanel>
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
+                                    <StackPanel>
+                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <TextBox Text="Кубическая кривая Безье" />
+                                    </StackPanel>
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type curves:Line}">
+                                    <StackPanel>
+                                        <TextBox Text="{Binding ControlPoints}" />
+                                        <TextBox Text="Линия" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ContentControl.Resources>

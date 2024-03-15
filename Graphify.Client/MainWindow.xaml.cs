@@ -39,6 +39,13 @@ public partial class MainWindow
                 .DisposeWith(disposables);
         });
 
+        this.listGeometryObjects.DataContext = viewModel; //dont work
+    }
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu? cm = this.FindResource("cmButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
     }
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)

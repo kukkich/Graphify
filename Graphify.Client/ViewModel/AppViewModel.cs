@@ -7,6 +7,7 @@ using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
