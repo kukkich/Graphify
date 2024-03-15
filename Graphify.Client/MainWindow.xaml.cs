@@ -107,44 +107,31 @@ public partial class MainWindow
         }
         ViewModel?.SetEditMode.Execute(EditMode.CreateBezierCurve);
     }
+    private void RotateModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.Rotate);
+    }
+    private void ReflectModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.Reflect);
+    }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
         {
             return;
         }
-        SaveFileDialog exportFileDialog = new SaveFileDialog
-        {
-            FileName = "test.svg",
-            DefaultExt = ".svg",
-            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
-            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
-            CheckFileExists = false
-        };
-
-        if (exportFileDialog.ShowDialog() != true)
-        {
-            return;
-        }
-
-        string filePath = exportFileDialog.FileName;
-        string selectedExtension = Path.GetExtension(filePath);
-        ExportFileType fileType = SelectFileType(selectedExtension);
-        ViewModel?.Export.Execute((filePath, fileType));
+        ViewModel?.OpenExportDialogCommand.Execute();
     }
 
-    // что возвращать, если пришла белиберда? TODO
-    private ExportFileType SelectFileType(string selectedExtension)
-    {
-        ExportFileType fileType = selectedExtension switch
-        {
-            ".svg" => ExportFileType.Svg,
-            ".png" => ExportFileType.Png,
-            ".grafify" => ExportFileType.Custom,
-            _ => throw new InvalidOperationException(selectedExtension)
-        };
-        return fileType;
-    }
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
     {
@@ -221,4 +208,6 @@ public partial class MainWindow
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
+
+    
 }

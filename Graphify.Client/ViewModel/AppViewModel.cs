@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -38,6 +40,8 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
 
+    public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; }
+
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
@@ -53,6 +57,17 @@ public class AppViewModel : ReactiveObject
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
+        OpenExportDialogCommand = ReactiveCommand.Create(() =>
+        {
+            var exportFileDialog = InitializeExportDialog();
+            if (exportFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+            var filePath = GetFilePath(exportFileDialog);
+            var fileType = GetFileType(filePath);
+            Export.Execute((filePath, fileType));
+        });
 
         RightMouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseUpAction);
         RightMouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseDownAction);
@@ -74,6 +89,41 @@ public class AppViewModel : ReactiveObject
         GeometryObjects = new SourceList<IGeometricObject>();
     }
 
+    public SaveFileDialog InitializeExportDialog()
+    {
+        SaveFileDialog exportFileDialog = new SaveFileDialog
+        {
+            FileName = "test.svg",
+            DefaultExt = ".svg",
+            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            CheckFileExists = false
+        };
+        return exportFileDialog;
+    }
+    private ExportFileType SelectFileType(string selectedExtension)
+    {
+        ExportFileType fileType = selectedExtension switch
+        {
+            ".svg" => ExportFileType.Svg,
+            ".png" => ExportFileType.Png,
+            ".grafify" => ExportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        return fileType;
+    }
+
+    public string GetFilePath(SaveFileDialog exportFileDialog)
+    {
+        string filePath = exportFileDialog.FileName;
+        return filePath;       
+    }
+    public ExportFileType GetFileType(string path)
+    {
+        string selectedExtension = Path.GetExtension(path);
+        ExportFileType type = SelectFileType(selectedExtension);
+        return type;
+    }
     private IObservable<Unit> RightMouseDownAction(Vector2 position)
     {
         _currentTool.RightMouseDown(position);
