@@ -5,7 +5,9 @@ using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
 using Graphify.Core.Model.IO.Export;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -41,6 +43,14 @@ public class AppViewModel : ReactiveObject
         _logger = logger;
         _application = application;
         _exporter = exporter;
+
+        // for tests
+        GeometryObjects = new SourceList<IGeometricObject>();
+        GeometryObjects.AddRange([
+            new Point(1,1),
+            new Point(2,2),
+            new Circle( new Point(1,1), new Point(2,2))
+        ]);
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
