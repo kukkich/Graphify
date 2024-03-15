@@ -163,11 +163,10 @@ public sealed class SVGExporter : IExporter
 
         _svgElements.AddPath(
             cubicBezier => cubicBezier
-                .D(
-                d => d
+                .D(d => d
                     .M(points[0].X, points[0].Y)
                     .C(points[1].X, points[1].Y, points[2].X, points[2].Y, points[3].X, points[3].Y)
-                    .Z())
+                )
                 .Fill(Paint.None)
                 .Stroke(dataBezier.Style.PrimaryColor)
                 .StrokeWidth((dataBezier.Style as CurveStyle ?? CurveStyle.Default).Size)
