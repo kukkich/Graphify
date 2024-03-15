@@ -1,5 +1,8 @@
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.Drawing;
+using Newtonsoft.Json;
+using Graphify.IO.Importers;
 
 namespace Graphify.IO;
 
@@ -11,5 +14,6 @@ public class JsonFigureObject(ObjectType objectType, uint[] attachedPoint, uint[
 
     public uint[] ControlPoints { get; internal init; } = controlPoints;
 
+    [JsonConverter(typeof(StyleConverter))]
     public IStyle Style { get; internal init; } = style;
 }
