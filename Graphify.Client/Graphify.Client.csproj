@@ -18,12 +18,18 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Icons\circle.png" />
+    <None Remove="Icons\curve.png" />
     <None Remove="Icons\line.png" />
     <None Remove="Icons\move.png" />
     <None Remove="Icons\point.png" />
+    <None Remove="Icons\polygon.png" />
     <None Remove="Icons\redo.png" />
+    <None Remove="Icons\rotate.png" />
     <None Remove="Icons\save.png" />
     <None Remove="Icons\undo.png" />
+    <None Remove="Icons\zoomIn.png" />
+    <None Remove="Icons\zoomOut.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,11 +71,17 @@
   </ItemGroup>
     
   <ItemGroup>
+    <Resource Include="Icons\circle.png" />
+    <Resource Include="Icons\curve.png" />
     <Resource Include="Icons\line.png" />
     <Resource Include="Icons\move.png" />
     <Resource Include="Icons\point.png" />
+    <Resource Include="Icons\polygon.png" />
     <Resource Include="Icons\redo.png" />
+    <Resource Include="Icons\rotate.png" />
     <Resource Include="Icons\save.png" />
     <Resource Include="Icons\undo.png" />
+    <Resource Include="Icons\zoomIn.png" />
+    <Resource Include="Icons\zoomOut.png" />
   </ItemGroup>
 </Project>

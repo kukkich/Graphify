@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -11,10 +11,10 @@ public class LineTool : IApplicationTool
     private readonly ApplicationContext _context;
     private readonly CommandsBuffer _commandsBuffer;
 
-    private const int RequiredClicks = 1;
+    private const int RequiredClicks = 2;
     private int _currentClicks = 0;
-    private Point? _firstPoint;
-    private Point? _secondPoint;
+
+    private readonly List<Point> _points = [];
 
     public LineTool(ApplicationContext context, CommandsBuffer commandsBuffer)
     {
@@ -22,32 +22,58 @@ public class LineTool : IApplicationTool
         _commandsBuffer = commandsBuffer;
     }
 
-    public void MouseMove(Vector2 newPosition) => throw new NotImplementedException();
+    public void RightMouseDown(Vector2 clickPosition) { }
+
+    public void RightMouseUp(Vector2 clickPosition) { }
+
+    public void MouseMove(Vector2 newPosition)
+    {
+
+    }
 
     public void MouseDown(Vector2 clickPosition)
     {
-        if (_currentClicks < RequiredClicks)
+        _currentClicks++;
+        IGeometricObject geometricObject = _context.Surface.TryGetClosestObject(clickPosition);
+
+        Point newPoint;
+        if (geometricObject is Point point)
         {
-            _firstPoint = _context.AddPoint(clickPosition);
-            ++_currentClicks;
+            newPoint = point;
         }
         else
         {
-            _secondPoint = _context.AddPoint(clickPosition);
-            IFigure line = _context.AddFigure(ObjectType.Line, [_firstPoint, _secondPoint]);
-            _commandsBuffer.AddCommand(new AddCommand(_context, line));
-            Reset();
+            newPoint = _context.CreatePoint(clickPosition);
         }
+        _points.Add(newPoint);
+
+        if (_currentClicks < RequiredClicks)
+        {
+            return;
+        }
+
+        IFigure line = _context.CreateFigure(ObjectType.Line, _points.ToArray());
+        _commandsBuffer.AddCommand(new AddCommand(_context, line));
+        OnToolChanged();
+    }
+
+    public void MouseUp(Vector2 clickPosition)
+    {
+
+    }
+
+    public bool InProgress()
+    {
+        return true;
     }
 
     public void Cancel()
     {
     }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         _currentClicks = 0;
-        _firstPoint = null;
-        _secondPoint = null;
+        _points.Clear();
     }
 }

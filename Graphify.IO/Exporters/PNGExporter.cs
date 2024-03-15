@@ -27,10 +27,11 @@ public sealed class PNGExporter : IExporter
     }
 
     private static void ConvertSvgToPng(string path, string svgPath)
+
     {
         using var document = new SVGDocument(svgPath);
         var pngSaveOptions = new ImageSaveOptions();
-
+        
         Converter.ConvertSVG(document, pngSaveOptions, path);
     }
 }

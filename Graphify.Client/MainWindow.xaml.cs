@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
@@ -36,6 +38,7 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
         });
+
     }
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
@@ -65,7 +68,6 @@ public partial class MainWindow
         {
             return;
         }
-
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
@@ -78,11 +80,96 @@ public partial class MainWindow
         ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
     }
 
-    private void ExportButton_Click(object sender, RoutedEventArgs e)
+    private void CreatePolygonModeButton_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
+        if (sender is not Button)
+        {
+            return;
+        }
+
+        ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
     }
 
+    private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateCircleTwoPoints);
+    }
+
+    private void CreateCurveModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.CreateBezierCurve);
+    }
+    private void RotateModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.Rotate);
+    }
+    private void ReflectModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.Reflect);
+    }
+    private void ExportButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.OpenExportDialogCommand.Execute();
+    }
+
+
+    private void UndoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.Undo.Execute();
+    }
+
+    private void RedoButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.Redo.Execute();
+    }
+
+    private void ZoomOutButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void ZoomInButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
     {
         if (ViewModel is null)
@@ -95,4 +182,32 @@ public partial class MainWindow
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
+
+    private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseUp.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    private void GlWindow_MouseMove(object sender, MouseEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    
 }

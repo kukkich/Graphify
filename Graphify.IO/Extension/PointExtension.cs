@@ -1,9 +1,9 @@
 using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Points;
 
-namespace Graphify.IO.Extention;
+namespace Graphify.IO.Extension;
 
-public static class PointExtention
+public static class PointExtension
 {
     public static Vector2 ToVector2(this Point point)
             => new(point.X, point.Y);

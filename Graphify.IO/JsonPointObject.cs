@@ -1,6 +1,5 @@
-using Graphify.Geometry.GeometricObjects.Points;
-using Newtonsoft.Json;
 using System.Numerics;
+using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.IO;
 

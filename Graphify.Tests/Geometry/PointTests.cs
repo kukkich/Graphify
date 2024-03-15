@@ -88,9 +88,9 @@ namespace Graphify.Tests.Geometry
 
         private static readonly object[] rotateData =
         {
-            new object[] { new Point(1, 0), 90, new Vector2(1, 1) },
-            new object[] { new Point(1, 0), 540, new Vector2(2, 0) },
-            new object[] { new Point(1, 0), -90, new Vector2(1, -1) }
+            new object[] { new Point(1, 0), 90, new Point(1, 1) },
+            new object[] { new Point(1, 0), 540, new Point(2, 0) },
+            new object[] { new Point(1, 0), -90, new Point(1, -1) }
         };
 
         [TestCaseSource(nameof(attachedRotateData))]
@@ -101,7 +101,7 @@ namespace Graphify.Tests.Geometry
 
         private static readonly object[] attachedRotateData =
         {
-            new object[] { new Point(1, 0), 90, new Vector2(1, 1) }
+            new object[] { new Point(1, 0), 90}
         };
 
         //Reflect

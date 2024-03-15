@@ -1,12 +1,14 @@
+using System.IO;
 using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows.Input;
 using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
+using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -18,34 +20,173 @@ public class AppViewModel : ReactiveObject
     [Reactive] public IGeometricObject? EditingObject { get; set; }
     public SourceList<IGeometricObject> GeometryObjects { get; set; }
 
-    public ReactiveCommand<Unit, Unit> RightMouseUp { get; private set; }
-    public ReactiveCommand<Unit, Unit> RightMouseDown { get; private set; }
+    public ReactiveCommand<Vector2, Unit> RightMouseUp { get; private set; }
+    public ReactiveCommand<Vector2, Unit> RightMouseDown { get; private set; }
+
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseUp { get; private set; }
-    public ReactiveCommand<Vector2, Unit> MouserMove { get; private set; }
+    public ReactiveCommand<Vector2, Unit> MouseMove { get; private set; }
+
+    public ReactiveCommand<Unit, Unit> Redo { get; private set; }
+    public ReactiveCommand<Unit, Unit> Undo { get; private set; }
+
+    public ReactiveCommand<Unit, Unit> Copy { get; private set; }
+    public ReactiveCommand<Unit, Unit> Paste { get; private set; }
+    public ReactiveCommand<Unit, Unit> Cut { get; private set; }
+
+    public ReactiveCommand<Unit, Unit> SelectAll { get; private set; }
+
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
+
+    public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; }
+
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
     private readonly Application _application;
+    private IApplicationTool _currentTool;
 
     public AppViewModel(ILogger<AppViewModel> logger, Application application)
     {
         _logger = logger;
         _application = application;
+        _currentTool = application.ToolsController.ChangeTool(EditMode.Move);
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
+        OpenExportDialogCommand = ReactiveCommand.Create(() =>
+        {
+            var exportFileDialog = InitializeExportDialog();
+            if (exportFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+            var filePath = GetFilePath(exportFileDialog);
+            var fileType = GetFileType(filePath);
+            Export.Execute((filePath, fileType));
+        });
+
+        RightMouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseUpAction);
+        RightMouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseDownAction);
+
         MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
+        MouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseUpAction);
+        MouseMove = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseMoveAction);
+
+        Undo = ReactiveCommand.CreateFromObservable(UndoChanges);
+        Redo = ReactiveCommand.CreateFromObservable(RedoChanges);
+
+        Copy = ReactiveCommand.CreateFromObservable(CopyObjects);
+        Cut = ReactiveCommand.CreateFromObservable(CutObjects);
+        Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
+
+        SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
+
+        EditingObject = null;
+        GeometryObjects = new SourceList<IGeometricObject>();
     }
 
-    //TODO �����������???????
+    public SaveFileDialog InitializeExportDialog()
+    {
+        SaveFileDialog exportFileDialog = new SaveFileDialog
+        {
+            FileName = "test.svg",
+            DefaultExt = ".svg",
+            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            CheckFileExists = false
+        };
+        return exportFileDialog;
+    }
+    private ExportFileType SelectFileType(string selectedExtension)
+    {
+        ExportFileType fileType = selectedExtension switch
+        {
+            ".svg" => ExportFileType.Svg,
+            ".png" => ExportFileType.Png,
+            ".grafify" => ExportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        return fileType;
+    }
+
+    public string GetFilePath(SaveFileDialog exportFileDialog)
+    {
+        string filePath = exportFileDialog.FileName;
+        return filePath;       
+    }
+    public ExportFileType GetFileType(string path)
+    {
+        string selectedExtension = Path.GetExtension(path);
+        ExportFileType type = SelectFileType(selectedExtension);
+        return type;
+    }
+    private IObservable<Unit> RightMouseDownAction(Vector2 position)
+    {
+        _currentTool.RightMouseDown(position);
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> RightMouseUpAction(Vector2 position)
+    {
+        _currentTool.RightMouseUp(position);
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> MouseDownAction(Vector2 position)
+    {
+        _currentTool.MouseDown(position);
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> MouseUpAction(Vector2 position)
+    {
+        _currentTool.MouseUp(position);
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> MouseMoveAction(Vector2 position)
+    {
+        _currentTool.MouseMove(position);
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> UndoChanges()
+    {
+        _application.CommandsBuffer.Undo();
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> RedoChanges()
+    {
+        _application.CommandsBuffer.Redo();
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> CopyObjects()
+    {
+        _application.Copy();
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> CutObjects()
+    {
+        _application.Cut();
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> PasteObjects()
+    {
+        _application.Paste();
+        return Observable.Return(Unit.Default);
+    }
+
     private IObservable<Unit> SetMode(EditMode mode)
     {
-        _application.ToolsController.SetTool(mode);
+        _currentTool = _application.ToolsController.ChangeTool(mode);
         return Observable.Return(Unit.Default);
     }
 
@@ -55,10 +196,9 @@ public class AppViewModel : ReactiveObject
         return Task.FromResult(Unit.Default);
     }
 
-    //TODO Implement for other figures
-    private IObservable<Unit> MouseDownAction(Vector2 position)
+    private IObservable<Unit> SelectAllObject()
     {
-        _application.ToolsController.MouseDown(position);
+        _application.Context.SelectAll();
         return Observable.Return(Unit.Default);
     }
 }

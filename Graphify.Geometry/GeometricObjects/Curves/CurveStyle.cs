@@ -16,13 +16,14 @@ public class CurveStyle : ReactiveObject, IStyle
     public static int DefaultSize { get; set; } = 4;
 
     public CurveStyle(Color primary, string name, int size)
-    {   
+    {
         PrimaryColor = primary;
         Name = name;
         Size = size;
     }
 
-    public virtual void ApplyStyle(IDrawer drawer) {
+    public virtual void ApplyStyle(IDrawer drawer)
+    {
         drawer.Settings.LineColor = PrimaryColor;
         drawer.Settings.LineThickness = Size;
     }

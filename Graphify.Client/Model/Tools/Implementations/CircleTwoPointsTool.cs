@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -11,15 +11,20 @@ public class CircleTwoPointsTool : IApplicationTool
     private readonly ApplicationContext _context;
     private readonly CommandsBuffer _commandsBuffer;
 
-    private const int RequiredClicks = 1;
+    private const int RequiredClicks = 2;
     private int _currentClicks = 0;
-    private Point? _firstPoint;
-    private Point? _secondPoint;
+
+    private readonly List<Point> _points = [];
+
     public CircleTwoPointsTool(ApplicationContext context, CommandsBuffer commandsBuffer)
     {
         _context = context;
         _commandsBuffer = commandsBuffer;
     }
+
+    public void RightMouseDown(Vector2 clickPosition) => throw new NotImplementedException();
+
+    public void RightMouseUp(Vector2 clickPosition) => throw new NotImplementedException();
 
     public void MouseMove(Vector2 newPosition)
     {
@@ -28,18 +33,38 @@ public class CircleTwoPointsTool : IApplicationTool
 
     public void MouseDown(Vector2 clickPosition)
     {
-        if (_currentClicks < RequiredClicks)
+        _currentClicks++;
+        IGeometricObject geometricObject = _context.Surface.TryGetClosestObject(clickPosition);
+
+        Point newPoint;
+        if (geometricObject is Point point)
         {
-            _firstPoint = _context.AddPoint(clickPosition);
-            ++_currentClicks;
+            newPoint = point;
         }
         else
         {
-            _secondPoint = _context.AddPoint(clickPosition);
-            IFigure circle = _context.AddFigure(ObjectType.Circle, [_firstPoint, _secondPoint]);
-            _commandsBuffer.AddCommand(new AddCommand(_context, circle));
-            Reset();
+            newPoint = _context.CreatePoint(clickPosition);
         }
+        _points.Add(newPoint);
+
+        if (_currentClicks < RequiredClicks)
+        {
+            return;
+        }
+
+        IFigure circle = _context.CreateFigure(ObjectType.Circle, _points.ToArray());
+        _commandsBuffer.AddCommand(new AddCommand(_context, circle));
+        OnToolChanged();
+    }
+
+    public void MouseUp(Vector2 clickPosition)
+    {
+
+    }
+
+    public bool InProgress()
+    {
+        return false;
     }
 
     public void Cancel()
@@ -47,10 +72,9 @@ public class CircleTwoPointsTool : IApplicationTool
 
     }
 
-    public void Reset()
+    public void OnToolChanged()
     {
         _currentClicks = 0;
-        _firstPoint = null;
-        _secondPoint = null;
+        _points.Clear();
     }
 }
