@@ -207,28 +207,16 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         var exportData = new FigureExportData
         {
             FigureType = ObjectType.CubicBezier,
-            Style = Style
+            Style = Style,
+            LeftBottomBound = new Vector2(
+                ControlPoints.Min(p => p.X),
+                ControlPoints.Min(p => p.Y)
+            ),
+            RightTopBound = new Vector2(
+                ControlPoints.Max(p => p.X),
+                ControlPoints.Max(p => p.Y)
+            )
         };
-
-        // Stupid Linear Method (Should use logarithmical find)
-        Vector2 leftBottom = new Vector2(float.MaxValue, float.MaxValue); ;
-        Vector2 rightTop = new Vector2(float.MaxValue, float.MaxValue); ;
-        for (float t = 0f; t < 1f; t += 0.01f)
-        {
-            var point = CurveFunction(t);
-            // TODO else if?
-            if (point.X < leftBottom.X)
-                leftBottom.X = point.X;
-            if (point.X > rightTop.X)
-                rightTop.X = point.X;
-            if (point.Y < leftBottom.Y)
-                leftBottom.Y = point.Y;
-            if (point.Y > rightTop.Y)
-                rightTop.Y = point.Y;
-        }
-
-        exportData.LeftBottomBound = leftBottom;
-        exportData.RightTopBound = rightTop;
 
         return exportData;
     }
