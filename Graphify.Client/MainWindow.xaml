@@ -70,6 +70,10 @@
                                     <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
                                     <Setter TargetName="border" Property="BorderThickness" Value="2"/>
                                 </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="red" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                                </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
@@ -182,13 +186,14 @@
                 <Image Source="/Icons/rotate.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ReflectModeButton"
+                    IsEnabled="False"
                     Width="40"
                     Height="40"
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="ReflectModeButton_Click">
-                
+                <Image Source="/Icons/reflect.png" Stretch="Uniform" Margin="2"/>
             </Button>
         </StackPanel>
         <StackPanel Grid.Row="0"

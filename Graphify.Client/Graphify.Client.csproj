@@ -25,6 +25,7 @@
     <None Remove="Icons\point.png" />
     <None Remove="Icons\polygon.png" />
     <None Remove="Icons\redo.png" />
+    <None Remove="Icons\reflect.png" />
     <None Remove="Icons\rotate.png" />
     <None Remove="Icons\save.png" />
     <None Remove="Icons\undo.png" />
@@ -78,6 +79,7 @@
     <Resource Include="Icons\point.png" />
     <Resource Include="Icons\polygon.png" />
     <Resource Include="Icons\redo.png" />
+    <Resource Include="Icons\reflect.png" />
     <Resource Include="Icons\rotate.png" />
     <Resource Include="Icons\save.png" />
     <Resource Include="Icons\undo.png" />
