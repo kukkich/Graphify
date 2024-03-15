@@ -1,19 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Numerics;
 using Aspose.Svg;
-using Aspose.Svg.Builder;
 using Aspose.Svg.Converters;
 using Aspose.Svg.Saving;
-using DynamicData;
-using Graphify.Geometry.Export;
-using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace Graphify.IO.Exporters
 {
