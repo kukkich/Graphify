@@ -40,7 +40,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
 
-    public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; private set; }
 
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
@@ -57,17 +57,7 @@ public class AppViewModel : ReactiveObject
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
-        OpenExportDialogCommand = ReactiveCommand.Create(() =>
-        {
-            var exportFileDialog = InitializeExportDialog();
-            if (exportFileDialog.ShowDialog() != true)
-            {
-                return;
-            }
-            var filePath = GetFilePath(exportFileDialog);
-            var fileType = GetFileType(filePath);
-            Export.Execute((filePath, fileType));
-        });
+        OpenExportDialogCommand = ReactiveCommand.CreateFromObservable(OpenDialog);
 
         RightMouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseUpAction);
         RightMouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseDownAction);
@@ -113,7 +103,7 @@ public class AppViewModel : ReactiveObject
     public string GetFilePath(SaveFileDialog exportFileDialog)
     {
         string filePath = exportFileDialog.FileName;
-        return filePath;       
+        return filePath;
     }
     public ExportFileType GetFileType(string path)
     {
@@ -184,6 +174,20 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> SetMode(EditMode mode)
     {
         _currentTool = _application.ToolsController.ChangeTool(mode);
+        return Observable.Return(Unit.Default);
+    }
+
+    private IObservable<Unit> OpenDialog()
+    {
+        var exportFileDialog = InitializeExportDialog();
+        if (exportFileDialog.ShowDialog() != true)
+        {
+            return Observable.Return(Unit.Default);
+        }
+        var filePath = GetFilePath(exportFileDialog);
+        var fileType = GetFileType(filePath);
+        Export.Execute((filePath, fileType));
+
         return Observable.Return(Unit.Default);
     }
 

@@ -118,7 +118,7 @@
                     Width="40"
                     Height="40"
                     Margin="14, 0, 14, 2"
-                    Style="{StaticResource RoundButtonStyle}"
+                    Style="{StaticResource CahgeButtonStyle}"
                     Click="ExportButton_Click"
                     >
                 <Image Source="/Icons/save.png" Stretch="Uniform"/>
