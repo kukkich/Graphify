@@ -29,12 +29,9 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         get
         {
             var controlPoints = new HashSet<Point>();
-            foreach (var line in _lines)
+            foreach (var point in _lines.SelectMany(line => line.ControlPoints))
             {
-                foreach (var point in line.ControlPoints)
-                {
-                    controlPoints.Add(point);
-                }
+                controlPoints.Add(point);
             }
 
             return controlPoints;
@@ -47,14 +44,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     {
         get
         {
-            foreach (var line in _lines)
-            {
-                if (!line.CanBeMoved)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return _lines.All(line => line.CanBeMoved);
         }
     }
 
@@ -161,7 +151,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     public void ConsumeDetach(Point attachable)
     {
         var maybeFindedEdge = _lines.Find(e => e.Attached.Contains(attachable));
-        if (maybeFindedEdge != null)
+        if (maybeFindedEdge is not null)
         {
             maybeFindedEdge.ConsumeDetach(attachable);
             return;
@@ -183,7 +173,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach(var p in ControlPoints)
+        foreach (var p in ControlPoints)
         {
             p.Rotate(shift, angle);
         }
@@ -207,7 +197,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
             p.Reflect(point);
         }
     }
-    
+
     /// <summary>
     /// Метод, отрисовывающий на экране полигон и отдельно каждую его грань
     /// </summary>
@@ -216,13 +206,11 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     {
         Style.ApplyStyle(drawer);
 
-        var points = new List<Vector2>();
-        foreach(var point in ControlPoints)
-        {
-            points.Add(new Vector2(point.X, point.Y));
-        }
+        var points = ControlPoints.Select(point => new Vector2(point.X, point.Y))
+            .ToList();
+
         drawer.DrawPolygon(points, ObjectState);
-        foreach(var line in _lines)
+        foreach (var line in _lines)
         {
             line.Draw(drawer);
         }
@@ -253,7 +241,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     {
         var pointsClones = ControlPoints.Select(c => (Point)c.Clone()).ToArray();
 
-        var polygonClone = 
+        var polygonClone =
             new Polygon(pointsClones, new PolygonStyle(Style.PrimaryColor, Style.LineColor, Style.Name, Style.Size))
             {
                 ObjectState = ObjectState

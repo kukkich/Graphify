@@ -1,6 +1,5 @@
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Draw;
-using Graphify.Client.Model.Interfaces;
 using Graphify.Client.Model.Tools;
 using Graphify.Core.Model.IO.Export;
 using Graphify.Core.Model.IO.Import;

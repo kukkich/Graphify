@@ -4,7 +4,7 @@ using Graphify.Geometry.Drawing;
 
 namespace Graphify.Client.View.Drawing.Point;
 
-public abstract class BasePointDrawer  : BaseGeometryObjectDrawer<Vector2>
+public abstract class BasePointDrawer : BaseGeometryObjectDrawer<Vector2>
 {
     protected BasePointDrawer(IBaseDrawer defaultDrawer) : base(defaultDrawer) { }
 

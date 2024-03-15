@@ -38,7 +38,6 @@ public class RotateTool : IApplicationTool
             }
 
             _angle += (newPosition.Y - _previousMousePosition.Y) * RotationSensitivity;
-
             Rotate(_point, (newPosition.Y - _previousMousePosition.Y) * RotationSensitivity);
         }
 
@@ -52,7 +51,7 @@ public class RotateTool : IApplicationTool
             geometricObject.Rotate(point, angle);
         }
     }
-    
+
     public void MouseDown(Vector2 clickPosition)
     {
         IGeometricObject closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
@@ -73,12 +72,12 @@ public class RotateTool : IApplicationTool
         {
             return;
         }
-        
+
         if (_point is not null)
         {
             _point.ObjectState = ObjectState.Selected;
         }
-            
+
         _point = point;
         _point.ObjectState = ObjectState.ControlPoint;
     }
@@ -105,7 +104,7 @@ public class RotateTool : IApplicationTool
         {
             return;
         }
-        
+
         _point.ObjectState = ObjectState.Selected;
         _point = null;
     }

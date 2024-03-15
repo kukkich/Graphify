@@ -20,24 +20,24 @@ public class AppViewModel : ReactiveObject
 
     public ReactiveCommand<Vector2, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> RightMouseDown { get; private set; }
-    
+
     public ReactiveCommand<Vector2, Unit> MouseDown { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> MouseMove { get; private set; }
-    
+
     public ReactiveCommand<Unit, Unit> Redo { get; private set; }
     public ReactiveCommand<Unit, Unit> Undo { get; private set; }
-    
+
     public ReactiveCommand<Unit, Unit> Copy { get; private set; }
     public ReactiveCommand<Unit, Unit> Paste { get; private set; }
     public ReactiveCommand<Unit, Unit> Cut { get; private set; }
-    
+
     public ReactiveCommand<Unit, Unit> SelectAll { get; private set; }
-    
+
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
-    
+
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
     public ReactiveCommand<string, Unit> Import { get; private set; }
 
@@ -53,30 +53,33 @@ public class AppViewModel : ReactiveObject
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
-        
+
         RightMouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseUpAction);
         RightMouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseDownAction);
-            
+
         MouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseDownAction);
         MouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseUpAction);
         MouseMove = ReactiveCommand.CreateFromObservable<Vector2, Unit>(MouseMoveAction);
 
         Undo = ReactiveCommand.CreateFromObservable(UndoChanges);
         Redo = ReactiveCommand.CreateFromObservable(RedoChanges);
-        
+
         Copy = ReactiveCommand.CreateFromObservable(CopyObjects);
         Cut = ReactiveCommand.CreateFromObservable(CutObjects);
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
 
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
+
+        EditingObject = null;
+        GeometryObjects = new SourceList<IGeometricObject>();
     }
-    
+
     private IObservable<Unit> RightMouseDownAction(Vector2 position)
     {
         _currentTool.RightMouseDown(position);
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> RightMouseUpAction(Vector2 position)
     {
         _currentTool.RightMouseUp(position);
@@ -88,7 +91,7 @@ public class AppViewModel : ReactiveObject
         _currentTool.MouseDown(position);
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> MouseUpAction(Vector2 position)
     {
         _currentTool.MouseUp(position);
@@ -106,13 +109,13 @@ public class AppViewModel : ReactiveObject
         _application.CommandsBuffer.Undo();
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> RedoChanges()
     {
         _application.CommandsBuffer.Redo();
         return Observable.Return(Unit.Default);
     }
-    
+
     private IObservable<Unit> CopyObjects()
     {
         _application.Copy();
@@ -142,7 +145,7 @@ public class AppViewModel : ReactiveObject
         _application.Exporter.Export(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
     }
-    
+
     private IObservable<Unit> SelectAllObject()
     {
         _application.Context.SelectAll();

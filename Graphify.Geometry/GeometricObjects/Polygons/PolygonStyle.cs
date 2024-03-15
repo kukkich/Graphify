@@ -1,5 +1,6 @@
 using System.Drawing;
 using Graphify.Geometry.Drawing;
+using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -7,10 +8,10 @@ namespace Graphify.Geometry.GeometricObjects.Polygons;
 
 public class PolygonStyle : ReactiveObject, IStyle
 {
-    [Reactive] public Color PrimaryColor { get; set; }
-    [Reactive] public Color LineColor { get; set; }
-    [Reactive] public string Name { get; set; }
-    [Reactive] public int Size { get; set; }
+    [Reactive, JsonProperty] public Color PrimaryColor { get; set; }
+    [Reactive, JsonProperty] public Color LineColor { get; set; }
+    [Reactive, JsonProperty] public string Name { get; set; }
+    [Reactive, JsonProperty] public int Size { get; set; }
     public static int DefaultSize { get; set; } = 4;
 
     public static PolygonStyle Default => new(Color.Orange, Color.Black, "Default", DefaultSize);
