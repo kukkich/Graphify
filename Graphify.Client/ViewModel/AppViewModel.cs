@@ -70,21 +70,6 @@ public class AppViewModel : ReactiveObject
 
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
 
-        // TODO remove
-        _application.Context.OnSurfaceChangedEvent += () =>
-        {
-            if (_application.Context.SelectedObjects.Any())
-            {
-                EditingObject = _application.Context.SelectedObjects.Last();
-            }
-
-            GeometryObjects.Clear();
-            foreach (var geometricObject in _application.Context.Surface.Objects)
-            {
-                GeometryObjects.Add(geometricObject);
-            }
-        };
-
         EditingObject = null;
         GeometryObjects = new SourceList<IGeometricObject>();
     }

@@ -24,7 +24,7 @@ public class GeometryFactory : IGeometryFactory
         _factoryMethods.Add(ObjectType.Circle, (points) => new Circle(points[0], points[1], CurveStyle.Default));
         _factoryMethods.Add(ObjectType.Polygon, (points) => new Polygon(points));
         _factoryMethods.Add(ObjectType.Line, (points) => new Line(points[0], points[1], CurveStyle.Default));
-        //FactoryMethods.Add(ObjectType.CubicBezier, (points, style) => new CubicBezierCurve()); // TODO: добавить фактори конструктор для кривой Безье
+        _factoryMethods.Add(ObjectType.CubicBezier, (points) => new CubicBezierCurve(points, CurveStyle.Default));
     }
 
     public IFigure Create(ObjectType type, Point[] points)

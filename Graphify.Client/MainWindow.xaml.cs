@@ -105,7 +105,7 @@ public partial class MainWindow
         {
             return;
         }
-        //ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+        ViewModel?.SetEditMode.Execute(EditMode.CreateBezierCurve);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {

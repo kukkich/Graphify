@@ -10,9 +10,6 @@ public class ApplicationContext
 {
     public Surface Surface { get; private set; }
     public IEnumerable<IGeometricObject> SelectedObjects => _selectedObjects;
-
-    public delegate void OnSurfaceChanged();
-    public event OnSurfaceChanged OnSurfaceChangedEvent;
     
     private readonly IGeometryFactory _factory;
 
@@ -28,14 +25,12 @@ public class ApplicationContext
     public void SetSurface(Surface newSurface)
     {
         Surface = newSurface;
-        OnSurfaceChangedEvent?.Invoke();
     }
 
     public Point CreatePoint(Vector2 pointCoords)
     {
         Point newPoint = _factory.Create(pointCoords);
         Surface.AddObject(newPoint);
-        OnSurfaceChangedEvent?.Invoke();
         
         return newPoint;
     }
@@ -44,7 +39,6 @@ public class ApplicationContext
     {
         IFigure newFigure = _factory.Create(type, points);
         Surface.AddObject(newFigure);
-        OnSurfaceChangedEvent?.Invoke();
 
         return newFigure;
     }
@@ -52,7 +46,6 @@ public class ApplicationContext
     public void AddObject(IGeometricObject geometricObject)
     {
         Surface.AddObject(geometricObject);
-        OnSurfaceChangedEvent?.Invoke();
     }
 
     public IGeometricObject? Select(Vector2 position, bool clearPrevious)
@@ -99,7 +92,6 @@ public class ApplicationContext
 
         _selectedObjects.AddLast(geometricObject);
         geometricObject.ObjectState = ObjectState.Selected;
-        OnSurfaceChangedEvent?.Invoke();
     }
 
     public void UnSelect(IGeometricObject geometricObject)
@@ -116,7 +108,6 @@ public class ApplicationContext
 
         _selectedObjects.Remove(geometricObject);
         geometricObject.ObjectState = ObjectState.Default;
-        OnSurfaceChangedEvent?.Invoke();
     }
 
     public IEnumerable<IGeometricObject> SelectAll()
@@ -129,13 +120,11 @@ public class ApplicationContext
             geometricObject.ObjectState = ObjectState.Selected;
         }
 
-        OnSurfaceChangedEvent?.Invoke();
         return _selectedObjects;
     }
 
     public void ClearSelected()
     {
-        OnSurfaceChangedEvent?.Invoke();
         foreach (var geometricObject in _selectedObjects)
         {
             geometricObject.ObjectState = ObjectState.Default;

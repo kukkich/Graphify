@@ -9,7 +9,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Curves;
 
-public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
+public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 {
     [Reactive] public CurveStyle Style { get; set; }
     [Reactive] public ObjectState ObjectState { get; set; }
@@ -54,7 +54,7 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
     /// <param name="points"> - массив опорных точек кривой</param>
     /// <param name="style"> - стиль кривой. <c>CurveStyle.Default</c>, если <c>null</c></param>
     /// <exception cref="InvalidDataException"> - исключение в случае, если размер <c>points</c> != 4</exception>
-    protected CubicBezierCurve(Point[] points, CurveStyle? style = null)
+    public CubicBezierCurve(Point[] points, CurveStyle? style = null)
     {
         if (points.Length != 4)
         {
@@ -192,7 +192,15 @@ public abstract class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveS
         }
     }
 
-    public void Draw(IDrawer drawer) => throw new NotImplementedException();
+    public void Draw(IDrawer drawer)
+    {
+        Style.ApplyStyle(drawer);
+
+        var points = ControlPoints.Select(point => new Vector2(point.X, point.Y))
+            .ToList();
+
+        drawer.DrawBezierCurve(points, ObjectState);
+    }
 
     public FigureExportData GetExportData()
     {
