@@ -43,6 +43,8 @@ public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
 
         CreateFile(path);
 
+        _logger.LogDebug("Successfully export to gfy!");
+
         _points.Clear();
         _figures.Clear();
     }
