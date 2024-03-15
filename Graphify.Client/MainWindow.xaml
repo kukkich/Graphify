@@ -17,7 +17,7 @@
         <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectAll}" />
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
-        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Export}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding OpenExportDialogCommand}" />
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="ObjectOptionsButton">

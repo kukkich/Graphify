@@ -113,38 +113,9 @@ public partial class MainWindow
         {
             return;
         }
-        SaveFileDialog exportFileDialog = new SaveFileDialog
-        {
-            FileName = "test.svg",
-            DefaultExt = ".svg",
-            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
-            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
-            CheckFileExists = false
-        };
-
-        if (exportFileDialog.ShowDialog() != true)
-        {
-            return;
-        }
-
-        string filePath = exportFileDialog.FileName;
-        string selectedExtension = Path.GetExtension(filePath);
-        ExportFileType fileType = SelectFileType(selectedExtension);
-        ViewModel?.Export.Execute((filePath, fileType));
+        ViewModel?.OpenExportDialogCommand.Execute();
     }
 
-    // что возвращать, если пришла белиберда? TODO
-    private ExportFileType SelectFileType(string selectedExtension)
-    {
-        ExportFileType fileType = selectedExtension switch
-        {
-            ".svg" => ExportFileType.Svg,
-            ".png" => ExportFileType.Png,
-            ".grafify" => ExportFileType.Custom,
-            _ => throw new InvalidOperationException(selectedExtension)
-        };
-        return fileType;
-    }
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
     {
