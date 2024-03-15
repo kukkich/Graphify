@@ -107,6 +107,22 @@ public partial class MainWindow
         }
         //ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
     }
+    private void RotateModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.Rotate);
+    }
+    private void ReflectModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.Reflect);
+    }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
@@ -179,4 +195,6 @@ public partial class MainWindow
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
+
+    
 }
