@@ -14,6 +14,10 @@ using Graphify.Geometry.GeometricObjects.Points;
 using System.Drawing;
 using ReactiveUI.Fody.Helpers;
 using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
+using Graphify.Geometry.GeometricObjects.Interfaces;
+using DynamicData;
+using System;
 
 namespace Graphify.Client;
 
@@ -21,12 +25,15 @@ public partial class MainWindow
 {
     private readonly OpenGLDrawer _drawer;
     private OpenGL _gl;
-
+    ReadOnlyObservableCollection<IGeometricObject> geometricObjects;
+    public ReadOnlyObservableCollection<IGeometricObject> GeometricObjects => geometricObjects;
     public MainWindow(AppViewModel viewModel, OpenGLDrawer drawer)
     {
         _drawer = drawer;
         ViewModel = viewModel;
         DataContext = viewModel;
+        var todispose=this.ViewModel.GeometryObjects.Connect().Bind(out geometricObjects)
+        .Subscribe();
         InitializeComponent();
 
         this.WhenActivated(disposables =>
@@ -39,6 +46,7 @@ public partial class MainWindow
                     _drawer.InitGl(_gl);
                 })
                 .DisposeWith(disposables);
+            todispose.DisposeWith(disposables);
         });
 
         this.listGeometryObjects.DataContext = viewModel; //dont work

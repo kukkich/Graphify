@@ -18,7 +18,7 @@ public class AppViewModel : ReactiveObject
 {
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
-    public SourceList<IGeometricObject> GeometryObjects { get; set; }
+    public SourceCache<IGeometricObject, IGeometricObject> GeometryObjects { get; set; }
 
     public ReactiveCommand<Unit, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Unit, Unit> RightMouseDown { get; private set; }
@@ -45,8 +45,8 @@ public class AppViewModel : ReactiveObject
         _exporter = exporter;
 
         // for tests
-        GeometryObjects = new SourceList<IGeometricObject>();
-        GeometryObjects.AddRange([
+        GeometryObjects = new SourceCache<IGeometricObject, IGeometricObject>(a=>a);
+        GeometryObjects.AddOrUpdate([
             new Point(1,1),
             new Point(2,2),
             new Circle( new Point(1,1), new Point(2,2))
