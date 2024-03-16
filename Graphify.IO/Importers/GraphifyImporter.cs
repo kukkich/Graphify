@@ -1,6 +1,7 @@
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -28,8 +29,6 @@ public partial class GraphifyImporter : IImporter
 
     public ImportResult ImportFrom(string path)
     {
-        ImportResult result = new ImportResult();
-
         string jsonString = File.ReadAllText(path);
 
         int indexItem1 = jsonString.IndexOf("Item1") + ShiftToOpeningBracket;
@@ -70,7 +69,7 @@ public partial class GraphifyImporter : IImporter
 
         _logger.LogDebug("Successfully import!");
 
-        return result;
+        return new ImportResult() { Points = _points, Figures = _figures };
     }
 
     private void AddFigures()
@@ -156,27 +155,105 @@ public partial class GraphifyImporter : IImporter
 
         if (attachedPoints is not null)
         {
-            foreach (Point item in attachedPoints)
+            foreach (Point point in attachedPoints)
             {
-                item.AttachTo(line);
+                point.AttachTo(line);
             }
         }
 
         _figures.Add(line);
     }
 
-    private void AddCircle(JsonFigureObject item) => throw new NotImplementedException();
-
-    private void AddPolygon(JsonFigureObject item) => throw new NotImplementedException();
-
-    private void AddCubicBezire(JsonFigureObject item) => throw new NotImplementedException();
-
-    private void Clear()
+    private void AddCircle(JsonFigureObject circleObject)
     {
-        _points.Clear();
-        _figures.Clear();
+        CurveStyle circleStyle = new CurveStyle(
+                    circleObject.Style.PrimaryColor,
+                    circleObject.Style.Name,
+                    (circleObject.Style as CurveStyle ?? CurveStyle.Default).Size
+                );
 
-        _jsonPointObjects?.Clear();
-        _jsonFigureObjects?.Clear();
+        List<Point>? controlPoints = CreateListPoints(circleObject.ControlPoints);
+        List<Point>? attachedPoints = CreateListPoints(circleObject.AttachedPoint);
+
+        if (controlPoints is null || (controlPoints.Count > 2))
+        {
+            _logger.LogError("The number of points to build a circle is not equal to 2. The number of points contained: {pointsCount}", controlPoints?.Count);
+            throw new ArgumentException("");
+        }
+
+        Circle circle = new(controlPoints[0], controlPoints[1], circleStyle);
+
+        if (attachedPoints is not null)
+        {
+            foreach (Point point in attachedPoints)
+            {
+                point.AttachTo(circle);
+            }
+        }
+
+        _figures.Add(circle);
+    }
+
+    private void AddPolygon(JsonFigureObject polygonObject)
+    {
+        PolygonStyle polygonStyle = new PolygonStyle(
+            polygonObject.Style.PrimaryColor,
+            (polygonObject.Style as PolygonStyle ?? PolygonStyle.Default).LineColor,
+            polygonObject.Style.Name,
+            (polygonObject.Style as PolygonStyle ?? PolygonStyle.Default).Size
+        );
+
+        List<Point>? controlPoints = CreateListPoints(polygonObject.ControlPoints);
+        List<Point>? attachedPoints = CreateListPoints(polygonObject.AttachedPoint);
+
+        if (controlPoints is null || (controlPoints.Count < 3))
+        {
+            _logger.LogError("The number of points to build a polygon is less than 3. The number of points contained: {pointsCount}", controlPoints?.Count);
+            throw new ArgumentException("");
+        }
+
+        Point[] points = [.. controlPoints];
+        Polygon polygon = new(points, polygonStyle);
+
+        if (attachedPoints is not null)
+        {
+            foreach (Point point in attachedPoints)
+            {
+                point.AttachTo(polygon);
+            }
+        }
+
+        _figures.Add(polygon);
+    }
+
+    private void AddCubicBezire(JsonFigureObject cubicBezireObject)
+    {
+        CurveStyle cubicBezireStyle = new CurveStyle(
+                    cubicBezireObject.Style.PrimaryColor,
+                    cubicBezireObject.Style.Name,
+                    (cubicBezireObject.Style as CurveStyle ?? CurveStyle.Default).Size
+                );
+
+        List<Point>? controlPoints = CreateListPoints(cubicBezireObject.ControlPoints);
+        List<Point>? attachedPoints = CreateListPoints(cubicBezireObject.AttachedPoint);
+
+        if (controlPoints is null || (controlPoints.Count != 4))
+        {
+            _logger.LogError("The number of points to build a cubic bezire is not equal to 4. The number of points contained: {pointsCount}", controlPoints?.Count);
+            throw new ArgumentException("");
+        }
+
+        Point[] points = [.. controlPoints];
+        CubicBezierCurve cubicBezire = new(points, cubicBezireStyle);
+
+        if (attachedPoints is not null)
+        {
+            foreach (Point point in attachedPoints)
+            {
+                point.AttachTo(cubicBezire);
+            }
+        }
+
+        _figures.Add(cubicBezire);
     }
 }
