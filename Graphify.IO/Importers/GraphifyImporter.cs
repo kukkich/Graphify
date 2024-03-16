@@ -1,109 +1,154 @@
-using Graphify.Geometry.Drawing;
+using System.Xml.Xsl;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Polygons;
+using Graphify.IO.Exporters;
 using Graphify.IO.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using ReactiveUI;
 
 namespace Graphify.IO.Importers;
 
-public class GraphifyImporter : IImporter
+public partial class GraphifyImporter : IImporter
 {
-    private List<JsonPointObject> _jsonPointObject = [];
+    private const byte ShiftToOpeningBracket = 8;
 
-    private List<JsonFigureObject> _jsonFigureObject = [];
+    private readonly ILogger<GraphifyImporter> _logger;
 
-    private List<Point> _points = [];
+    private readonly List<Point> _points = [];
 
-    private List<IFigure> _figures = [];
+    private readonly List<IFigure> _figures = [];
+
+    private List<JsonPointObject> _jsonPointObjects = [];
+
+    private List<JsonFigureObject> _jsonFigureObjects = [];
+
+    public GraphifyImporter(ILogger<GraphifyImporter> logger)
+    {
+        _logger = logger;
+    }
 
     public ImportResult ImportFrom(string path)
     {
         ImportResult result = new ImportResult();
 
         string jsonString = File.ReadAllText(path);
-        int indexStartItem1 = jsonString.IndexOf("[");
-        int indexStartItem2 = jsonString.IndexOf("2\": [") + 4;
 
-        string jsonStringItem1 = jsonString.Substring(indexStartItem1, jsonString.IndexOf("]") - indexStartItem1 + 1);
-        string jsonStringItem2 = jsonString.Substring(indexStartItem2, jsonString.LastIndexOf('}') - indexStartItem2);
+        int indexItem1 = jsonString.IndexOf("Item1") + ShiftToOpeningBracket;
+        int indexItem2 = jsonString.IndexOf("Item2") + ShiftToOpeningBracket;
+        int lengthItem1 = indexItem2 - indexItem1 - 14;
 
-        _jsonPointObject = JsonConvert.DeserializeObject<List<JsonPointObject>>(jsonStringItem1);
-        _jsonFigureObject = JsonConvert.DeserializeObject<List<JsonFigureObject>>(jsonStringItem2);
+        string jsonStringItem1 = jsonString.Substring(indexItem1, lengthItem1);
+        string jsonStringItem2 = jsonString[indexItem2..jsonString.LastIndexOf('}')];
+
+        _jsonPointObjects = JsonConvert.DeserializeObject<List<JsonPointObject>>(jsonStringItem1);
+        _jsonFigureObjects = JsonConvert.DeserializeObject<List<JsonFigureObject>>(jsonStringItem2);
 
         AddObjects();
 
-        _jsonPointObject.Clear();
-        _jsonFigureObject.Clear();
+        _jsonPointObjects.Clear(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        _jsonFigureObjects.Clear();
 
         return result;
     }
 
     private void AddObjects()
     {
-        foreach (var item in _jsonPointObject)
+        foreach (JsonPointObject pointObject in _jsonPointObjects)
         {
-            _points.Add(new Point(item.Position.X, item.Position.Y, item.Style));
+            AddPoint(pointObject);
         }
 
-        foreach (var item in _jsonFigureObject)
+        foreach (JsonFigureObject figureObject in _jsonFigureObjects)
         {
-            switch (item.ObjectType)
+            switch (figureObject.ObjectType)
             {
-                case ObjectType.Circle: AddCircle(item); break;
-                case ObjectType.Line: AddLine(item); break;
-                case ObjectType.CubicBezier: AddCubicBezire(item); break;
-                case ObjectType.Polygon: AddPolygon(item); break;
+                case ObjectType.Circle: AddCircle(figureObject); break;
+                case ObjectType.Line: AddLine(figureObject); break;
+                case ObjectType.CubicBezier: AddCubicBezire(figureObject); break;
+                case ObjectType.Polygon: AddPolygon(figureObject); break;
+            }
+        }
+    }
+
+    private Point? CreatePoint(uint id)
+    {
+        foreach (JsonPointObject point in _jsonPointObjects)
+        {
+            if (point.Id == id)
+            {
+                float x = point.Position.X;
+                float y = point.Position.Y;
+
+                return new Point(x, y, point.Style);
             }
         }
 
+        return null;
     }
 
-    private void AddLine(JsonFigureObject item)
+    private List<Point>? CreateListPoints(uint[]? idPoints)
     {
-        var style = new CurveStyle(item.Style.PrimaryColor, item.Style.Name, (item.Style as CurveStyle ?? CurveStyle.Default).Size);
+        if (idPoints == null)
+        {
+            return null;
+        }
 
-        //_figures.Add();
+        List<Point> points = [];
+
+        foreach (uint idControlPoint in idPoints)
+        {
+            Point? point = CreatePoint(idControlPoint);
+
+            if (point == null)
+            {
+                continue;
+            }
+
+            points.Add(point);
+        }
+
+        return points;
     }
+
+    private void AddPoint(JsonPointObject pointObject)
+    {
+        _points.Add(new Point(pointObject.Position.X, pointObject.Position.Y, pointObject.Style));
+    }
+
+    private void AddLine(JsonFigureObject lineObject)
+    {
+        CurveStyle lineStyle = new CurveStyle(
+                            lineObject.Style.PrimaryColor,
+                            lineObject.Style.Name,
+                            (lineObject.Style as CurveStyle ?? CurveStyle.Default).Size
+                        );
+
+        List<Point>? controlPoints = CreateListPoints(lineObject.ControlPoints);
+        List<Point>? attachedPoints = CreateListPoints(lineObject.AttachedPoint);
+
+        if (controlPoints is null || (controlPoints.Count > 2))
+        {
+            _logger.LogError("The number of points to build a line is not equal to 2. The number of points contained: {pointsCount}", controlPoints?.Count);
+            throw new ArgumentException("");
+        }
+
+        Line line = new(controlPoints[0], controlPoints[1], lineStyle);
+
+        if (attachedPoints is not null)
+        {
+            foreach (Point item in attachedPoints)
+            {
+                item.AttachTo(line);
+            }
+        }
+
+        _figures.Add(line);
+    }
+
     private void AddCircle(JsonFigureObject item) => throw new NotImplementedException();
     private void AddPolygon(JsonFigureObject item) => throw new NotImplementedException();
     private void AddCubicBezire(JsonFigureObject item) => throw new NotImplementedException();
-
-    public class StyleConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return (objectType == typeof(IStyle));
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-
-            JObject styleObject = JObject.Load(reader);
-
-            string styleType = (string)styleObject["LineColor"];
-
-            if (styleType != null)
-            {
-                return styleObject.ToObject<PolygonStyle>(serializer);
-            }
-
-            styleType = (string)styleObject["Variant"];
-
-            if (styleType != null)
-            {
-                return styleObject.ToObject<PointStyle>(serializer);
-            }
-
-            return styleObject.ToObject<CurveStyle>(serializer);
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-        public override bool CanWrite => false;
-    }
 }
