@@ -1,13 +1,9 @@
-using System.Xml.Xsl;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.GeometricObjects.Polygons;
-using Graphify.IO.Exporters;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ReactiveUI;
 
 namespace Graphify.IO.Importers;
 
@@ -21,9 +17,9 @@ public partial class GraphifyImporter : IImporter
 
     private readonly List<IFigure> _figures = [];
 
-    private List<JsonPointObject> _jsonPointObjects = [];
+    private List<JsonPointObject>? _jsonPointObjects = [];
 
-    private List<JsonFigureObject> _jsonFigureObjects = [];
+    private List<JsonFigureObject>? _jsonFigureObjects = [];
 
     public GraphifyImporter(ILogger<GraphifyImporter> logger)
     {
@@ -46,22 +42,40 @@ public partial class GraphifyImporter : IImporter
         _jsonPointObjects = JsonConvert.DeserializeObject<List<JsonPointObject>>(jsonStringItem1);
         _jsonFigureObjects = JsonConvert.DeserializeObject<List<JsonFigureObject>>(jsonStringItem2);
 
-        AddObjects();
+        if (_jsonFigureObjects is null && _jsonPointObjects is null)
+        {
+            _logger.LogError("There is no data to import!");
+            throw new InvalidDataException("There is no data to import!");
+        }
 
-        _jsonPointObjects.Clear(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        _jsonFigureObjects.Clear();
+        if (_jsonFigureObjects is not null && _jsonPointObjects is null)
+        {
+            _logger.LogError("There can be no shapes without dots!");
+            throw new InvalidDataException("There can be no shapes without dots!");
+        }
+
+        if (_jsonFigureObjects is null && _jsonPointObjects is not null)
+        {
+            AddPoints();
+            Clear();
+
+            _logger.LogDebug("Successfully import!");
+
+            return new ImportResult() { Figures = _figures, Points = _points };
+        }
+
+        AddPoints();
+        AddFigures();
+        Clear();
+
+        _logger.LogDebug("Successfully import!");
 
         return result;
     }
 
-    private void AddObjects()
+    private void AddFigures()
     {
-        foreach (JsonPointObject pointObject in _jsonPointObjects)
-        {
-            AddPoint(pointObject);
-        }
-
-        foreach (JsonFigureObject figureObject in _jsonFigureObjects)
+        foreach (JsonFigureObject figureObject in _jsonFigureObjects!)
         {
             switch (figureObject.ObjectType)
             {
@@ -75,7 +89,7 @@ public partial class GraphifyImporter : IImporter
 
     private Point? CreatePoint(uint id)
     {
-        foreach (JsonPointObject point in _jsonPointObjects)
+        foreach (JsonPointObject point in _jsonPointObjects!)
         {
             if (point.Id == id)
             {
@@ -113,9 +127,12 @@ public partial class GraphifyImporter : IImporter
         return points;
     }
 
-    private void AddPoint(JsonPointObject pointObject)
+    private void AddPoints()
     {
-        _points.Add(new Point(pointObject.Position.X, pointObject.Position.Y, pointObject.Style));
+        foreach (JsonPointObject pointObject in _jsonPointObjects!)
+        {
+            _points.Add(new Point(pointObject.Position.X, pointObject.Position.Y, pointObject.Style));
+        }
     }
 
     private void AddLine(JsonFigureObject lineObject)
@@ -149,6 +166,17 @@ public partial class GraphifyImporter : IImporter
     }
 
     private void AddCircle(JsonFigureObject item) => throw new NotImplementedException();
+
     private void AddPolygon(JsonFigureObject item) => throw new NotImplementedException();
+
     private void AddCubicBezire(JsonFigureObject item) => throw new NotImplementedException();
+
+    private void Clear()
+    {
+        _points.Clear();
+        _figures.Clear();
+
+        _jsonPointObjects?.Clear();
+        _jsonFigureObjects?.Clear();
+    }
 }
