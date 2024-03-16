@@ -1,4 +1,4 @@
-﻿using Graphify.Geometry.Drawing;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Polygons;
@@ -16,21 +16,18 @@ public partial class GraphifyImporter
             return (objectType == typeof(IStyle));
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-
             JObject styleObject = JObject.Load(reader);
 
-            string styleType = (string)styleObject["LineColor"];
+            string? styleType = styleObject["LineColor"]?.ToString();
 
-            if (styleType != null)
+            if (styleType is not null)
             {
                 return styleObject.ToObject<PolygonStyle>(serializer);
             }
 
-            styleType = (string)styleObject["Variant"];
-
-            if (styleType != null)
+            if (styleType is not null)
             {
                 return styleObject.ToObject<PointStyle>(serializer);
             }
@@ -38,10 +35,11 @@ public partial class GraphifyImporter
             return styleObject.ToObject<CurveStyle>(serializer);
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
+
         public override bool CanWrite => false;
     }
 }
