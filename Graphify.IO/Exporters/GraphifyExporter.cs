@@ -2,6 +2,7 @@ using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.IO.Interfaces;
+using Graphify.IO.JSON.Objects;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
