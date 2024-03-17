@@ -1,8 +1,9 @@
-using Aspose.Svg;
-using Aspose.Svg.Converters;
-using Aspose.Svg.Saving;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Text;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.IO.Interfaces;
+using Svg;
 
 namespace Graphify.IO.Exporters;
 
@@ -28,9 +29,14 @@ public sealed class PNGExporter : IExporter
 
     private static void ConvertSvgToPng(string path, string svgPath)
     {
-        using var document = new SVGDocument(svgPath);
-        var pngSaveOptions = new ImageSaveOptions();
+        byte[] byteArray = Encoding.ASCII.GetBytes(svgPath);
+
+        using var stream = new MemoryStream(byteArray);
+
+        SvgDocument svgDocument = SvgDocument.Open(svgPath);
+
+        Bitmap bitmap = svgDocument.Draw();
         
-        Converter.ConvertSVG(document, pngSaveOptions, path);
+        bitmap.Save(path, ImageFormat.Png);
     }
 }
