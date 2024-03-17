@@ -252,14 +252,10 @@ public sealed class SVGExporter : IExporter
     {
         const string str = "<text y=\"15\" style=\"font-family:Times New Roman; font-size:15px; fill:red;\" >Evaluation Only. Created with Aspose.SVG. Copyright 2018-2024 Aspose Pty Ltd.</text>";
 
-        int lastIndex = path.LastIndexOf('.');
-
-        using StreamReader reader = new(path);
-        using StreamWriter writer = new(path.Insert(lastIndex, "WW"));
-
-        var content = reader.ReadLine();
-        var newContent = content!.Replace(str, "");
-
-        writer.WriteLine(newContent);
+        var content = File.ReadLines(path).ToArray()[0];
+        
+        var newContent = content.Replace(str, "");
+        
+        File.WriteAllText(path, newContent);
     }
 }
