@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
@@ -16,13 +16,13 @@ public class PointCircleDrawer : BasePointDrawer
 
     protected override void DrawSelected(Vector2 point, DrawSettings settings)
     {
-        defaultDrawer.DrawPoint(point, settings.PointColor, settings.PointSize);
         defaultDrawer.DrawFilledCircle(point, settings.PointSize, settings.PointColor);
-        defaultDrawer.DrawBorderOfCircle(point, 10, settings.PointColor, 2);
+        defaultDrawer.DrawBorderOfCircle(point, settings.PointSize + 10, settings.PointColor, 2);
     }
 
     protected override void DrawControlPoint(Vector2 point, DrawSettings settings)
     {
-        defaultDrawer.DrawPoint(point, Color.Aqua, settings.PointSize);
+        defaultDrawer.DrawFilledCircle(point, settings.PointSize, settings.PointColor);
+        defaultDrawer.DrawBorderOfCircle(point, settings.PointSize + 4, Color.Aqua, 2);
     }
 }

@@ -5,18 +5,21 @@ namespace Graphify.Client.Model.Commands;
 
 public class ReflectCommand : ICommand
 {
-    private readonly IGeometricObject _geometricObject;
+    private readonly IEnumerable<IGeometricObject> _geometricObjects;
     private readonly Point _point;
 
-    public ReflectCommand(IGeometricObject geometricObject, Point point)
+    public ReflectCommand(IEnumerable<IGeometricObject> geometricObjects, Point point)
     {
-        _geometricObject = geometricObject;
+        _geometricObjects = geometricObjects;
         _point = point;
     }
 
     public void Execute()
     {
-        _geometricObject.Reflect(_point);
+        foreach (var geometricObject in _geometricObjects)
+        {
+            geometricObject.Reflect(_point);
+        }
     }
 
     public void Undo()

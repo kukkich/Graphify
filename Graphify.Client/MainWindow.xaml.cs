@@ -105,7 +105,7 @@ public partial class MainWindow
         {
             return;
         }
-        //ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+        ViewModel?.SetEditMode.Execute(EditMode.CreateBezierCurve);
     }
     private void RotateModeButton_Click(object sender, RoutedEventArgs e)
     {
@@ -129,8 +129,26 @@ public partial class MainWindow
         {
             return;
         }
-        ViewModel?.OpenExportDialogCommand.Execute();
+        SaveFileDialog exportFileDialog = new SaveFileDialog
+        {
+            FileName = "test.svg",
+            DefaultExt = ".svg",
+            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            CheckFileExists = false
+        };
+
+        if (exportFileDialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        string filePath = exportFileDialog.FileName;
+        string selectedExtension = Path.GetExtension(filePath);
+        ExportFileType fileType = SelectFileType(selectedExtension);
+        ViewModel?.Export.Execute((filePath, fileType));
     }
+  
     private void ImportButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
@@ -138,6 +156,18 @@ public partial class MainWindow
             return;
         }
         ViewModel?.OpenImportDialogCommand.Execute();
+    }
+
+    private ExportFileType SelectFileType(string selectedExtension)
+    {
+        ExportFileType fileType = selectedExtension switch
+        {
+            ".svg" => ExportFileType.Svg,
+            ".png" => ExportFileType.Png,
+            ".grafify" => ExportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        return fileType;
     }
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
@@ -190,6 +220,19 @@ public partial class MainWindow
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
+    private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseUp.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
     private void GlWindow_MouseMove(object sender, MouseEventArgs args)
     {
         if (ViewModel is null)
@@ -203,5 +246,5 @@ public partial class MainWindow
         ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
-    
+
 }

@@ -304,6 +304,7 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                MouseDown="GlWindow_MouseDown"
+                               MouseUp="GlWindow_MouseUp"
                                MouseMove="GlWindow_MouseMove"
                                Grid.ColumnSpan="2"
                                />

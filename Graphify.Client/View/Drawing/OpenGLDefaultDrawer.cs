@@ -25,7 +25,7 @@ public class OpenGLDefaultDrawer : IBaseDrawer
 
         var controlPoints = points.ToList();
 
-        _gl.Color(color.R, color.G, color.B);
+        _gl.Color(color.R, color.G, color.B, color.A);
         for (double t = 0; t <= 1; t += 0.01)
         {
             double x = Math.Pow(1 - t, 3) * controlPoints[0].X +

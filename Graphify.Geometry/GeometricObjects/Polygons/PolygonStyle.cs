@@ -14,7 +14,7 @@ public class PolygonStyle : ReactiveObject, IStyle
     [Reactive, JsonProperty] public int Size { get; set; }
     public static int DefaultSize { get; set; } = 4;
 
-    public static PolygonStyle Default => new(Color.Orange, Color.Black, "Default", DefaultSize);
+    public static PolygonStyle Default => new(Color.FromArgb(0, 255, 255, 255), Color.Black, "Default", DefaultSize);
 
     public PolygonStyle(Color primary, Color lineColor, string name, int size)
     {

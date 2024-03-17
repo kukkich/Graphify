@@ -21,7 +21,6 @@ public class DrawLoop
     {
         _drawer = drawer;
         _context = applicationContext.Surface;
-        applicationContext.OnSurfaceChangedEvent += context => _context = context;
     }
 
     public void Initialize(float fps = 60)
