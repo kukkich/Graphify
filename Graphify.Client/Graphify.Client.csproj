@@ -20,6 +20,7 @@
     <None Remove="appsettings.json" />
     <None Remove="Icons\circle.png" />
     <None Remove="Icons\curve.png" />
+    <None Remove="Icons\import.png" />
     <None Remove="Icons\line.png" />
     <None Remove="Icons\move.png" />
     <None Remove="Icons\point.png" />
@@ -74,6 +75,7 @@
   <ItemGroup>
     <Resource Include="Icons\circle.png" />
     <Resource Include="Icons\curve.png" />
+    <Resource Include="Icons\import.png" />
     <Resource Include="Icons\line.png" />
     <Resource Include="Icons\move.png" />
     <Resource Include="Icons\point.png" />

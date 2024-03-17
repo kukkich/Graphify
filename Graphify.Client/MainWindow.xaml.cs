@@ -131,7 +131,14 @@ public partial class MainWindow
         }
         ViewModel?.OpenExportDialogCommand.Execute();
     }
-
+    private void ImportButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.OpenImportDialogCommand.Execute();
+    }
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
     {
