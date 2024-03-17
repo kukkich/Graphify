@@ -146,6 +146,7 @@ public sealed class SVGExporter : IExporter
             polygon => polygon
                 .Points(pointsSVG)
                 .Fill(dataPolygon.Style.PrimaryColor)
+                .Opacity(dataPolygon.Style.PrimaryColor.A / 255D)
                 .Stroke(Paint.None)
                 .Transform(t => t.Scale(1, -1))
             );
@@ -253,9 +254,9 @@ public sealed class SVGExporter : IExporter
         const string str = "<text y=\"15\" style=\"font-family:Times New Roman; font-size:15px; fill:red;\" >Evaluation Only. Created with Aspose.SVG. Copyright 2018-2024 Aspose Pty Ltd.</text>";
 
         var content = File.ReadLines(path).ToArray()[0];
-        
+
         var newContent = content.Replace(str, "");
-        
+
         File.WriteAllText(path, newContent);
     }
 }
