@@ -148,6 +148,15 @@ public partial class MainWindow
         ExportFileType fileType = SelectFileType(selectedExtension);
         ViewModel?.Export.Execute((filePath, fileType));
     }
+  
+    private void ImportButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.OpenImportDialogCommand.Execute();
+    }
 
     private ExportFileType SelectFileType(string selectedExtension)
     {
