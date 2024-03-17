@@ -3,6 +3,7 @@ using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
+using Graphify.IO.JSON.Objects;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -255,5 +256,14 @@ public partial class GraphifyImporter : IImporter
         }
 
         _figures.Add(cubicBezire);
+    }
+
+    private void Clear()
+    {
+        _points.Clear();
+        _figures.Clear();
+
+        _jsonPointObjects?.Clear();
+        _jsonFigureObjects?.Clear();
     }
 }

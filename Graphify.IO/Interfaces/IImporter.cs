@@ -1,3 +1,5 @@
+using Graphify.IO.Importers;
+
 namespace Graphify.IO.Interfaces;
 
 public interface IImporter
