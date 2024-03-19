@@ -275,36 +275,62 @@
             <ListBox.Resources>
                 <DataTemplate DataType="{x:Type points:Point}">
                     <StackPanel>
-                        <TextBox Text="{Binding X, Mode=OneWay}" />
-                        <TextBox Text="{Binding Y, Mode=OneWay}" />
-                        <TextBox Text="Точка" />
+                        <TextBlock Text="Точка" />
+                        <TextBlock Text="{Binding X, Mode=OneWay}" />
+                        <TextBlock Text="{Binding Y, Mode=OneWay}" />                        
                     </StackPanel>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type polygons:Polygon}">
                     <StackPanel>
-                        <TextBox Text="Полигон" />
+                        <TextBlock Text="Полигон" />
                     </StackPanel>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type curves:Circle}">
                     <StackPanel>
                         <!--<TextBox Text="{Binding ControlPoints}" />-->
-                        <TextBox Text="Окружность" />
+                        <TextBlock Text="Окружность" />
                     </StackPanel>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
                     <StackPanel>
-                        <!--<TextBox Text="{Binding ControlPoints}" />-->
-                        <TextBox Text="Кубическая кривая Безье" />
+                        <TextBlock Text="Кубическая кривая Безье" />
+                        <ItemsControl ItemsSource="{Binding ControlPoints}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Fill="{Binding CurveStyle.PrimaryColor}" Width="10" Height="10"/>
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type curves:Line}">
                     <StackPanel>
-                        <!--<TextBox Text="{Binding ControlPoints}" />-->
-                        <TextBox Text="Линия" />
+                        <ItemsControl ItemsSource="{Binding ControlPoints}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Fill="{Binding CurveStyle.PrimaryColor}" Width="10" Height="10"/>
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="Линия" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.Resources>

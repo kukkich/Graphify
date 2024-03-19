@@ -94,7 +94,9 @@ public class AppViewModel : ReactiveObject
         GeometryObjects.AddOrUpdate([
             new Point(1,1),
             new Point(2,2),
-            new Circle( new Point(1,1), new Point(2,2))
+            new Circle( new Point(1,1), new Point(2,2)),
+            new Line(new Point(1,1),
+            new Point(2,2))
         ]);
     }
 
