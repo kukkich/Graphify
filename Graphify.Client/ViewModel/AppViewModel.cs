@@ -6,6 +6,7 @@ using DynamicData;
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
@@ -80,7 +81,13 @@ public class AppViewModel : ReactiveObject
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
 
         EditingObject = null;
-        GeometryObjects = new SourceList<IGeometricObject>();
+
+        GeometryObjects = new SourceCache<IGeometricObject, IGeometricObject>(a => a);
+        GeometryObjects.AddOrUpdate([
+            new Point(1,1),
+            new Point(2,2),
+            new Circle( new Point(1,1), new Point(2,2))
+        ]);
     }
 
     public SaveFileDialog InitializeExportDialog()

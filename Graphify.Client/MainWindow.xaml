@@ -12,7 +12,7 @@
     xmlns:curves="clr-namespace:Graphify.Geometry.GeometricObjects.Curves;assembly=Graphify.Geometry"
     xmlns:polygons="clr-namespace:Graphify.Geometry.GeometricObjects.Polygons;assembly=Graphify.Geometry"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify">
+    Title="Graphify" Name="mainwin">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
@@ -24,7 +24,7 @@
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding OpenImportDialogCommand}" />
     </Window.InputBindings>
     <Window.Resources>
-        <ContextMenu x:Key="ObjectOptionsButton">
+        <ContextMenu x:Key="ObjectOptions">
             <MenuItem Header="Удалить"
                       Click="DeleteObjectButton_Click"/>
             <MenuItem Header="Клонировать"
@@ -256,7 +256,8 @@
                  Grid.Row="1"
                  Grid.Column="0"
                  x:Name="listGeometryObjects"
-                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}"> <!-- dont work -->
+                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}">
+            <!-- dont work -->
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
@@ -272,49 +273,49 @@
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.Resources>
-                                <DataTemplate DataType="{x:Type points:Point}">
-                                    <StackPanel>
-                                        <TextBox Text="{Binding X, Mode=OneWay}" />
-                                        <TextBox Text="{Binding Y, Mode=OneWay}" />
-                                        <TextBox Text="Точка" />
-                                    </StackPanel>
-                                </DataTemplate>
+                <DataTemplate DataType="{x:Type points:Point}">
+                    <StackPanel>
+                        <TextBox Text="{Binding X, Mode=OneWay}" />
+                        <TextBox Text="{Binding Y, Mode=OneWay}" />
+                        <TextBox Text="Точка" />
+                    </StackPanel>
+                </DataTemplate>
 
-                                <DataTemplate DataType="{x:Type polygons:Polygon}">
-                                    <StackPanel>
-                                        <TextBox Text="Полигон" />
-                                    </StackPanel>
-                                </DataTemplate>
+                <DataTemplate DataType="{x:Type polygons:Polygon}">
+                    <StackPanel>
+                        <TextBox Text="Полигон" />
+                    </StackPanel>
+                </DataTemplate>
 
-                                <DataTemplate DataType="{x:Type curves:Circle}">
-                                    <StackPanel>
-                                        <!--<TextBox Text="{Binding ControlPoints}" />-->
-                                        <TextBox Text="Окружность" />
-                                    </StackPanel>
-                                </DataTemplate>
+                <DataTemplate DataType="{x:Type curves:Circle}">
+                    <StackPanel>
+                        <!--<TextBox Text="{Binding ControlPoints}" />-->
+                        <TextBox Text="Окружность" />
+                    </StackPanel>
+                </DataTemplate>
 
-                                <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
-                                    <StackPanel>
-                                        <!--<TextBox Text="{Binding ControlPoints}" />-->
-                                        <TextBox Text="Кубическая кривая Безье" />
-                                    </StackPanel>
-                                </DataTemplate>
+                <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
+                    <StackPanel>
+                        <!--<TextBox Text="{Binding ControlPoints}" />-->
+                        <TextBox Text="Кубическая кривая Безье" />
+                    </StackPanel>
+                </DataTemplate>
 
-                                <DataTemplate DataType="{x:Type curves:Line}">
-                                    <StackPanel>
-                                        <!--<TextBox Text="{Binding ControlPoints}" />-->
-                                        <TextBox Text="Линия" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.Resources>
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel>
-                                                    <ContentControl Content="{Binding}"/>
-                                                    <Button Click="Button_Click"/>
-                                                </StackPanel>
-                                            </DataTemplate>                                            
-                                        </ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type curves:Line}">
+                    <StackPanel>
+                        <!--<TextBox Text="{Binding ControlPoints}" />-->
+                        <TextBox Text="Линия" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <ContentControl Content="{Binding}"/>
+                        <Button Click="Button_Click"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
         <sharpGL:OpenGLControl x:Name="GlWindow" 
                                Resized="GlWindow_Resized"

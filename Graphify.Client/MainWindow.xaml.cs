@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
@@ -5,9 +6,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DynamicData;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
@@ -26,7 +29,7 @@ public partial class MainWindow
         _drawer = drawer;
         ViewModel = viewModel;
         DataContext = viewModel;
-        var todispose=this.ViewModel.GeometryObjects.Connect().Bind(out geometricObjects)
+        var todispose = this.ViewModel.GeometryObjects.Connect().Bind(out geometricObjects)
         .Subscribe();
         InitializeComponent();
 
@@ -43,11 +46,11 @@ public partial class MainWindow
             todispose.DisposeWith(disposables);
         });
 
-        this.listGeometryObjects.DataContext = viewModel; //dont work
+       this.listGeometryObjects.DataContext = viewModel; //dont work
     }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu? cm = this.FindResource("cmButton") as ContextMenu;
+        ContextMenu? cm = this.FindResource("OptionsButton") as ContextMenu;
         cm.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
@@ -210,7 +213,7 @@ public partial class MainWindow
     }
     private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
+        ContextMenu cm = this.FindResource("ObjectOptions") as ContextMenu;
         cm.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
