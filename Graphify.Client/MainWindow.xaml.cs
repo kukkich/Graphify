@@ -54,34 +54,11 @@ public partial class MainWindow
             todispose.DisposeWith(disposables);
         });
 
-       this.listGeometryObjects.DataContext = viewModel; //dont work
-        {
-            new Figure()
-            {
-        ContextMenu? cm = this.FindResource("OptionsButton") as ContextMenu;
-                Type = "LightBlue"
-            },
-            new Figure()
-            {
-                Data = "B = (3.45, 2.1)",
-                Type = "LightBlue"
-            },
-            new Figure()
-            {
-                Data = "C = (0, 0)",
-                Type = "LightBlue"
-            },
-            new Figure()
-            {
-                Data = "f: Прямая(B, C)",
-                Type = "LightGray"
-            }
-        };
-        this.listGeometryObjects.ItemsSource = listObjects; //temporarily
+        this.listGeometryObjects.DataContext = viewModel;
     }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
+        ContextMenu cm = this.FindResource("OptionsButton") as ContextMenu;
         cm.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
@@ -240,7 +217,7 @@ public partial class MainWindow
 
     private void ZoomInButton_Click(object sender, RoutedEventArgs e)
     {
-
+    }
 
     private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
     {
@@ -269,7 +246,7 @@ public partial class MainWindow
     }
 
 
-    }
+    
     private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
     { }
     private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
@@ -287,9 +264,4 @@ public partial class MainWindow
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
   
-    public class Figure //temporarily
-    {
-        public string Data { get; set; }
-        public string Type { get; set; }
-    }
 }
