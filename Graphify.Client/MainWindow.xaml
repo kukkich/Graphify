@@ -9,7 +9,9 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify">
+    Title="Graphify"
+    MinWidth="850"
+    MinHeight="600">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
