@@ -18,6 +18,7 @@
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding OpenExportDialogCommand}" />
+        <KeyBinding Key="I" Modifiers="Control" Command="{Binding OpenImportDialogCommand}" />
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="ObjectOptionsButton">
@@ -70,13 +71,17 @@
                                     <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
                                     <Setter TargetName="border" Property="BorderThickness" Value="2"/>
                                 </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="red" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                                </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style.Setters>
         </Style>
-        <Style x:Key="CahgeButtonStyle" TargetType="Button">
+        <Style x:Key="ChangeButtonStyle" TargetType="Button">
             <Style.Setters>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -118,10 +123,19 @@
                     Width="40"
                     Height="40"
                     Margin="14, 0, 14, 2"
-                    Style="{StaticResource RoundButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="ExportButton_Click"
                     >
                 <Image Source="/Icons/save.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="ImportButton"
+                    Width="40"
+                    Height="40"
+                    Margin="14, 0, 14, 2"
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="ImportButton_Click"
+             >
+                <Image Source="/Icons/import.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="MoveModeButton"
                     Width="40"
@@ -188,7 +202,7 @@
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
                     Click="ReflectModeButton_Click">
-                
+                <Image Source="/Icons/reflect.png" Stretch="Uniform" Margin="2"/>
             </Button>
         </StackPanel>
         <StackPanel Grid.Row="0"
@@ -201,7 +215,7 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="UndoButton_Click">
                 <Image Source="/Icons/undo.png" Stretch="Uniform" Margin="2"/>
             </Button>
@@ -210,7 +224,7 @@
                     Height="40"
                     Margin="0, 0, 100, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="RedoButton_Click">
                 <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
             </Button>
@@ -219,7 +233,7 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="ZoomInButton_Click">
                 <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
             </Button>
@@ -228,7 +242,7 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="ZoomOutButton_Click">
                 <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
             </Button>
