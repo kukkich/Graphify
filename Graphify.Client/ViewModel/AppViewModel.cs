@@ -58,6 +58,14 @@ public class AppViewModel : ReactiveObject
         _application = application;
         _currentTool = application.ToolsController.ChangeTool(EditMode.Move);
 
+        // for tests
+        GeometryObjects = new SourceCache<IGeometricObject, IGeometricObject>(a=>a);
+        GeometryObjects.AddOrUpdate([
+            new Point(1,1),
+            new Point(2,2),
+            new Circle( new Point(1,1), new Point(2,2))
+        ]);
+
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
         Import = ReactiveCommand.CreateFromTask<string, Unit>(ImportFrom);

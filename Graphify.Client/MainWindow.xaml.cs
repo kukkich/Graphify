@@ -15,6 +15,14 @@ using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
+using Graphify.Geometry.GeometricObjects.Points;
+using System.Drawing;
+using ReactiveUI.Fody.Helpers;
+using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
+using Graphify.Geometry.GeometricObjects.Interfaces;
+using DynamicData;
+using System;
 
 namespace Graphify.Client;
 
@@ -47,10 +55,33 @@ public partial class MainWindow
         });
 
        this.listGeometryObjects.DataContext = viewModel; //dont work
+        {
+            new Figure()
+            {
+        ContextMenu? cm = this.FindResource("OptionsButton") as ContextMenu;
+                Type = "LightBlue"
+            },
+            new Figure()
+            {
+                Data = "B = (3.45, 2.1)",
+                Type = "LightBlue"
+            },
+            new Figure()
+            {
+                Data = "C = (0, 0)",
+                Type = "LightBlue"
+            },
+            new Figure()
+            {
+                Data = "f: Прямая(B, C)",
+                Type = "LightGray"
+            }
+        };
+        this.listGeometryObjects.ItemsSource = listObjects; //temporarily
     }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu? cm = this.FindResource("OptionsButton") as ContextMenu;
+        ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
         cm.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
@@ -210,29 +241,6 @@ public partial class MainWindow
     private void ZoomInButton_Click(object sender, RoutedEventArgs e)
     {
 
-    }
-    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
-    {
-        ContextMenu cm = this.FindResource("ObjectOptions") as ContextMenu;
-        cm.PlacementTarget = sender as Button;
-        cm.IsOpen = true;
-    }
-    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
-    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
-    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        var position = args.GetPosition((OpenGLControl)sender);
-        position.X -= GlWindow.ActualWidth / 2;
-        position.Y = GlWindow.ActualHeight / 2 - position.Y;
-        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
-    }
 
     private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
     {
@@ -261,4 +269,27 @@ public partial class MainWindow
     }
 
 
+    }
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+  
+    public class Figure //temporarily
+    {
+        public string Data { get; set; }
+        public string Type { get; set; }
+    }
 }
