@@ -12,6 +12,7 @@ using Graphify.Core.Model.IO.Import;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.IO.Exporters;
 using Graphify.IO.Extension;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -73,11 +74,12 @@ public class Program
 
     private static void ConfigureExportImport(IServiceCollection services)
     {
-        services.AddSingleton<Exporter>();
-        services.AddSingleton<Importer>();
+        services.AddScoped<Exporter>();
+        services.AddScoped<Importer>();
 
-        services.AddSingleton<IImporterFactory, ImporterFactory>();
-        services.AddSingleton<IExporterFactory, ExporterFactory>();
+        services.AddScoped<PNGExporter>();
+        services.AddScoped<SVGExporter>();
+        services.AddScoped<GraphifyExporter>();
     }
 
     private static void ConfigureApplication(IServiceCollection services)

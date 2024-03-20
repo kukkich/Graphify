@@ -40,10 +40,11 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
 
-    public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; private set; }
+    public ReactiveCommand<Unit, Unit> OpenImportDialogCommand { get; private set; }
 
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
-    public ReactiveCommand<string, Unit> Import { get; private set; }
+    public ReactiveCommand<(string Path, ImportFileType Format), Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
     private readonly Application _application;
@@ -57,17 +58,9 @@ public class AppViewModel : ReactiveObject
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
-        OpenExportDialogCommand = ReactiveCommand.Create(() =>
-        {
-            var exportFileDialog = InitializeExportDialog();
-            if (exportFileDialog.ShowDialog() != true)
-            {
-                return;
-            }
-            var filePath = GetFilePath(exportFileDialog);
-            var fileType = GetFileType(filePath);
-            Export.Execute((filePath, fileType));
-        });
+        Import = ReactiveCommand.CreateFromTask<(string Path, ImportFileType Format), Unit>(ImportFrom);
+        OpenExportDialogCommand = ReactiveCommand.CreateFromObservable(OpenExportDialog);
+        OpenImportDialogCommand = ReactiveCommand.CreateFromObservable(OpenImportDialog);
 
         RightMouseUp = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseUpAction);
         RightMouseDown = ReactiveCommand.CreateFromObservable<Vector2, Unit>(RightMouseDownAction);
@@ -87,13 +80,15 @@ public class AppViewModel : ReactiveObject
 
         EditingObject = null;
         GeometryObjects = new SourceList<IGeometricObject>();
+        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
+        _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
     }
 
     public SaveFileDialog InitializeExportDialog()
     {
         SaveFileDialog exportFileDialog = new SaveFileDialog
         {
-            FileName = "test.svg",
+            FileName = "test",
             DefaultExt = ".svg",
             Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
             InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
@@ -101,7 +96,7 @@ public class AppViewModel : ReactiveObject
         };
         return exportFileDialog;
     }
-    private ExportFileType SelectFileType(string selectedExtension)
+    private ExportFileType SelectExportFileType(string selectedExtension)
     {
         ExportFileType fileType = selectedExtension switch
         {
@@ -112,18 +107,94 @@ public class AppViewModel : ReactiveObject
         };
         return fileType;
     }
+    
+    private ImportFileType SelectImportFileType(string selectedExtension)
+    {
+        ImportFileType fileType = selectedExtension switch
+        {
+            ".png" => ImportFileType.Png,
+            ".grafify" => ImportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        
+        return fileType;
+    }
 
     public string GetFilePath(SaveFileDialog exportFileDialog)
     {
         string filePath = exportFileDialog.FileName;
-        return filePath;       
+        return filePath;
     }
-    public ExportFileType GetFileType(string path)
+    
+    public ExportFileType GetExportFileType(string path)
     {
         string selectedExtension = Path.GetExtension(path);
-        ExportFileType type = SelectFileType(selectedExtension);
+        ExportFileType type = SelectExportFileType(selectedExtension);
         return type;
     }
+    
+    public ImportFileType GetImportFileType(string path)
+    {
+        string selectedExtension = Path.GetExtension(path);
+        ImportFileType type = SelectImportFileType(selectedExtension);
+        return type;
+    }
+
+    private IObservable<Unit> OpenExportDialog()
+    {
+        var exportFileDialog = InitializeExportDialog();
+        if (exportFileDialog.ShowDialog() != true)
+        {
+            return Observable.Return(Unit.Default);
+        }
+        var filePath = GetFilePath(exportFileDialog);
+        var fileType = GetExportFileType(filePath);
+        Export.Execute((filePath, fileType));
+
+        return Observable.Return(Unit.Default);
+    }
+    public string GetFilePath(OpenFileDialog importFileDialog)
+    {
+        string filePath = importFileDialog.FileName;
+        return filePath;
+    }
+    private OpenFileDialog InitializeImportDialog()
+    {
+        OpenFileDialog importFileDialog = new OpenFileDialog
+        {
+            FileName = "test",
+            DefaultExt = ".grafify",
+            Filter = "Grafify image (*.grafify)|*.grafify",
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            CheckFileExists = false
+        };
+        return importFileDialog;
+    }
+    private IObservable<Unit> OpenImportDialog()
+    {
+        var importFileDialog = InitializeImportDialog();
+        if (importFileDialog.ShowDialog() != true)
+        {
+            return Observable.Return(Unit.Default);
+        }
+        var filePath = GetFilePath(importFileDialog);
+        var fileType = GetImportFileType(filePath);
+        Import.Execute((filePath, fileType));
+
+        return Observable.Return(Unit.Default);
+    }    
+
+    private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
+    {
+        _application.Exporter.Export(tuple.Format, tuple.Path);
+        return Task.FromResult(Unit.Default);
+    }
+    private Task<Unit> ImportFrom((string Path, ImportFileType Format) tuple)
+    {
+        _application.Importer.Import(tuple.Format,  tuple.Path);
+        return Task.FromResult(Unit.Default);
+    }
+
     private IObservable<Unit> RightMouseDownAction(Vector2 position)
     {
         _currentTool.RightMouseDown(position);
@@ -190,12 +261,7 @@ public class AppViewModel : ReactiveObject
         return Observable.Return(Unit.Default);
     }
 
-    private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
-    {
-        _application.Exporter.Export(tuple.Format, tuple.Path);
-        return Task.FromResult(Unit.Default);
-    }
-
+   
     private IObservable<Unit> SelectAllObject()
     {
         _application.Context.SelectAll();
