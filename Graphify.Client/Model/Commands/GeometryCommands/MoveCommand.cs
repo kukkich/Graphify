@@ -5,22 +5,28 @@ namespace Graphify.Client.Model.Commands;
 
 public class MoveCommand : ICommand
 {
-    private readonly IGeometricObject _geometricObject;
+    private readonly IEnumerable<IGeometricObject> _movedObjects;
     private readonly Vector2 _shift;
 
-    public MoveCommand(IGeometricObject geometricObject, Vector2 shift)
+    public MoveCommand(IEnumerable<IGeometricObject> movedObjects, Vector2 shift)
     {
-        _geometricObject = geometricObject;
+        _movedObjects = movedObjects;
         _shift = shift;
     }
 
     public void Execute()
     {
-        _geometricObject.Move(_shift);
+        foreach (var movedObject in _movedObjects)
+        {
+            movedObject.Move(_shift);
+        }
     }
 
     public void Undo()
     {
-        _geometricObject.Move(-_shift);
+        foreach (var movedObject in _movedObjects)
+        {
+            movedObject.Move(-_shift);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
@@ -37,8 +39,8 @@ public partial class MainWindow
                 .DisposeWith(disposables);
         });
 
-    }    
-  
+    }
+
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -84,6 +86,7 @@ public partial class MainWindow
         {
             return;
         }
+
         ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
     }
 
@@ -102,12 +105,70 @@ public partial class MainWindow
         {
             return;
         }
-        ViewModel?.SetEditMode.Execute(EditMode.CreateCurve);
+        ViewModel?.SetEditMode.Execute(EditMode.CreateBezierCurve);
+    }
+    private void RotateModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.Rotate);
+    }
+    private void ReflectModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.Reflect);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel?.Export.Execute(("../../../test.svg", ExportFileType.Svg));
-    }       
+        if (sender is not Button)
+        {
+            return;
+        }
+        SaveFileDialog exportFileDialog = new SaveFileDialog
+        {
+            FileName = "test.svg",
+            DefaultExt = ".svg",
+            Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            CheckFileExists = false
+        };
+
+        if (exportFileDialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        string filePath = exportFileDialog.FileName;
+        string selectedExtension = Path.GetExtension(filePath);
+        ExportFileType fileType = SelectFileType(selectedExtension);
+        ViewModel?.Export.Execute((filePath, fileType));
+    }
+  
+    private void ImportButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.OpenImportDialogCommand.Execute();
+    }
+
+    private ExportFileType SelectFileType(string selectedExtension)
+    {
+        ExportFileType fileType = selectedExtension switch
+        {
+            ".svg" => ExportFileType.Svg,
+            ".png" => ExportFileType.Png,
+            ".grafify" => ExportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        return fileType;
+    }
 
     private void UndoButton_Click(object sender, RoutedEventArgs e)
     {
@@ -158,4 +219,32 @@ public partial class MainWindow
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
+
+    private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseUp.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    private void GlWindow_MouseMove(object sender, MouseEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+
 }

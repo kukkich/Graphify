@@ -2,6 +2,7 @@ using System.Numerics;
 using Graphify.Geometry.Attaching;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -150,7 +151,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         Update();
     }
-    
+
     /// <summary>
     /// Обновляет фигуры, привязанные к данной точке
     /// </summary>
@@ -260,6 +261,15 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     {
         return new PointExportData(new Vector2(X, Y), Style);
     }
-    
-    public IGeometricObject Clone() => throw new NotImplementedException();
+
+    public IGeometricObject Clone()
+    {
+        var pointClone = new Point(X, Y,
+            new PointStyle(new CurveStyle(Style.PrimaryColor, Style.Name, Style.Size), Style.Variant))
+        {
+            ObjectState = ObjectState
+        };
+
+        return pointClone;
+    }
 }

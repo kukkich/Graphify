@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Graphify.Client.Model.Enums;
+﻿using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 
 namespace Graphify.Client.Model.Tools;
@@ -22,34 +21,29 @@ public class ToolsController
         }
     }
 
-    public void SetTool(EditMode editMode)
+    public IApplicationTool ChangeTool(EditMode editMode)
     {
         if (_currentTool is not null)
         {
-            _currentTool.Reset();
+            if (_currentTool.InProgress())
+            {
+                _currentTool.Cancel();
+            }
+
+            _currentTool.OnToolChanged();
         }
 
         _currentTool = GetTool(editMode);
+        return _currentTool;
     }
 
     private IApplicationTool GetTool(EditMode editMode)
     {
-        return _tools[editMode];
-    }
-
-    public void MouseDown(Vector2 position)
-    {
-        if (_currentTool is not null)
+        if (_tools.TryGetValue(editMode, out IApplicationTool tool))
         {
-            _currentTool.MouseDown(position);
+            return tool;
         }
-    }
 
-    public void MouseMove(Vector2 newPosition)
-    {
-        if (_currentTool is not null)
-        {
-            _currentTool.MouseMove(newPosition);
-        }
+        throw new ArgumentException($"There is no such tool {editMode}");
     }
 }

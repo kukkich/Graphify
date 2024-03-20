@@ -18,14 +18,14 @@ public class OpenGLDrawer : IDrawer
 
     private OpenGL _gl;
     private IBaseDrawer _defaultDrawer;
-    
+
     private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentBezierCurveDrawer;
     private IGeometryObjectDrawer<(Vector2, float)> _currentCircleDrawer;
     private IGeometryObjectDrawer<(Vector2, Vector2)> _currentLineDrawer;
-    
+
     private readonly Dictionary<PointVariant, IGeometryObjectDrawer<Vector2>> _pointVariantDrawers = [];
     private IGeometryObjectDrawer<Vector2> _currentPointDrawer;
-    
+
     private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentPolygonDrawer;
 
     public DrawSettings Settings { get; private set; }
@@ -34,24 +34,28 @@ public class OpenGLDrawer : IDrawer
     {
         _gl = gl;
         Settings = new DrawSettings();
-        
+
         _defaultDrawer = new OpenGLDefaultDrawer(gl);
-        
+
         _pointVariantDrawers.Add(PointVariant.Circle, new PointCircleDrawer(_defaultDrawer));
         _pointVariantDrawers.Add(PointVariant.Cross, new PointCrossDrawer(_defaultDrawer));
 
         _currentBezierCurveDrawer = new BaseBezierCurveDrawer(_defaultDrawer);
         _currentPolygonDrawer = new BasePolygonDrawer(_defaultDrawer);
         _currentCircleDrawer = new BaseCircleDrawer(_defaultDrawer);
-        _currentLineDrawer = new BaseLineDrawer( _defaultDrawer);
+        _currentLineDrawer = new BaseLineDrawer(_defaultDrawer);
     }
 
-    public void Reset()
+    public void Start()
     {
         _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         _gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
     }
-    
+    public void End()
+    {
+        _gl.Flush();
+    }
+
     public void DrawBezierCurve(IEnumerable<Vector2> points, ObjectState state)
     {
         _currentBezierCurveDrawer.Draw(points, state, Settings);
@@ -66,7 +70,7 @@ public class OpenGLDrawer : IDrawer
     {
         _currentLineDrawer.Draw((start, end), state, Settings);
     }
-    
+
     public void DrawPoint(Vector2 point, ObjectState state)
     {
         _currentPointDrawer = _pointVariantDrawers[Settings.PointVariant];

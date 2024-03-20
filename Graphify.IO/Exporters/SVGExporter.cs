@@ -7,22 +7,26 @@ using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.IO.Extension;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Graphify.IO.Exporters;
 
-public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
+public sealed class SVGExporter : IExporter
 {
     private const byte ExtraSize = 50;
 
-    private readonly ILogger<SVGExporter> _logger = logger;
+    private readonly ILogger<SVGExporter> _logger;
 
     private SVGSVGElementBuilder _svgElements = null!;
-
     private Vector2 LeftBottomBound { get; set; }
-
     private Vector2 RightTopBound { get; set; }
+
+    public SVGExporter(ILogger<SVGExporter> logger)
+    {
+        _logger = logger;
+    }
 
     public void Export(IGeometryContext context, string path)
     {
@@ -61,7 +65,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
         {
             case ObjectType.Line: AddLine(data, controlPoints); break;
             case ObjectType.Circle: AddCircle(data, controlPoints); break;
-            case ObjectType.Polygon:AddPolygon(data, controlPoints);  break;
+            case ObjectType.Polygon: AddPolygon(data, controlPoints); break;
             case ObjectType.CubicBezier: AddCubicBezier(data, controlPoints); break;
         }
     }
@@ -159,11 +163,10 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 
         _svgElements.AddPath(
             cubicBezier => cubicBezier
-                .D(
-                d => d
+                .D(d => d
                     .M(points[0].X, points[0].Y)
                     .C(points[1].X, points[1].Y, points[2].X, points[2].Y, points[3].X, points[3].Y)
-                    .Z())
+                )
                 .Fill(Paint.None)
                 .Stroke(dataBezier.Style.PrimaryColor)
                 .StrokeWidth((dataBezier.Style as CurveStyle ?? CurveStyle.Default).Size)
@@ -215,7 +218,7 @@ public sealed class SVGExporter(ILogger<SVGExporter> logger) : IExporter
 
         if (data.Position.Y > RightTopBound.Y)
         {
-            RightTopBound = new Vector2(data.Position.X, data.Position.Y);
+            RightTopBound = new Vector2(RightTopBound.X, data.Position.Y);
         }
     }
 

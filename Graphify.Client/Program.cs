@@ -12,7 +12,7 @@ using Graphify.Core.Model.IO.Import;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.IO;
+using Graphify.IO.Extension;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -84,9 +84,11 @@ public class Program
     {
         services.AddSingleton<Application>();
         services.AddSingleton<ApplicationContext>();
-        services.AddScoped<DrawLoop>();
         services.AddScoped<Surface>();
+        services.AddScoped<Clipboard>();
         services.AddScoped<IGeometryFactory, GeometryFactory>();
+
+        services.AddScoped<DrawLoop>();
         services.AddScoped<IDrawer, OpenGLDrawer>();
 
         services.AddScoped<CommandsBuffer>();
