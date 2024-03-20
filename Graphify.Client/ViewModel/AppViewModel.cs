@@ -82,6 +82,8 @@ public class AppViewModel : ReactiveObject
         
         EditingObject = null;
         GeometryObjects = new SourceList<IGeometricObject>();
+        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
+        _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
     }
 
     public SaveFileDialog InitializeExportDialog()
