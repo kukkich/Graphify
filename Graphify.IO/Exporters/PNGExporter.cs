@@ -1,8 +1,9 @@
-using Aspose.Svg;
-using Aspose.Svg.Converters;
-using Aspose.Svg.Saving;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Text;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.IO.Interfaces;
+using Svg;
 
 namespace Graphify.IO.Exporters;
 
@@ -15,24 +16,27 @@ public sealed class PNGExporter : IExporter
         _svgExporter = svgExporter;
     }
 
-    public void Export(IGeometryContext context, string path)
+    public void Export(IGeometryContext context, string pathPNG)
     {
-        string svgPath = Path.ChangeExtension(path, ".svg");
-        string svgPathWW = string.Join('\\', Path.GetDirectoryName(svgPath), Path.GetFileNameWithoutExtension(svgPath) + "WW.svg");
+        string pathSVG = Path.ChangeExtension(pathPNG, ".svg");
 
-        _svgExporter.Export(context, svgPath);
+        _svgExporter.Export(context, pathSVG);
 
-        ConvertSvgToPng(path, svgPathWW);
+        ConvertSvgToPng(pathPNG, pathSVG);
 
-        File.Delete(svgPath);
-        File.Delete(svgPathWW);
+        File.Delete(pathSVG);
     }
 
     private static void ConvertSvgToPng(string path, string svgPath)
     {
-        using var document = new SVGDocument(svgPath);
-        var pngSaveOptions = new ImageSaveOptions();
+        byte[] byteArray = Encoding.ASCII.GetBytes(svgPath);
+
+        using var stream = new MemoryStream(byteArray);
+
+        SvgDocument svgDocument = SvgDocument.Open(svgPath);
+
+        Bitmap bitmap = svgDocument.Draw();
         
-        Converter.ConvertSVG(document, pngSaveOptions, path);
+        bitmap.Save(path, ImageFormat.Png);
     }
 }
