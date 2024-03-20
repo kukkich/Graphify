@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Windows.Navigation;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.GeometricObjects.Polygons;
 
 namespace Graphify.Client.Model.Geometry;
 
@@ -21,7 +22,6 @@ public class Surface : IGeometryContext
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
 
-    // TODO add object filter
     public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 10)
     {
         var closestPoint = TryGetClosestPoint(point, precision);
@@ -68,6 +68,7 @@ public class Surface : IGeometryContext
             foreach (var controlPoint in figure.ControlPoints)
             {
                 _points.Add(controlPoint);
+                controlPoint.AssignControl(figure);
             }
         }
         
@@ -89,17 +90,46 @@ public class Surface : IGeometryContext
         }
         if (target is IFigure figure)
         {
-            if (_figures.Remove(figure))
+            foreach (var controlPoint in figure.ControlPoints)
             {
+
                 OnGeometryObjectRemovedEvent.Invoke(target);
-                foreach (var controlPoint in figure.ControlPoints)
-                {
-                    return TryRemovePoint(controlPoint);
-                }
+                if (TryRemovePoint(controlPoint) == false) return false;
+
+                // TODO Were there during conflict resolving, remove if its not nesessary
+                //OnGeometryObjectRemovedEvent.Invoke(target);
+                //foreach (var controlPoint in figure.ControlPoints)
+                //{
+                //    return TryRemovePoint(controlPoint);
+                //}
             }
+
+            return _figures.Remove(figure);
         }
 
         throw new ArgumentException("Target object not found");
+    }
+
+    public void CancelObject(IGeometricObject geometricObject)
+    {
+        if (geometricObject is Point point)
+        {
+            _points.Remove(point);
+        }
+        else if (geometricObject is IFigure figure)
+        {
+            _figures.Remove(figure);
+
+            foreach (var controlPoint in figure.ControlPoints)
+            {
+                controlPoint.RetrieveControl(figure);
+
+                if (controlPoint.ControlFor.Any() || (figure is Polygon && controlPoint.ControlFor.Count() > 2))
+                    continue;
+
+                _points.Remove(controlPoint);
+            }
+        }
     }
 
     public void Clear()
@@ -110,9 +140,19 @@ public class Surface : IGeometryContext
 
     private bool TryRemovePoint(Point point)
     {
-        if (point.ControlFor.Any(figureOfPoint => !_figures.Remove(figureOfPoint)))
+        var controlledFigures = point.ControlFor.ToArray();
+
+        foreach (var figureOfPoint in controlledFigures)
         {
-            return false;
+            if (_figures.Contains(figureOfPoint))
+            {
+                if (!_figures.Remove(figureOfPoint))
+                {
+                    return false;
+                }
+            }
+
+            point.RetrieveControl(figureOfPoint);
         }
 
         var figureAttached = point.AttachedTo;

@@ -116,8 +116,19 @@ public class ApplicationContext
 
         foreach (var geometricObject in Surface.Objects)
         {
-            _selectedObjects.AddLast(geometricObject);
-            geometricObject.ObjectState = ObjectState.Selected;
+            if (geometricObject is Point point)
+            {
+                if (point.ControlFor.Count() == 0)
+                {
+                    _selectedObjects.AddLast(geometricObject);
+                    geometricObject.ObjectState = ObjectState.Selected;
+                }
+            }
+            else
+            {
+                _selectedObjects.AddLast(geometricObject);
+                geometricObject.ObjectState = ObjectState.Selected;
+            }
         }
 
         return _selectedObjects;
