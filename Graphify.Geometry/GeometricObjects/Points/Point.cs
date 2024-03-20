@@ -163,6 +163,16 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         }
     }
 
+    public void AssignControl(IFigure figure)
+    {
+        _controlFor.Add(figure);
+    }
+
+    public void RetrieveControl(IFigure figure)
+    {
+        _controlFor.Remove(figure);
+    }
+
     /// <summary>
     /// Проверяет, может ли точка быть присоединённой к фигуре <c>consumer</c>
     /// </summary>
