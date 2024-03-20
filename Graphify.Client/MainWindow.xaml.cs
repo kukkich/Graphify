@@ -56,9 +56,9 @@ public partial class MainWindow
 
         this.listGeometryObjects.DataContext = viewModel;
     }
-    private void Button_Click(object sender, RoutedEventArgs e)
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu cm = this.FindResource("OptionsButton") as ContextMenu;
+        ContextMenu cm = this.FindResource("ObjectOptions") as ContextMenu;
         cm.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
@@ -245,8 +245,8 @@ public partial class MainWindow
         ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
-
-    
+    private void EditObjectButton_Click(object sender, RoutedEventArgs e)
+    { }    
     private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
     { }
     private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
