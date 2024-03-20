@@ -1,8 +1,6 @@
-
-
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
-using Graphify.IO;
+using Graphify.IO.Importers;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,8 +14,8 @@ public class Importer
     public Importer(IServiceProvider serviceProvider)
     {
         _context = serviceProvider.GetRequiredService<ApplicationContext>();
-        /*_importers.Add(ImportFileType.Png, serviceProvider.GetRequiredService<>());
-        _importers.Add(ImportFileType.Custom, serviceProvider.GetRequiredService<>());*/
+
+        _importers.Add(ImportFileType.Custom, serviceProvider.GetRequiredService<GraphifyImporter>());
     }
     
     public SaveResult Import(ImportFileType fileType, string path)

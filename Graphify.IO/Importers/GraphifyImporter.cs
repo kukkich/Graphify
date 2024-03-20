@@ -15,7 +15,7 @@ public partial class GraphifyImporter : IImporter
 
     private readonly ILogger<GraphifyImporter> _logger;
 
-    private readonly List<Point> _points = [];
+    private readonly Dictionary<uint, Point> _points = [];
 
     private readonly List<IFigure> _figures = [];
 
@@ -30,6 +30,8 @@ public partial class GraphifyImporter : IImporter
 
     public ImportResult ImportFrom(string path)
     {
+        Clear();
+
         string jsonString = File.ReadAllText(path);
 
         int indexItem1 = jsonString.IndexOf("Item1") + ShiftToOpeningBracket;
@@ -57,20 +59,18 @@ public partial class GraphifyImporter : IImporter
         if (_jsonFigureObjects is null && _jsonPointObjects is not null)
         {
             AddPoints();
-            Clear();
 
             _logger.LogDebug("Successfully import!");
 
-            return new ImportResult() { Figures = _figures, Points = _points };
+            return new ImportResult() { Figures = _figures, Points = _points.Values };
         }
 
         AddPoints();
         AddFigures();
-        Clear();
 
         _logger.LogDebug("Successfully import!");
 
-        return new ImportResult() { Points = _points, Figures = _figures };
+        return new ImportResult() { Points = _points.Values, Figures = _figures };
     }
 
     private void AddFigures()
@@ -87,20 +87,14 @@ public partial class GraphifyImporter : IImporter
         }
     }
 
-    private Point? CreatePoint(uint id)
+    private Point FindPoint(uint id)
     {
-        foreach (JsonPointObject point in _jsonPointObjects!)
+        if (_points.TryGetValue(id, out var point))
         {
-            if (point.Id == id)
-            {
-                float x = point.Position.X;
-                float y = point.Position.Y;
-
-                return new Point(x, y, point.Style);
-            }
+            return point;
         }
 
-        return null;
+        throw new InvalidDataException($"Invalid id point: {id}.The figure contains a non-existent point!");
     }
 
     private List<Point>? CreateListPoints(uint[]? idPoints)
@@ -112,26 +106,21 @@ public partial class GraphifyImporter : IImporter
 
         List<Point> points = [];
 
-        foreach (uint idControlPoint in idPoints)
+        foreach (uint idPoint in idPoints)
         {
-            Point? point = CreatePoint(idControlPoint);
-
-            if (point == null)
-            {
-                continue;
-            }
+            Point point = FindPoint(idPoint);
 
             points.Add(point);
         }
 
         return points;
     }
-
+     
     private void AddPoints()
     {
         foreach (JsonPointObject pointObject in _jsonPointObjects!)
         {
-            _points.Add(new Point(pointObject.Position.X, pointObject.Position.Y, pointObject.Style));
+            _points.Add(pointObject.Id, new Point(pointObject.Position.X, pointObject.Position.Y, pointObject.Style));
         }
     }
 
