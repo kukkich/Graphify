@@ -103,7 +103,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         for (float t = 0f; t < 1f; t += 0.01f)
         {
             var point = CurveFunction(t);
-            var distV = new Vector2(attachable.X - point.X, attachable.Y - point.Y);
+            var distV = new Vector2(point.X - attachable.X, point.Y - attachable.Y);
             var dist = distV.Length();
             if (!(dist < minDst))
             {
