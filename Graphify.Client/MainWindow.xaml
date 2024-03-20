@@ -142,6 +142,14 @@
                     Click="CreatePointModeButton_Click">
                 <Image Source="/Icons/point.png" Stretch="Uniform"/>
             </Button>
+            <Button x:Name="AttachePointModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="AttachePointModeButton_Click">
+                <!--<Image Source="/Icons/point.png" Stretch="Uniform"/>-->
+            </Button>
             <Button x:Name="CreateLineModeButton"
                     Width="40"
                     Height="40"

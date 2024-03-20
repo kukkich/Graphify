@@ -99,6 +99,15 @@ public partial class MainWindow
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
     }
 
+    private void AttachePointModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.AttachePoint);
+    }
+
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)

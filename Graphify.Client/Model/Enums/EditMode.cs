@@ -8,5 +8,6 @@ public enum EditMode
     CreateLine,
     CreatePolygon,
     CreateCircleTwoPoints,
-    CreateBezierCurve
+    CreateBezierCurve,
+    //AttachePoint
 }
