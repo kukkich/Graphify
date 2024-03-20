@@ -9,7 +9,9 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify">
+    Title="Graphify"
+    MinWidth="850"
+    MinHeight="600">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
@@ -153,6 +155,14 @@
                     Style="{StaticResource RoundButtonStyle}"
                     Click="CreatePointModeButton_Click">
                 <Image Source="/Icons/point.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="AttachePointModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="AttachePointModeButton_Click">
+                <!--<Image Source="/Icons/point.png" Stretch="Uniform"/>-->
             </Button>
             <Button x:Name="CreateLineModeButton"
                     Width="40"

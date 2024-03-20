@@ -20,7 +20,7 @@ public class BaseCircleDrawer : BaseGeometryObjectDrawer<(Vector2, float)>
 
         defaultDrawer.DrawBorderOfCircle(point.Item1,
                                          point.Item2,
-                                         Color.FromArgb(50,
+                                         Color.FromArgb(40,
                                                         settings.LineColor.R,
                                                         settings.LineColor.G,
                                                         settings.LineColor.B),

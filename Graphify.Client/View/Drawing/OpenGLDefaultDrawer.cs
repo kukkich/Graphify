@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using SharpGL;
@@ -26,8 +26,11 @@ public class OpenGLDefaultDrawer : IBaseDrawer
         var controlPoints = points.ToList();
 
         _gl.Color(color.R, color.G, color.B, color.A);
-        for (double t = 0; t <= 1; t += 0.01)
+
+        var numPoints = 100;
+        for (var i = 0; i <= numPoints; i++)
         {
+            var t = (double)i / numPoints;
             double x = Math.Pow(1 - t, 3) * controlPoints[0].X +
                        3 * t * Math.Pow(1 - t, 2) * controlPoints[1].X +
                        3 * Math.Pow(t, 2) * (1 - t) * controlPoints[2].X +

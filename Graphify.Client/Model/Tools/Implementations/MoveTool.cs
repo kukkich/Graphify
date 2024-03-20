@@ -8,13 +8,13 @@ namespace Graphify.Client.Model.Tools.Implementations;
 
 public class MoveTool : IApplicationTool
 {
+    private const float SmallShift = 0.5f;
+
     private readonly ApplicationContext _applicationContext;
     private readonly CommandsBuffer _commandsBuffer;
     private Vector2 _previousMousePosition;
-
-    private Vector2 MoveShift = Vector2.Zero;
-    private const float SmallShift = 0.5f;
-
+    private Vector2 _moveShift = Vector2.Zero;
+    
     public MoveTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer)
     {
         _applicationContext = applicationContext;
@@ -29,11 +29,7 @@ public class MoveTool : IApplicationTool
     {
         if (Mouse.LeftButton == MouseButtonState.Pressed)
         {
-            foreach (var geometricObject in _applicationContext.SelectedObjects)
-            {
-                geometricObject.Move((newPosition - _previousMousePosition));
-                MoveShift += newPosition - _previousMousePosition;
-            }
+            Move(newPosition);
         }
 
         _previousMousePosition = newPosition;
@@ -43,7 +39,12 @@ public class MoveTool : IApplicationTool
     {
         foreach (var geometricObject in _applicationContext.SelectedObjects)
         {
-            geometricObject.Move(newPosition - _previousMousePosition);
+            var shift = (newPosition - _previousMousePosition);
+
+            if (!(shift.Length() >= SmallShift)) continue;
+
+            geometricObject.Move((newPosition - _previousMousePosition));
+            _moveShift += newPosition - _previousMousePosition;
         }
     }
 
@@ -71,10 +72,10 @@ public class MoveTool : IApplicationTool
 
     public void MouseUp(Vector2 clickPosition)
     {
-        if (MoveShift.Length() >= SmallShift)
+        if (_moveShift.Length() >= SmallShift)
         {
-            _commandsBuffer.AddCommand(new MoveCommand(_applicationContext.SelectedObjects, MoveShift));
-            MoveShift = Vector2.Zero;
+            _commandsBuffer.AddCommand(new MoveCommand(_applicationContext.SelectedObjects, _moveShift));
+            _moveShift = Vector2.Zero;
         }
     }
 
@@ -87,6 +88,6 @@ public class MoveTool : IApplicationTool
 
     public void OnToolChanged()
     {
-        MoveShift = Vector2.Zero;
+        _moveShift = Vector2.Zero;
     }
 }
