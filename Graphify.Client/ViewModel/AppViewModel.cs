@@ -44,7 +44,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> OpenImportDialogCommand { get; private set; }
 
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
-    public ReactiveCommand<string, Unit> Import { get; private set; }
+    public ReactiveCommand<(string Path, ImportFileType Format), Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
     private readonly Application _application;
@@ -58,7 +58,7 @@ public class AppViewModel : ReactiveObject
 
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
-        Import = ReactiveCommand.CreateFromTask<string, Unit>(ImportFrom);
+        Import = ReactiveCommand.CreateFromTask<(string Path, ImportFileType Format), Unit>(ImportFrom);
         OpenExportDialogCommand = ReactiveCommand.CreateFromObservable(OpenExportDialog);
         OpenImportDialogCommand = ReactiveCommand.CreateFromObservable(OpenImportDialog);
 
@@ -94,7 +94,7 @@ public class AppViewModel : ReactiveObject
         };
         return exportFileDialog;
     }
-    private ExportFileType SelectFileType(string selectedExtension)
+    private ExportFileType SelectExportFileType(string selectedExtension)
     {
         ExportFileType fileType = selectedExtension switch
         {
@@ -105,6 +105,18 @@ public class AppViewModel : ReactiveObject
         };
         return fileType;
     }
+    
+    private ImportFileType SelectImportFileType(string selectedExtension)
+    {
+        ImportFileType fileType = selectedExtension switch
+        {
+            ".png" => ImportFileType.Png,
+            ".grafify" => ImportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        
+        return fileType;
+    }
 
     public string GetFilePath(SaveFileDialog exportFileDialog)
     {
@@ -112,12 +124,20 @@ public class AppViewModel : ReactiveObject
         return filePath;
     }
     
-    public ExportFileType GetFileType(string path)
+    public ExportFileType GetExportFileType(string path)
     {
         string selectedExtension = Path.GetExtension(path);
-        ExportFileType type = SelectFileType(selectedExtension);
+        ExportFileType type = SelectExportFileType(selectedExtension);
         return type;
     }
+    
+    public ImportFileType GetImportFileType(string path)
+    {
+        string selectedExtension = Path.GetExtension(path);
+        ImportFileType type = SelectImportFileType(selectedExtension);
+        return type;
+    }
+
     private IObservable<Unit> OpenExportDialog()
     {
         var exportFileDialog = InitializeExportDialog();
@@ -126,7 +146,7 @@ public class AppViewModel : ReactiveObject
             return Observable.Return(Unit.Default);
         }
         var filePath = GetFilePath(exportFileDialog);
-        var fileType = GetFileType(filePath);
+        var fileType = GetExportFileType(filePath);
         Export.Execute((filePath, fileType));
 
         return Observable.Return(Unit.Default);
@@ -156,7 +176,8 @@ public class AppViewModel : ReactiveObject
             return Observable.Return(Unit.Default);
         }
         var filePath = GetFilePath(importFileDialog);
-        Import.Execute(filePath);
+        var fileType = GetImportFileType(filePath);
+        Import.Execute((filePath, fileType));
 
         return Observable.Return(Unit.Default);
     }    
@@ -166,9 +187,9 @@ public class AppViewModel : ReactiveObject
         _application.Exporter.Export(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
     }
-    private Task<Unit> ImportFrom(string Path)
+    private Task<Unit> ImportFrom((string Path, ImportFileType Format) tuple)
     {
-        //_application.Importer.Import(Path,  );
+        _application.Importer.Import(tuple.Format,  tuple.Path);
         return Task.FromResult(Unit.Default);
     }
 

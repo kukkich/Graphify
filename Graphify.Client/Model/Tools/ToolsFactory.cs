@@ -19,6 +19,7 @@ public class ToolsFactory : IToolsFactory
     {
         _factoryMethods.Add(EditMode.Move, () => new MoveTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.Rotate, () => new RotateTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
+        _factoryMethods.Add(EditMode.Reflect, () => new ReflectTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreatePoint, () => new PointTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreateLine, () => new LineTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreatePolygon, () => new PolygonTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));

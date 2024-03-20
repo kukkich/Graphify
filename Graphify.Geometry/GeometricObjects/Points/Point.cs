@@ -121,7 +121,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         var x = X - shift.X;
         var y = Y - shift.Y;
 
-        var radians = -angle * Math.PI / 180.0;
+        var radians = angle * Math.PI / 180.0;
         var s = (float)Math.Sin(radians);
         var c = (float)Math.Cos(radians);
 
