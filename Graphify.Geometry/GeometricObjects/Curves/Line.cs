@@ -127,7 +127,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         var A = new Vector2(_pointA.X, _pointA.Y);
         var ab = new Vector2(_pointB.X - A.X, _pointB.Y - A.Y);
 
-        foreach (var attachedPoint in _attached)
+        foreach (var attachedPoint in _attached.ToList())
         {
             var t = attachedPoint.T;
             var newPointCoords = new Vector2(A.X + t * ab.X, A.Y + t * ab.Y);
@@ -183,6 +183,8 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         {
             point.Move(shift);
         }
+
+        Update();
     }
 
     /// <summary>

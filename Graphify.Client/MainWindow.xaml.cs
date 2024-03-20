@@ -121,7 +121,8 @@ public partial class MainWindow
         {
             return;
         }
-        ViewModel?.SetEditMode.Execute(EditMode.Reflect);
+        ViewModel?.SetEditMode.Execute(EditMode.AttachDetach);
+        // ViewModel?.SetEditMode.Execute(EditMode.Reflect);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {

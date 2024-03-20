@@ -30,7 +30,7 @@ public class Surface : IGeometryContext
         {
             return closestFigure;
         }
-
+        
         return null;
     }
 

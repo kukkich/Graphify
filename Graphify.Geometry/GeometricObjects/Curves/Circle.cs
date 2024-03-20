@@ -108,14 +108,15 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
     public void ConsumeDetach(Point attachable)
     {
-        AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
-        if (maybeAttached != null)
+        AttachedPoint? attached = _attached.Find(x => x.Object == attachable);
+        if (attached is null)
         {
-            _attached.Remove(maybeAttached);
-            return;
+            throw new InvalidOperationException(
+                "Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре"
+            );
         }
-
-        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
+        
+        _attached.Remove(attached);
     }
 
     /// <summary>
