@@ -179,12 +179,10 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var point in ControlPoints)
+        foreach (var point in ControlPoints.ToList())
         {
             point.Move(shift);
         }
-
-        Update();
     }
 
     /// <summary>
@@ -200,7 +198,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var point in ControlPoints)
+        foreach (var point in ControlPoints.ToList())
         {
             point.Rotate(shift, angle);
         }
@@ -218,7 +216,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var objPoint in ControlPoints)
+        foreach (var objPoint in ControlPoints.ToList())
         {
             objPoint.Reflect(point);
         }
