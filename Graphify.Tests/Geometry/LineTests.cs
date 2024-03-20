@@ -11,15 +11,19 @@ namespace Graphify.Tests.Geometry
         private readonly IEqualityComparer<Line> _comparer = new LineComparer();
         private Line _secondLine = null;
         private Point _b = null;
+        static private Point _pointA = null;
+        private Point _pointB = null;
 
         [SetUp]
         public void Setup()
         {
-
-            _line = new Line(new Point(0, 0), _b);
-            _b = new Point(1, 1);
-            _secondLine = new Line(new Point(0, 1), new Point(2, 1));
-            _secondLine.ConsumeAttach(_b);
+            _pointA = new Point(0, 0);
+            _pointB = new Point(1, 1);
+            _line = new Line(_pointA, _pointB);
+            _b = new Point(2, 1);
+            _secondLine = new Line(new Point(0, 1), _b);
+            //_secondLine.ConsumeAttach(_b);
+            _b.AttachTo(_line);
         }
 
         //IsNextTo
@@ -77,7 +81,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(attachedPointMoveData))]
         public void GIVEN_Line_WHEN_move_attached_point_THEN_expected_exception(Vector2 shift, Line expected)
         {
-            Assert.Throws<InvalidOperationException>(() => _line.Move(shift));
+            Assert.Throws<InvalidOperationException>(() => _secondLine.Move(shift));
         }
 
         private static readonly object[] attachedPointMoveData =
@@ -105,7 +109,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(attachedPointRotateData))]
         public void GIVEN_Line_WHEN_rotate_attached_point_THEN_expected_exception(Point shift, float angle, Line expected)
         {
-            Assert.Throws<InvalidOperationException>(() => _line.Rotate(shift, angle));
+            Assert.Throws<InvalidOperationException>(() => _secondLine.Rotate(shift, angle));
         }
 
         private static readonly object[] attachedPointRotateData =
@@ -134,7 +138,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(attachedPointReflectData))]
         public void GIVEN_Line_WHEN_reflect_attached_point_THEN_expected_exception(Point point, Line expected)
         {
-            Assert.Throws<InvalidOperationException>(() => _line.Reflect(point));
+            Assert.Throws<InvalidOperationException>(() => _secondLine.Reflect(point));
         }
 
         private static readonly object[] attachedPointReflectData =

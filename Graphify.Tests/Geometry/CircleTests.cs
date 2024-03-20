@@ -1,4 +1,5 @@
 using System.Numerics;
+using Graphify.Geometry.Attaching;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Points;
 
@@ -9,15 +10,17 @@ namespace Graphify.Tests.Geometry
         private Circle _circle = null;
         private Circle _secondCircle = null;
         private Point _b = null;
+        private Point _a = null;
         private readonly IEqualityComparer<Circle> _comparer = new CircleComparer();
 
         [SetUp]
         public void Setup()
         {
+            //_a = new Point(1, 1);
             _circle = new Circle(new Point(0, 0), new Point(1, 1));
             _b = new Point(1, 1);
-            _secondCircle = new Circle(new Point(2, 2), new Point(1, 1));
-            _secondCircle.ConsumeAttach(_b);
+            _secondCircle = new Circle(new Point(2, 2), _b);
+            _b.AttachTo(_circle);
         }
 
         //IsNextTo 
@@ -76,7 +79,8 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(attachedPointMoveData))]
         public void GIVEN_Circle_WHEN_move_attached_point_THEN_expected_exception(Vector2 shift, Circle expected)
         {
-            Assert.Throws<InvalidOperationException>(() => _circle.Move(shift));
+            //Assert.That(_b.IsAttached, Is.True);
+            Assert.Throws<InvalidOperationException>(() => _secondCircle.Move(shift));
         }
 
         private static readonly object[] attachedPointMoveData =
@@ -104,7 +108,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(attachedPointRotateData))]
         public void GIVEN_Circle_WHEN_rotate_attached_point_THEN_expected_exception(Point shift, float angle, Circle expected)
         {
-            Assert.Throws<InvalidOperationException>(() => _circle.Rotate(shift, angle));
+            Assert.Throws<InvalidOperationException>(() => _secondCircle.Rotate(shift, angle));//?
         }
 
         private static readonly object[] attachedPointRotateData =
@@ -133,7 +137,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(attachedPointReflectData))]
         public void GIVEN_Circle_WHEN_reflect_attached_point_THEN_expected_exception(Point point, Circle expected)
         {
-            Assert.Throws<InvalidOperationException>(() => _circle.Reflect(point));
+            Assert.Throws<InvalidOperationException>(() => _secondCircle.Reflect(point));
         }
 
         private static readonly object[] attachedPointReflectData =
@@ -156,6 +160,7 @@ namespace Graphify.Tests.Geometry
             new object[] {new Point(0, 2)}
         };
 
+        // тест не работает потому что нужно передавать сами опорные точки
         [TestCaseSource(nameof(controlPointToAttachedData))]
         public void GIVEN_Circle_WHEN_the_control_point_is_attached_THEN_expected_exception(Point attachable)
         {
@@ -165,7 +170,7 @@ namespace Graphify.Tests.Geometry
 
         private static readonly object[] controlPointToAttachedData =
         {
-            new object[] {new Point(0, 0)},
+            new object[] {new Point(1f, 1f)},
         };
 
         [TestCaseSource(nameof(doubleAttachedData))]
@@ -183,9 +188,10 @@ namespace Graphify.Tests.Geometry
 
         //ConsumeDetach 
         [TestCaseSource(nameof(detachData))]
-        public void GIVEN_Circle_WHEN_the_point_is_detached_THEN_expected_true(Point dettachable)
+        public void GIVEN_Circle_WHEN_the_point_is_detached_THEN_expected_false(Point dettachable)
         {
-            _circle.ConsumeAttach(dettachable);
+            //_circle.ConsumeAttach(dettachable);
+            dettachable.AttachTo(_circle);
             _circle.ConsumeDetach(dettachable);
 
             bool result = _circle.Attached.Contains(dettachable);
@@ -196,7 +202,7 @@ namespace Graphify.Tests.Geometry
         private static readonly object[] detachData =
         {
             new object[] { new Point(0.5f, 0.5f)},
-            new object[] { new Point(0f, 0f)},
+            new object[] { new Point(1f, 1f)},
         };
     }
 }
