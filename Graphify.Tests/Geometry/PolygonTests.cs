@@ -66,7 +66,6 @@ namespace Graphify.Tests.Geometry
         };
 
         //Move
-        // тесты не проходят возможно тк первая точка есть в первой и последней прямой и она двигается 2 раза
         [TestCaseSource(nameof(moveData))]
         public void GIVEN_Polygon_WHEN_move_THEN_expected_new_coords(Vector2 shift, Polygon expected)
         {
@@ -148,6 +147,17 @@ namespace Graphify.Tests.Geometry
         {
             new object[] { new Point(0.5f, 0.5f)},
             new object[] {new Point(0, 0)},
+        };
+
+        [TestCaseSource(nameof(errDetachData))]
+        public void GIVEN_Polygon_WHEN_the_point_is_not_detached_THEN_expected_exception(Point dettachable)
+        {
+            Assert.Throws<InvalidOperationException>(() => _polygon.ConsumeDetach(dettachable));
+        }
+
+        private static readonly object[] errDetachData =
+        {
+            new object[] { new Point(0.5f, 0.5f)},
         };
 
 

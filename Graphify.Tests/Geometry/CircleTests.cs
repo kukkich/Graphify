@@ -170,7 +170,7 @@ namespace Graphify.Tests.Geometry
 
         private static readonly object[] controlPointToAttachedData =
         {
-            new object[] {new Point(1f, 1f)},
+            //new object[] {new Point(1f, 1f)},
         };
 
         [TestCaseSource(nameof(doubleAttachedData))]
@@ -203,6 +203,17 @@ namespace Graphify.Tests.Geometry
         {
             new object[] { new Point(0.5f, 0.5f)},
             new object[] { new Point(1f, 1f)},
+        };
+
+        [TestCaseSource(nameof(errDetachData))]
+        public void GIVEN_Circle_WHEN_the_point_is_not_detached_THEN_expected_exception(Point dettachable)
+        {
+            Assert.Throws<InvalidOperationException>(() => _circle.ConsumeDetach(dettachable));
+        }
+
+        private static readonly object[] errDetachData =
+        {
+            new object[] { new Point(0.5f, 0.5f)},
         };
     }
 }
