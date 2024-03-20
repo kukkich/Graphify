@@ -130,7 +130,84 @@ namespace Graphify.Tests.Geometry
             new object[] { new Point(0.5f, 0.5f)},
         };
 
+        //Move
+        [TestCaseSource(nameof(moveData))]
+        public void GIVEN_BezierCurve_WHEN_move_THEN_expected_new_coords(Vector2 shift, CubicBezierCurve expected)
+        {
+            _bezier.Move(shift);
+            CubicBezierCurve actual = _bezier;
+            Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
+        }
 
-        
+        private static readonly object[] moveData =
+        {
+            new object[] { new Vector2(1f, 1f), new CubicBezierCurve([new Point(1f, 1f), new Point(2f, 2f), new Point(3f, 2f), new Point(4f, 1f)]) },
+            new object[] { new Vector2(1f, -1f), new CubicBezierCurve([new Point(1f, -1f), new Point(2f, 0f), new Point(3f, 0f), new Point(4f, -1f)]) },
+            new object[] { new Vector2(0, 0), new CubicBezierCurve([new Point(0, 0), new Point(1, 1), new Point(2, 1), new Point(3, 0)]) },
+        };
+
+        [TestCaseSource(nameof(attachedPointMoveData))]
+        public void GIVEN_BezierCurve_WHEN_move_attached_point_THEN_expected_exception(Vector2 shift)
+        {
+            Assert.Throws<InvalidOperationException>(() => _secondBezier.Move(shift));
+        }
+
+        private static readonly object[] attachedPointMoveData =
+        {
+            new object[] { new Vector2(1f, 1f)},
+        };
+
+
+        //Rotate
+        [TestCaseSource(nameof(rotateData))]
+        public void GIVEN_BezierCurve_WHEN_rotate_THEN_expected_new_coords(Point shift, float angle, CubicBezierCurve expected)
+        {
+            _bezier.Rotate(shift, angle);
+            CubicBezierCurve actual = _bezier;
+            Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
+        }
+
+        private static readonly object[] rotateData =
+        {
+            new object[] { new Point(1.5f, 1f), 90, new CubicBezierCurve([new Point(0.5f, 2.5f), new Point(1.5f, 1.5f), new Point(1.5f, 0.5f), new Point(0.5f, -0.5f)]) },
+        };
+
+        [TestCaseSource(nameof(attachedPointRotateData))]
+        public void GIVEN_BezierCurve_WHEN_rotate_attached_point_THEN_expected_exception(Point shift, float angle)
+        {
+            Assert.Throws<InvalidOperationException>(() => _secondBezier.Rotate(shift, angle));
+        }
+
+        private static readonly object[] attachedPointRotateData =
+        {
+            new object[] { new Point(1.5f, 1f), 90},
+        };
+
+
+        //Reflect
+        [TestCaseSource(nameof(reflectData))]
+        public void GIVEN_BezierCurve_WHEN_reflect_THEN_expected_new_coords(Point point, CubicBezierCurve expected)
+        {
+            _bezier.Reflect(point);
+            CubicBezierCurve actual = _bezier;
+            Assert.That(actual, Is.EqualTo(expected).Using(_comparer));
+        }
+
+        private static readonly object[] reflectData =
+        {
+            new object[] { new Point(1.5f, 1f), new CubicBezierCurve([new Point(3f, 2f), new Point(2f, 1f), new Point(1f, 1f), new Point(0f, 2f)]) },
+        };
+
+        [TestCaseSource(nameof(attachedPointReflectData))]
+        public void GIVEN_BezierCurve_WHEN_reflect_attached_point_THEN_expected_exception(Point point)
+        {
+            Assert.Throws<InvalidOperationException>(() => _secondBezier.Reflect(point));
+        }
+
+        private static readonly object[] attachedPointReflectData =
+        {
+            new object[] { new Point(1.5f, 1f)},
+        };
+
     }
 }
