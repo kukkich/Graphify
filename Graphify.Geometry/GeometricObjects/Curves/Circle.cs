@@ -61,7 +61,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
             var point = attachedPoint.Object;
             var attachedParam = attachedPoint.T;
             var angle = attachedParam * (2 * Math.PI); // [0; 1) --> [0; 2pi)
-            var newPosition = new Vector2((float)(radius * Math.Cos(angle)), (float)(radius * Math.Sin(angle)));
+            var newPosition = new Vector2((float)(_centerPoint.X + radius * Math.Cos(angle)), (float)(_centerPoint.Y + radius * Math.Sin(angle)));
             var dv = new Vector2(newPosition.X - point.X, newPosition.Y - point.Y);
 
             point.Move(dv);
@@ -91,7 +91,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         angle = (angle + 2 * Math.PI) % (2 * Math.PI);  // Округляем угол до нужного диапазона [0; 2pi)
 
         var radius = Radius;
-        var newPosition = new Vector2((float)(radius * Math.Cos(angle)), (float)(radius * Math.Sin(angle)));
+        var newPosition = new Vector2((float)(_centerPoint.X + radius * Math.Cos(angle)), (float)(_centerPoint.Y + radius * Math.Sin(angle)));
         var moveVector = new Vector2(newPosition.X - attachable.X, newPosition.Y - attachable.Y);
 
         var angleParameter = angle / (2 * Math.PI); // [0; 2pi) --> [0; 1)
