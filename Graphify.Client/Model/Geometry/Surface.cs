@@ -10,6 +10,13 @@ public class Surface : IGeometryContext
     public IEnumerable<IGeometricObject> Objects => _figures.Union<IGeometricObject>(_points);
     public IEnumerable<IFigure> Figures => _figures;
     public IEnumerable<Point> Points => _points;
+    
+    public delegate void OnGeometryObjectAdded(IGeometricObject newObject);
+    public event OnGeometryObjectAdded OnGeometryObjectAddedEvent;
+    
+    public delegate void OnGeometryObjectRemoved(IGeometricObject newObject);
+    public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent;
+
 
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
@@ -63,6 +70,8 @@ public class Surface : IGeometryContext
                 _points.Add(controlPoint);
             }
         }
+        
+        OnGeometryObjectAddedEvent.Invoke(newObject);
     }
 
     public bool TryRemove(IGeometricObject target)
@@ -70,12 +79,19 @@ public class Surface : IGeometryContext
         //TODO removing
         if (target is Point point)
         {
-            return TryRemovePoint(point);
+            if (TryRemovePoint(point))
+            {
+                OnGeometryObjectRemovedEvent.Invoke(target);
+                return true;
+            }
+            
+            return false;
         }
         if (target is IFigure figure)
         {
             if (_figures.Remove(figure))
             {
+                OnGeometryObjectRemovedEvent.Invoke(target);
                 foreach (var controlPoint in figure.ControlPoints)
                 {
                     return TryRemovePoint(controlPoint);
@@ -102,7 +118,7 @@ public class Surface : IGeometryContext
         var figureAttached = point.AttachedTo;
 
         figureAttached?.ConsumeDetach(point);
-
+        
         return _points.Remove(point);
     }
 }
