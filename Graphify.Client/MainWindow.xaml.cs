@@ -53,9 +53,10 @@ public partial class MainWindow
                 .DisposeWith(disposables);
             todispose.DisposeWith(disposables);
         });
-
         this.listGeometryObjects.DataContext = viewModel;
+        
     }
+
     private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
     {
         ContextMenu cm = this.FindResource("ObjectOptions") as ContextMenu;
@@ -68,6 +69,7 @@ public partial class MainWindow
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
         _gl.LoadIdentity();
         _gl.Ortho(-GlWindow.ActualWidth / 2, GlWindow.ActualWidth / 2, -GlWindow.ActualHeight / 2, GlWindow.ActualHeight / 2, -1, 1);
+        listGeometryObjects.Height = mainwin.ActualHeight - 85;
     }
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
@@ -246,7 +248,8 @@ public partial class MainWindow
     }
 
     private void EditObjectButton_Click(object sender, RoutedEventArgs e)
-    { }    
+    {
+    }    
     private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
     { }
     private void CloneObjectButton_Click(object sender, RoutedEventArgs e)

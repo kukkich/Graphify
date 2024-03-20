@@ -86,10 +86,10 @@ public class AppViewModel : ReactiveObject
         GeometryObjects.AddOrUpdate([
             new Point(1,1),
             new Point(2,2),
+            new CubicBezierCurve([new Point(1,0), new Point(0,0), new Point(0, 1), new Point(0, 4)]),
             new Circle( new Point(1,1), new Point(2,2)),
             new Line(new Point(1,1),
-            new Point(3,2)),
-            new Point(3, 2)
+            new Point(3,2))
         ]);
     }
 
