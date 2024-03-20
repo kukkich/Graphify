@@ -1,4 +1,4 @@
-﻿namespace Graphify.Client.Model.Enums;
+namespace Graphify.Client.Model.Enums;
 
 public enum EditMode
 {
@@ -6,5 +6,7 @@ public enum EditMode
     Select,
     CreatePoint,
     CreateLine,
-    CreateCircleTwoPoints
+    CreatePolygon,
+    CreateCircleTwoPoints,
+    CreateCurve
 }
