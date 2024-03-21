@@ -13,10 +13,10 @@ public class Surface : IGeometryContext
     public IEnumerable<Point> Points => _points;
     
     public delegate void OnGeometryObjectAdded(IGeometricObject newObject);
-    public event OnGeometryObjectAdded OnGeometryObjectAddedEvent;
+    public event OnGeometryObjectAdded OnGeometryObjectAddedEvent = null!;
     
     public delegate void OnGeometryObjectRemoved(IGeometricObject newObject);
-    public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent;
+    public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent = null!;
 
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
