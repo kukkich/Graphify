@@ -296,4 +296,8 @@ public partial class MainWindow
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
+    private void CleanAllModeButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

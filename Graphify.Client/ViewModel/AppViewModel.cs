@@ -41,6 +41,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> Copy { get; private set; }
     public ReactiveCommand<Unit, Unit> Paste { get; private set; }
     public ReactiveCommand<Unit, Unit> Cut { get; private set; }
+    public ReactiveCommand<Unit, Unit> Clean { get; private set; }
 
     public ReactiveCommand<Unit, Unit> SelectAll { get; private set; }
 
@@ -84,6 +85,7 @@ public class AppViewModel : ReactiveObject
         Copy = ReactiveCommand.CreateFromObservable(CopyObjects);
         Cut = ReactiveCommand.CreateFromObservable(CutObjects);
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
+        Clean = ReactiveCommand.CreateFromObservable(CleanObjects);
 
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
         
@@ -115,6 +117,8 @@ public class AppViewModel : ReactiveObject
 
         _allCommands = commandProperties;
     }
+
+    
 
     public SaveFileDialog InitializeExportDialog()
     {
@@ -299,6 +303,10 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> SelectAllObject()
     {
         _application.Context.SelectAll();
+        return Observable.Return(Unit.Default);
+    }
+    private IObservable<Unit> CleanObjects()
+    {
         return Observable.Return(Unit.Default);
     }
 }
