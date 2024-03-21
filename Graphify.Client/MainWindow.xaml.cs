@@ -53,8 +53,13 @@ public partial class MainWindow
                 .DisposeWith(disposables);
             todispose.DisposeWith(disposables);
         });
+
         this.listGeometryObjects.DataContext = viewModel;
-        
+        this.WhenAnyValue(x => x.Height)
+            .Subscribe(height =>
+            {
+                listGeometryObjects.Height = height - 85;
+            });
     }
 
     private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
@@ -69,7 +74,6 @@ public partial class MainWindow
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
         _gl.LoadIdentity();
         _gl.Ortho(-GlWindow.ActualWidth / 2, GlWindow.ActualWidth / 2, -GlWindow.ActualHeight / 2, GlWindow.ActualHeight / 2, -1, 1);
-        listGeometryObjects.Height = mainwin.ActualHeight - 85;
     }
 
     private void GlWindow_OpenGLDraw(object sender, OpenGLRoutedEventArgs args)
