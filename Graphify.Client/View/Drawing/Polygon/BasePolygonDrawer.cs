@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.View.Drawing.Base;
 using Graphify.Geometry.Drawing;
 
@@ -10,11 +10,11 @@ public class BasePolygonDrawer : BaseGeometryObjectDrawer<IEnumerable<Vector2>>
 
     protected override void DrawDefault(IEnumerable<Vector2> point, DrawSettings settings)
     {
-        defaultDrawer.DrawPolygon(point, settings.LineColor, settings.LineThickness);
+        defaultDrawer.DrawPolygon(point, settings.FillColor, settings.LineThickness);
     }
 
     protected override void DrawSelected(IEnumerable<Vector2> point, DrawSettings settings)
     {
-        defaultDrawer.DrawPolygon(point, settings.LineColor, settings.LineThickness);
+        defaultDrawer.DrawPolygon(point, settings.FillColor, settings.LineThickness);
     }
 }

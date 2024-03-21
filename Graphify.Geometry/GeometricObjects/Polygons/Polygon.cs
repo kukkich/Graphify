@@ -244,7 +244,7 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         var pointsClones = ControlPoints.Select(c => (Point)c.Clone()).ToArray();
 
         var polygonClone =
-            new Polygon(pointsClones, new PolygonStyle(Style.PrimaryColor, Style.LineColor, Style.Name, Style.Size))
+            new Polygon(pointsClones, new PolygonStyle(Style.PrimaryColor, Style.Name))
             {
                 ObjectState = ObjectState
             };

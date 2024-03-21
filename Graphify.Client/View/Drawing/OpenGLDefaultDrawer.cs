@@ -107,8 +107,8 @@ public class OpenGLDefaultDrawer : IBaseDrawer
     public void DrawPolygon(IEnumerable<Vector2> points, Color color, int lineThickness)
     {
         _gl.LineWidth(lineThickness);
-        _gl.Begin(OpenGL.GL_LINE_LOOP);
-        _gl.Color(color.R, color.G, color.B);
+        _gl.Begin(OpenGL.GL_POLYGON);
+        _gl.Color(color.R, color.G, color.B, color.A);
         foreach (var point in points)
         {
             _gl.Vertex(point.X, point.Y);

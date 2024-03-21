@@ -188,9 +188,7 @@ public partial class GraphifyImporter : IImporter
     {
         PolygonStyle polygonStyle = new PolygonStyle(
             polygonObject.Style.PrimaryColor,
-            (polygonObject.Style as PolygonStyle ?? PolygonStyle.Default).LineColor,
-            polygonObject.Style.Name,
-            (polygonObject.Style as PolygonStyle ?? PolygonStyle.Default).Size
+            polygonObject.Style.Name
         );
 
         List<Point>? controlPoints = CreateListPoints(polygonObject.ControlPoints);
