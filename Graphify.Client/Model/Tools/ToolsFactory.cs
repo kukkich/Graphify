@@ -25,6 +25,7 @@ public class ToolsFactory : IToolsFactory
         _factoryMethods.Add(EditMode.CreatePolygon, () => new PolygonTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreateCircleTwoPoints, () => new CircleTwoPointsTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
         _factoryMethods.Add(EditMode.CreateBezierCurve, () => new CubicBezierTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
+        _factoryMethods.Add(EditMode.AttachDetach, () => new AttachDetachTool(serviceProvider.GetRequiredService<ApplicationContext>(), serviceProvider.GetRequiredService<CommandsBuffer>()));
     }
 
     public IApplicationTool CreateTool(EditMode editMode)
