@@ -32,7 +32,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     private Vector2 CurveFunction(float t)
     {
-        var tc = new float[4]
+        Span<float> tc = stackalloc float[]
         {
             (1f-t)*(1f-t)*(1f-t),
             3f*t*(1f-t)*(1f-t),
