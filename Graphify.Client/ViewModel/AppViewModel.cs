@@ -100,9 +100,8 @@ public class AppViewModel : ReactiveObject
         //    new Point(3,2))
         //]);
 
-        GeometryObjects = new SourceList<IGeometricObject>();
-        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
-        _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
+        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.AddOrUpdate(newObject);
+        _application.Context.Surface.OnGeometryObjectRemovedEvent += removedObject => GeometryObjects.Remove(key: removedObject);
 
 
         var type = GetType();

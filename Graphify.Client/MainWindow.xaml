@@ -374,7 +374,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
-                        <TextBlock Text="Кубическая кривая Безье" Grid.Column="1" Grid.Row="0"/>
+                        <TextBlock Text="Кривая Безье" Grid.Column="1" Grid.Row="0"/>
                         <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
