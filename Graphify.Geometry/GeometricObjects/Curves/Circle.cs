@@ -56,7 +56,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     {
         var radius = Radius;
 
-        foreach (var attachedPoint in _attached)
+        foreach (var attachedPoint in _attached.ToList())
         {
             var point = attachedPoint.Object;
             var attachedParam = attachedPoint.T;

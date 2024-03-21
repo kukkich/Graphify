@@ -173,7 +173,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var point in _points.ToArray())
+        foreach (var point in _points)
         {
             point.Rotate(shift, angle);
         }
@@ -186,7 +186,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var pointi in _points.ToArray())
+        foreach (var pointi in _points)
         {
             pointi.Reflect(point);
         }
