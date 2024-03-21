@@ -27,6 +27,8 @@ public partial class MainWindow
         DataContext = viewModel;
         InitializeComponent();
 
+        
+
         this.WhenActivated(disposables =>
         {
             this.WhenAnyValue(x => x.GlWindow)
@@ -37,8 +39,34 @@ public partial class MainWindow
                     _drawer.InitGl(_gl);
                 })
                 .DisposeWith(disposables);
+
+
+            ViewModel.RightMouseUp.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.RightMouseDown.ThrownExceptions.Subscribe(HandleError);
+
+            ViewModel.MouseDown.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.MouseUp.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.MouseMove.ThrownExceptions.Subscribe(HandleError);
+
+            ViewModel.Redo.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.Undo.ThrownExceptions.Subscribe(HandleError);
+
+            ViewModel.Copy.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.Paste.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.Cut.ThrownExceptions.Subscribe(HandleError);
+
+            ViewModel.SelectAll.ThrownExceptions.Subscribe(HandleError);
+
+            ViewModel.SetEditMode.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.OpenExportDialogCommand.ThrownExceptions.Subscribe(HandleError);
+            ViewModel.Export.ThrownExceptions.Subscribe(HandleError);
         });
 
+    }
+
+    private void HandleError(Exception e)
+    {
+        MessageBox.Show("Произошла ошибка: " + e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
@@ -55,7 +83,7 @@ public partial class MainWindow
     private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
-        {
+        {          
             return;
         }
 
@@ -69,6 +97,15 @@ public partial class MainWindow
             return;
         }
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
+    }
+
+    private void AttachePointModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        //ViewModel?.SetEditMode.Execute(EditMode.AttachePoint);
     }
 
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
