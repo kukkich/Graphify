@@ -18,7 +18,10 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Icons\app.jpg" />
+    <None Remove="Icons\attach.png" />
     <None Remove="Icons\circle.png" />
+    <None Remove="Icons\clean.png" />
     <None Remove="Icons\curve.png" />
     <None Remove="Icons\import.png" />
     <None Remove="Icons\line.png" />
@@ -32,6 +35,7 @@
     <None Remove="Icons\undo.png" />
     <None Remove="Icons\zoomIn.png" />
     <None Remove="Icons\zoomOut.png" />
+    <None Remove="Icons\attach.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,7 +77,10 @@
   </ItemGroup>
     
   <ItemGroup>
+    <Resource Include="Icons\app.jpg" />
+    <Resource Include="Icons\attach.png" />
     <Resource Include="Icons\circle.png" />
+    <Resource Include="Icons\clean.png" />
     <Resource Include="Icons\curve.png" />
     <Resource Include="Icons\import.png" />
     <Resource Include="Icons\line.png" />
@@ -87,5 +94,6 @@
     <Resource Include="Icons\undo.png" />
     <Resource Include="Icons\zoomIn.png" />
     <Resource Include="Icons\zoomOut.png" />
+    <Resource Include="Icons\attach.svg" />
   </ItemGroup>
 </Project>

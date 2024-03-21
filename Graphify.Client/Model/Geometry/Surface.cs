@@ -13,11 +13,10 @@ public class Surface : IGeometryContext
     public IEnumerable<Point> Points => _points;
     
     public delegate void OnGeometryObjectAdded(IGeometricObject newObject);
-    public event OnGeometryObjectAdded OnGeometryObjectAddedEvent;
+    public event OnGeometryObjectAdded OnGeometryObjectAddedEvent = null!;
     
     public delegate void OnGeometryObjectRemoved(IGeometricObject newObject);
-    public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent;
-
+    public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent = null!;
 
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
@@ -85,7 +84,7 @@ public class Surface : IGeometryContext
                 OnGeometryObjectRemovedEvent.Invoke(target);
                 return true;
             }
-            
+
             return false;
         }
         if (target is IFigure figure)
@@ -96,7 +95,8 @@ public class Surface : IGeometryContext
                 OnGeometryObjectRemovedEvent.Invoke(target);
                 if (TryRemovePoint(controlPoint) == false) return false;
 
-                // TODO Were there during conflict resolving, remove if its not nesessary
+                // TODO Were there during conflict resolving, remove if its not necessary
+
                 //OnGeometryObjectRemovedEvent.Invoke(target);
                 //foreach (var controlPoint in figure.ControlPoints)
                 //{

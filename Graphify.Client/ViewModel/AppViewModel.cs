@@ -4,9 +4,12 @@ using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Client.Model;
+using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -16,9 +19,14 @@ namespace Graphify.Client.ViewModel;
 
 public class AppViewModel : ReactiveObject
 {
+
+    public IReadOnlyList<IReactiveCommand> AllCommands => _allCommands;
+
+    private readonly List<IReactiveCommand> _allCommands;
+
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
-    public SourceList<IGeometricObject> GeometryObjects { get; set; }
+    public SourceCache<IGeometricObject, IGeometricObject> GeometryObjects { get; set; }
 
     public ReactiveCommand<Vector2, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> RightMouseDown { get; private set; }
@@ -33,6 +41,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> Copy { get; private set; }
     public ReactiveCommand<Unit, Unit> Paste { get; private set; }
     public ReactiveCommand<Unit, Unit> Cut { get; private set; }
+    public ReactiveCommand<Unit, Unit> Clean { get; private set; }
 
     public ReactiveCommand<Unit, Unit> Delete { get; private set; }
 
@@ -58,6 +67,7 @@ public class AppViewModel : ReactiveObject
         _application = application;
         _currentTool = application.ToolsController.ChangeTool(EditMode.Move);
 
+
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
         Import = ReactiveCommand.CreateFromTask<(string Path, ImportFileType Format), Unit>(ImportFrom);
@@ -77,15 +87,41 @@ public class AppViewModel : ReactiveObject
         Copy = ReactiveCommand.CreateFromObservable(CopyObjects);
         Cut = ReactiveCommand.CreateFromObservable(CutObjects);
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
+        Clean = ReactiveCommand.CreateFromObservable(CleanObjects);
 
         Delete = ReactiveCommand.CreateFromObservable(DeleteObjects);
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObjects);
 
         EditingObject = null;
-        GeometryObjects = new SourceList<IGeometricObject>();
-        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
-        _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
+
+        GeometryObjects = new SourceCache<IGeometricObject, IGeometricObject>(a => a);
+        // Test example, todo: remove if it'll work
+        //GeometryObjects.AddOrUpdate([
+        //    new Point(1,1),
+        //    new Point(2,2),
+        //    new CubicBezierCurve([new Point(1,0), new Point(0,0), new Point(0, 1), new Point(0, 4)]),
+        //    new Circle( new Point(1,1), new Point(2,2)),
+        //    new Line(new Point(1,1),
+        //    new Point(3,2))
+        //]);
+
+        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.AddOrUpdate(newObject);
+        _application.Context.Surface.OnGeometryObjectRemovedEvent += removedObject => GeometryObjects.Remove(key: removedObject);
+
+
+        var type = GetType();
+        var properties = type.GetProperties();
+
+        var commandProperties = properties
+            .Where(prop => typeof(IReactiveCommand).IsAssignableFrom(prop.PropertyType))
+            .Select(prop => (IReactiveCommand)prop.GetValue(this))
+            .Where(prop => prop is not null)
+            .ToList();
+
+        _allCommands = commandProperties;
     }
+
+    
 
     public SaveFileDialog InitializeExportDialog()
     {
@@ -156,11 +192,13 @@ public class AppViewModel : ReactiveObject
 
         return Observable.Return(Unit.Default);
     }
+
     public string GetFilePath(OpenFileDialog importFileDialog)
     {
         string filePath = importFileDialog.FileName;
         return filePath;
     }
+
     private OpenFileDialog InitializeImportDialog()
     {
         OpenFileDialog importFileDialog = new OpenFileDialog
@@ -274,6 +312,10 @@ public class AppViewModel : ReactiveObject
     private IObservable<Unit> SelectAllObjects()
     {
         _application.Context.SelectAll();
+        return Observable.Return(Unit.Default);
+    }
+    private IObservable<Unit> CleanObjects()
+    {
         return Observable.Return(Unit.Default);
     }
 }

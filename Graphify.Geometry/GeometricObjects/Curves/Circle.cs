@@ -56,12 +56,12 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     {
         var radius = Radius;
 
-        foreach (var attachedPoint in _attached)
+        foreach (var attachedPoint in _attached.ToList())
         {
             var point = attachedPoint.Object;
             var attachedParam = attachedPoint.T;
             var angle = attachedParam * (2 * Math.PI); // [0; 1) --> [0; 2pi)
-            var newPosition = new Vector2((float)(radius * Math.Cos(angle)), (float)(radius * Math.Sin(angle)));
+            var newPosition = new Vector2((float)(_centerPoint.X + radius * Math.Cos(angle)), (float)(_centerPoint.Y + radius * Math.Sin(angle)));
             var dv = new Vector2(newPosition.X - point.X, newPosition.Y - point.Y);
 
             point.Move(dv);
@@ -91,7 +91,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         angle = (angle + 2 * Math.PI) % (2 * Math.PI);  // Округляем угол до нужного диапазона [0; 2pi)
 
         var radius = Radius;
-        var newPosition = new Vector2((float)(radius * Math.Cos(angle)), (float)(radius * Math.Sin(angle)));
+        var newPosition = new Vector2((float)(_centerPoint.X + radius * Math.Cos(angle)), (float)(_centerPoint.Y + radius * Math.Sin(angle)));
         var moveVector = new Vector2(newPosition.X - attachable.X, newPosition.Y - attachable.Y);
 
         var angleParameter = angle / (2 * Math.PI); // [0; 2pi) --> [0; 1)
@@ -108,14 +108,15 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
     public void ConsumeDetach(Point attachable)
     {
-        AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
-        if (maybeAttached != null)
+        AttachedPoint? attached = _attached.Find(x => x.Object == attachable);
+        if (attached is null)
         {
-            _attached.Remove(maybeAttached);
-            return;
+            throw new InvalidOperationException(
+                "Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре"
+            );
         }
-
-        throw new InvalidOperationException("Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре");
+        
+        _attached.Remove(attached);
     }
 
     /// <summary>
@@ -137,6 +138,8 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
 
         return Math.Abs(Radius - distanceToPoint) < distance;
     }
+
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
 
     /// <summary>
     /// Метод, сдвигающий текущую окружность по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
