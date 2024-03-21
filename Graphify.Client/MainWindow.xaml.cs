@@ -40,33 +40,20 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
 
-
-            ViewModel.RightMouseUp.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.RightMouseDown.ThrownExceptions.Subscribe(HandleError);
-
-            ViewModel.MouseDown.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.MouseUp.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.MouseMove.ThrownExceptions.Subscribe(HandleError);
-
-            ViewModel.Redo.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.Undo.ThrownExceptions.Subscribe(HandleError);
-
-            ViewModel.Copy.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.Paste.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.Cut.ThrownExceptions.Subscribe(HandleError);
-
-            ViewModel.SelectAll.ThrownExceptions.Subscribe(HandleError);
-
-            ViewModel.SetEditMode.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.OpenExportDialogCommand.ThrownExceptions.Subscribe(HandleError);
-            ViewModel.Export.ThrownExceptions.Subscribe(HandleError);
+            
+            
+            foreach (var command in ViewModel.AllCommands)
+            {
+                command.ThrownExceptions.Subscribe(HandleError)
+                    .DisposeWith(disposables);
+            }
         });
 
     }
 
     private void HandleError(Exception e)
     {
-        MessageBox.Show("Произошла ошибка: " + e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)

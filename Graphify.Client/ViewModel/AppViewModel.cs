@@ -17,6 +17,11 @@ namespace Graphify.Client.ViewModel;
 
 public class AppViewModel : ReactiveObject
 {
+
+    public IReadOnlyList<IReactiveCommand> AllCommands => _allCommands;
+
+    private readonly List<IReactiveCommand> _allCommands;
+
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
     public SourceList<IGeometricObject> GeometryObjects { get; set; }
@@ -84,6 +89,18 @@ public class AppViewModel : ReactiveObject
         GeometryObjects = new SourceList<IGeometricObject>();
         _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
         _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
+
+
+        var type = GetType();
+        var properties = type.GetProperties();
+
+        var commandProperties = properties
+            .Where(prop => typeof(IReactiveCommand).IsAssignableFrom(prop.PropertyType))
+            .Select(prop => (IReactiveCommand)prop.GetValue(this))
+            .Where(prop => prop is not null)
+            .ToList();
+
+        _allCommands = commandProperties;
     }
 
     public SaveFileDialog InitializeExportDialog()
