@@ -13,7 +13,7 @@
     xmlns:polygons="clr-namespace:Graphify.Geometry.GeometricObjects.Polygons;assembly=Graphify.Geometry"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify"
-    MinWidth="850"
+    MinWidth="1000"
     MinHeight="600" Name="mainwin">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
