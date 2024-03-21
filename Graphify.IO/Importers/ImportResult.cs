@@ -1,7 +1,7 @@
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 
-namespace Graphify.IO;
+namespace Graphify.IO.Importers;
 
 public class ImportResult
 {

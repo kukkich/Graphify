@@ -41,6 +41,8 @@ public partial class MainWindow
         .Subscribe();
         InitializeComponent();
 
+        
+
         this.WhenActivated(disposables =>
         {
             this.WhenAnyValue(x => x.GlWindow)
@@ -51,7 +53,14 @@ public partial class MainWindow
                     _drawer.InitGl(_gl);
                 })
                 .DisposeWith(disposables);
+
             todispose.DisposeWith(disposables);
+            
+            foreach (var command in ViewModel.AllCommands)
+            {
+                command.ThrownExceptions.Subscribe(HandleError)
+                    .DisposeWith(disposables);
+            }
         });
 
         this.listGeometryObjects.DataContext = viewModel;
@@ -69,6 +78,11 @@ public partial class MainWindow
         cm.IsOpen = true;
     }
 
+    private void HandleError(Exception e)
+    {
+        MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
     {
         _gl.Viewport(0, 0, (int)GlWindow.ActualWidth, (int)GlWindow.ActualHeight);
@@ -83,7 +97,7 @@ public partial class MainWindow
     private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
-        {
+        {          
             return;
         }
 
@@ -97,6 +111,15 @@ public partial class MainWindow
             return;
         }
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
+    }
+
+    private void AttachePointModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.AttachDetach);
     }
 
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
@@ -149,7 +172,7 @@ public partial class MainWindow
         {
             return;
         }
-        //ViewModel?.SetEditMode.Execute(EditMode.Reflect);
+        ViewModel?.SetEditMode.Execute(EditMode.Reflect);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {

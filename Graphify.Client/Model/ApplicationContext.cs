@@ -10,16 +10,16 @@ public class ApplicationContext
 {
     public Surface Surface { get; private set; }
     public IEnumerable<IGeometricObject> SelectedObjects => _selectedObjects;
-    
+
     private readonly IGeometryFactory _factory;
 
-    private readonly LinkedList<IGeometricObject> _selectedObjects;
+    private readonly HashSet<IGeometricObject> _selectedObjects;
 
     public ApplicationContext(Surface surface, IGeometryFactory factory)
     {
         Surface = surface;
         _factory = factory;
-        _selectedObjects = new LinkedList<IGeometricObject>();
+        _selectedObjects = [];
     }
 
     public void SetSurface(Surface newSurface)
@@ -31,7 +31,7 @@ public class ApplicationContext
     {
         Point newPoint = _factory.Create(pointCoords);
         Surface.AddObject(newPoint);
-        
+
         return newPoint;
     }
 
@@ -85,12 +85,11 @@ public class ApplicationContext
             ClearSelected();
         }
 
-        if (_selectedObjects.Contains(geometricObject))
+        if (!_selectedObjects.Add(geometricObject))
         {
             return;
         }
 
-        _selectedObjects.AddLast(geometricObject);
         geometricObject.ObjectState = ObjectState.Selected;
     }
 
@@ -114,13 +113,75 @@ public class ApplicationContext
     {
         ClearSelected();
 
-        foreach (var geometricObject in Surface.Objects)
+        foreach (var figure in Surface.Figures.Where(x => x.CanBeMoved()))
         {
-            _selectedObjects.AddLast(geometricObject);
+            _selectedObjects.Add(figure);
+        }
+
+        var pointsStack = new Stack<Point>();
+        var handledPoints = new HashSet<Point>();
+        foreach (var globalPoint in Surface.Points.Where(x => !x.IsAttached))
+        {
+            if (handledPoints.Contains(globalPoint))
+            {
+                continue;
+            }
+
+            pointsStack.Push(globalPoint);
+
+            ResolveMoveConflicts(pointsStack, handledPoints);
+        }
+
+        foreach (var geometricObject in _selectedObjects)
+        {
             geometricObject.ObjectState = ObjectState.Selected;
         }
 
         return _selectedObjects;
+    }
+
+    private void ResolveMoveConflicts(Stack<Point> pointsStack, HashSet<Point> handledPoints)
+    {
+        while (pointsStack.Count > 0)
+        {
+            var point = pointsStack.Pop();
+            handledPoints.Add(point);
+
+            var selectedControlFor = point.ControlFor
+                .Where(_selectedObjects.Contains)
+                .ToArray();
+
+            if (!selectedControlFor.Any())
+            {
+                _selectedObjects.Add(point);
+                continue;
+            }
+
+            if (selectedControlFor.Length == 1)
+            {
+                foreach (var p in selectedControlFor.First()
+                             .ControlPoints
+                             .Where(x => x != point &&
+                                         !handledPoints.Contains(x))
+                        )
+                {
+                    pointsStack.Push(p);
+                }
+            }
+
+            if (selectedControlFor.Length > 1)
+            {
+                foreach (var selectedFigure in selectedControlFor)
+                {
+                    _selectedObjects.Remove(selectedFigure);
+                    foreach (var p in selectedFigure.ControlPoints.Where(x => x != point))
+                    {
+                        pointsStack.Push(p);
+                    }
+                }
+                _selectedObjects.Add(point);
+            }
+        }
     }
 
     public void ClearSelected()

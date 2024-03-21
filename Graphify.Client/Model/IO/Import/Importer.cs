@@ -1,21 +1,37 @@
+using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
-using Graphify.Client.Model.Geometry;
-using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.IO.Importers;
 using Graphify.IO.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Graphify.Core.Model.IO.Import;
 
 public class Importer
 {
+    private readonly ApplicationContext _context;
     private readonly Dictionary<ImportFileType, IImporter> _importers = [];
 
-    public Importer(/*ISvgImporter svgImporter*/)
+    public Importer(IServiceProvider serviceProvider)
     {
-        /*_importers.Add(ImportFileType.Png, svgImporter);*/
-    }
+        _context = serviceProvider.GetRequiredService<ApplicationContext>();
 
-    public Surface? Import(string path, IGeometryFactory factory)
+        _importers.Add(ImportFileType.Custom, serviceProvider.GetRequiredService<GraphifyImporter>());
+    }
+    
+    public SaveResult Import(ImportFileType fileType, string path)
     {
-        throw new NotImplementedException();
+        ImportResult importResult = _importers[fileType].ImportFrom(path);
+
+        foreach (var figure in importResult.Figures)
+        {
+            _context.Surface.AddObject(figure);
+        }
+        
+        foreach (var point in importResult.Points)
+        {
+            _context.Surface.AddObject(point);
+        }
+        
+        return SaveResult.Success;
     }
 }

@@ -78,6 +78,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         return dist < distance;
     }
 
+    public bool CanBeMoved() => true;
+
     /// <summary>
     /// Метод, перемещающий точку в пространстве по вектору <c>shift</c>.
     /// Вместе со своим перемещением, обновляет все фигуры, которые к точке привязаны, вызовом метода <c>Point.Update()</c>
@@ -121,7 +123,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         var x = X - shift.X;
         var y = Y - shift.Y;
 
-        var radians = -angle * Math.PI / 180.0;
+        var radians = angle * Math.PI / 180.0;
         var s = (float)Math.Sin(radians);
         var c = (float)Math.Cos(radians);
 
@@ -161,6 +163,16 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         {
             fig.Update();
         }
+    }
+
+    public void AssignControl(IFigure figure)
+    {
+        _controlFor.Add(figure);
+    }
+
+    public void RetrieveControl(IFigure figure)
+    {
+        _controlFor.Remove(figure);
     }
 
     /// <summary>
@@ -255,7 +267,6 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
 
         drawer.DrawPoint(p, ObjectState);
     }
-
 
     public PointExportData GetExportData()
     {

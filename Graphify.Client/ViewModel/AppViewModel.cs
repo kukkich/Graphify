@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Client.Model;
+using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Curves;
@@ -18,6 +19,11 @@ namespace Graphify.Client.ViewModel;
 
 public class AppViewModel : ReactiveObject
 {
+
+    public IReadOnlyList<IReactiveCommand> AllCommands => _allCommands;
+
+    private readonly List<IReactiveCommand> _allCommands;
+
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
     public SourceCache<IGeometricObject, IGeometricObject> GeometryObjects { get; set; }
@@ -46,7 +52,7 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> OpenImportDialogCommand { get; private set; }
 
     public ReactiveCommand<(string Path, ExportFileType Format), Unit> Export { get; private set; }
-    public ReactiveCommand<string, Unit> Import { get; private set; }
+    public ReactiveCommand<(string Path, ImportFileType Format), Unit> Import { get; private set; }
 
     private readonly ILogger<AppViewModel> _logger;
     private readonly Application _application;
@@ -58,9 +64,10 @@ public class AppViewModel : ReactiveObject
         _application = application;
         _currentTool = application.ToolsController.ChangeTool(EditMode.Move);
 
+
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
-        Import = ReactiveCommand.CreateFromTask<string, Unit>(ImportFrom);
+        Import = ReactiveCommand.CreateFromTask<(string Path, ImportFileType Format), Unit>(ImportFrom);
         OpenExportDialogCommand = ReactiveCommand.CreateFromObservable(OpenExportDialog);
         OpenImportDialogCommand = ReactiveCommand.CreateFromObservable(OpenImportDialog);
 
@@ -79,18 +86,35 @@ public class AppViewModel : ReactiveObject
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
 
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
-
+        
         EditingObject = null;
 
         GeometryObjects = new SourceCache<IGeometricObject, IGeometricObject>(a => a);
-        GeometryObjects.AddOrUpdate([
-            new Point(1,1),
-            new Point(2,2),
-            new CubicBezierCurve([new Point(1,0), new Point(0,0), new Point(0, 1), new Point(0, 4)]),
-            new Circle( new Point(1,1), new Point(2,2)),
-            new Line(new Point(1,1),
-            new Point(3,2))
-        ]);
+        // Test example, todo: remove if it'll work
+        //GeometryObjects.AddOrUpdate([
+        //    new Point(1,1),
+        //    new Point(2,2),
+        //    new CubicBezierCurve([new Point(1,0), new Point(0,0), new Point(0, 1), new Point(0, 4)]),
+        //    new Circle( new Point(1,1), new Point(2,2)),
+        //    new Line(new Point(1,1),
+        //    new Point(3,2))
+        //]);
+
+        GeometryObjects = new SourceList<IGeometricObject>();
+        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
+        _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
+
+
+        var type = GetType();
+        var properties = type.GetProperties();
+
+        var commandProperties = properties
+            .Where(prop => typeof(IReactiveCommand).IsAssignableFrom(prop.PropertyType))
+            .Select(prop => (IReactiveCommand)prop.GetValue(this))
+            .Where(prop => prop is not null)
+            .ToList();
+
+        _allCommands = commandProperties;
     }
 
     public SaveFileDialog InitializeExportDialog()
@@ -105,7 +129,7 @@ public class AppViewModel : ReactiveObject
         };
         return exportFileDialog;
     }
-    private ExportFileType SelectFileType(string selectedExtension)
+    private ExportFileType SelectExportFileType(string selectedExtension)
     {
         ExportFileType fileType = selectedExtension switch
         {
@@ -116,6 +140,18 @@ public class AppViewModel : ReactiveObject
         };
         return fileType;
     }
+    
+    private ImportFileType SelectImportFileType(string selectedExtension)
+    {
+        ImportFileType fileType = selectedExtension switch
+        {
+            ".png" => ImportFileType.Png,
+            ".grafify" => ImportFileType.Custom,
+            _ => throw new InvalidOperationException(selectedExtension)
+        };
+        
+        return fileType;
+    }
 
     public string GetFilePath(SaveFileDialog exportFileDialog)
     {
@@ -123,12 +159,20 @@ public class AppViewModel : ReactiveObject
         return filePath;
     }
     
-    public ExportFileType GetFileType(string path)
+    public ExportFileType GetExportFileType(string path)
     {
         string selectedExtension = Path.GetExtension(path);
-        ExportFileType type = SelectFileType(selectedExtension);
+        ExportFileType type = SelectExportFileType(selectedExtension);
         return type;
     }
+    
+    public ImportFileType GetImportFileType(string path)
+    {
+        string selectedExtension = Path.GetExtension(path);
+        ImportFileType type = SelectImportFileType(selectedExtension);
+        return type;
+    }
+
     private IObservable<Unit> OpenExportDialog()
     {
         var exportFileDialog = InitializeExportDialog();
@@ -137,16 +181,18 @@ public class AppViewModel : ReactiveObject
             return Observable.Return(Unit.Default);
         }
         var filePath = GetFilePath(exportFileDialog);
-        var fileType = GetFileType(filePath);
+        var fileType = GetExportFileType(filePath);
         Export.Execute((filePath, fileType));
 
         return Observable.Return(Unit.Default);
     }
+
     public string GetFilePath(OpenFileDialog importFileDialog)
     {
         string filePath = importFileDialog.FileName;
         return filePath;
     }
+
     private OpenFileDialog InitializeImportDialog()
     {
         OpenFileDialog importFileDialog = new OpenFileDialog
@@ -167,7 +213,8 @@ public class AppViewModel : ReactiveObject
             return Observable.Return(Unit.Default);
         }
         var filePath = GetFilePath(importFileDialog);
-        Import.Execute(filePath);
+        var fileType = GetImportFileType(filePath);
+        Import.Execute((filePath, fileType));
 
         return Observable.Return(Unit.Default);
     }    
@@ -177,9 +224,9 @@ public class AppViewModel : ReactiveObject
         _application.Exporter.Export(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
     }
-    private Task<Unit> ImportFrom(string Path)
+    private Task<Unit> ImportFrom((string Path, ImportFileType Format) tuple)
     {
-        //_application.Importer.Import(Path,  );
+        _application.Importer.Import(tuple.Format,  tuple.Path);
         return Task.FromResult(Unit.Default);
     }
 
