@@ -167,6 +167,8 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         return distance > DistanceTo(point);
     }
 
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
+
     /// <summary>
     /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
     /// </summary>

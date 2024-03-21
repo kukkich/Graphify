@@ -18,14 +18,6 @@ public class Surface : IGeometryContext
     public delegate void OnGeometryObjectRemoved(IGeometricObject newObject);
     public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent;
 
-
-    public delegate void OnGeometryObjectAdded(IGeometricObject newObject);
-    public event OnGeometryObjectAdded OnGeometryObjectAddedEvent;
-
-    public delegate void OnGeometryObjectRemoved(IGeometricObject newObject);
-    public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent;
-
-
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
 

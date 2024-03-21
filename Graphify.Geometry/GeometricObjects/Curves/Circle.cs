@@ -139,6 +139,8 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
         return Math.Abs(Radius - distanceToPoint) < distance;
     }
 
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
+
     /// <summary>
     /// Метод, сдвигающий текущую окружность по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
     /// </summary>

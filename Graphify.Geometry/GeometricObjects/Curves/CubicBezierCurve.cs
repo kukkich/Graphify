@@ -153,6 +153,8 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         return false;
     }
 
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
+
     public void Move(Vector2 shift)
     {
         if (!CanBeMoved)

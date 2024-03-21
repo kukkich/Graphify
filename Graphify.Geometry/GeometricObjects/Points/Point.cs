@@ -78,6 +78,8 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         return dist < distance;
     }
 
+    public bool CanBeMoved() => true;
+
     /// <summary>
     /// Метод, перемещающий точку в пространстве по вектору <c>shift</c>.
     /// Вместе со своим перемещением, обновляет все фигуры, которые к точке привязаны, вызовом метода <c>Point.Update()</c>

@@ -105,6 +105,8 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
         return isNextToLines.Any();
     }
 
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
+
     /// <summary>
     /// Метод, сдвигающий текущий полигон по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
     /// </summary>
