@@ -133,6 +133,7 @@
                     Margin="14, 0, 14, 2"
                     Style="{StaticResource ChangeButtonStyle}"
                     Click="ExportButton_Click"
+                    ToolTip="Экспортировать изображение"
                     >
                 <Image Source="/Icons/save.png" Stretch="Uniform"/>
             </Button>
@@ -142,6 +143,7 @@
                     Margin="14, 0, 14, 2"
                     Style="{StaticResource ChangeButtonStyle}"
                     Click="ImportButton_Click"
+                    ToolTip="Загрузить изображение"
              >
                 <Image Source="/Icons/import.png" Stretch="Uniform"/>
             </Button>
@@ -151,6 +153,7 @@
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"                    
                     Click="MoveModeButton_Click"
+                    ToolTip="Выбрать/переместить"
                     >
                 <Image Source="/Icons/move.png" Stretch="Uniform"/>
             </Button>
@@ -159,7 +162,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreatePointModeButton_Click">
+                    Click="CreatePointModeButton_Click"
+                    ToolTip="Нарисовать точку">
                 <Image Source="/Icons/point.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateLineModeButton"
@@ -167,7 +171,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateLineModeButton_Click">
+                    Click="CreateLineModeButton_Click"
+                    ToolTip="Нарисовать отрезок">
                 <Image Source="/Icons/line.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreatePolygonModeButton"
@@ -175,7 +180,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreatePolygonModeButton_Click">
+                    Click="CreatePolygonModeButton_Click"
+                    ToolTip="Нарисовать многоугольник">
                 <Image Source="/Icons/polygon.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateCircleModeButton"
@@ -183,7 +189,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateCircleModeButton_Click">
+                    Click="CreateCircleModeButton_Click"
+                    ToolTip="Нарисовать окружность">
                 <Image Source="/Icons/circle.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateCurveModeButton"
@@ -191,7 +198,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateCurveModeButton_Click">
+                    Click="CreateCurveModeButton_Click"
+                    ToolTip="Нарисовать кривую Безье">
                 <Image Source="/Icons/curve.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="RotateModeButton"
@@ -200,7 +208,8 @@
                     Margin="20, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="RotateModeButton_Click">
+                    Click="RotateModeButton_Click"
+                    ToolTip="Повернуть">
                 <Image Source="/Icons/rotate.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ReflectModeButton"
@@ -209,7 +218,8 @@
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="ReflectModeButton_Click">
+                    Click="ReflectModeButton_Click"
+                    ToolTip="Отразить">
                 <Image Source="/Icons/reflect.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="AttachePointModeButton"
@@ -217,7 +227,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="AttachePointModeButton_Click">
+                    Click="AttachePointModeButton_Click"
+                    ToolTip="Прикрепить/открепить точку">
                 <Image Source="/Icons/attach.png" Stretch="Uniform" Margin="2"/>
             </Button>
         </StackPanel>
@@ -232,7 +243,8 @@
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource ChangeButtonStyle}"
-                    Click="UndoButton_Click">
+                    Click="UndoButton_Click"
+                    ToolTip="Отменить изменения">
                 <Image Source="/Icons/undo.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="RedoButton"
@@ -241,17 +253,9 @@
                     Margin="0, 0, 100, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource ChangeButtonStyle}"
-                    Click="RedoButton_Click">
+                    Click="RedoButton_Click"
+                    ToolTip="Повторить изменения">
                 <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
-            </Button>
-            <Button x:Name="ZoomInButton"
-                    Width="40"
-                    Height="40"
-                    Margin="0, 0, 14, 2"
-                    HorizontalAlignment="Right"
-                    Style="{StaticResource ChangeButtonStyle}"
-                    Click="ZoomInButton_Click">
-                <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ZoomOutButton"
                     Width="40"
@@ -259,7 +263,18 @@
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource ChangeButtonStyle}"
-                    Click="ZoomOutButton_Click">
+                    Click="ZoomOutButton_Click"
+                    ToolTip="Приблизить">
+                <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="ZoomInButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="ZoomInButton_Click"
+                    ToolTip="Отдалить">
                 <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
             </Button>
 
