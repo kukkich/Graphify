@@ -10,6 +10,7 @@ public class CurveStyle : ReactiveObject, IStyle
 {
     [Reactive, JsonProperty] public Color PrimaryColor { get; set; }
     [Reactive, JsonProperty] public string Name { get; set; }
+    [Reactive, JsonProperty] public bool Visible { get; set; } = true;
     [Reactive, JsonProperty] public int Size { get; set; }
     public static CurveStyle Default => new(Color.Black, "Default", CurveStyle.DefaultSize);
 

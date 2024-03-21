@@ -261,6 +261,10 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
     /// <param name="drawer"> - рисователь, предоставляющий набор примитивов для отрисовки</param>
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
 
         var p = new Vector2(X, Y);

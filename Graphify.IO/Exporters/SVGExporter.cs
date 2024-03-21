@@ -1,15 +1,17 @@
 using System.Numerics;
+using Aspose.Imaging;
 using Aspose.Svg;
 using Aspose.Svg.Builder;
 using Aspose.Svg.Toolkit.Optimizers;
 using DynamicData;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.IO.Extension;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
+using Point = Graphify.Geometry.GeometricObjects.Points.Point;
 
 namespace Graphify.IO.Exporters;
 
@@ -78,6 +80,7 @@ public sealed class SVGExporter : IExporter
                 .Cy(dataPoint.Position.Y)
                 .R(dataPoint.Style.Size)
                 .Fill(dataPoint.Style.PrimaryColor)
+                .Visibility(GetVisibilityType(dataPoint.Style))
                 .Transform(t => t.Scale(1, -1))
                 );
     }
@@ -100,6 +103,7 @@ public sealed class SVGExporter : IExporter
                 .Y2(points[1].Y)
                 .Stroke(dataLine.Style.PrimaryColor)
                 .StrokeWidth((dataLine.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Visibility(GetVisibilityType(dataLine.Style))
                 .Transform(t => t.Scale(1, -1))
                 );
     }
@@ -126,6 +130,7 @@ public sealed class SVGExporter : IExporter
                 .Fill(Paint.None)
                 .Stroke(dataCircle.Style.PrimaryColor)
                 .StrokeWidth((dataCircle.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Visibility(GetVisibilityType(dataCircle.Style))
                 .Transform(t => t.Scale(1, -1))
             );
     }
@@ -258,5 +263,10 @@ public sealed class SVGExporter : IExporter
         var newContent = content.Replace(str, "");
 
         File.WriteAllText(path, newContent);
+    }
+
+    private static Visibility GetVisibilityType(IStyle style)
+    {
+        return style.Visible ? Visibility.Visible : Visibility.Hidden;
     }
 }

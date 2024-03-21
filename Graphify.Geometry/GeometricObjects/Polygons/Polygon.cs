@@ -206,6 +206,10 @@ public class Polygon : ReactiveObject, IFigure, IStyled<PolygonStyle>
     /// <param name="drawer"> - рисователь, реализующий интерфейс <c>IDrawer</c></param>
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
 
         var points = ControlPoints.Select(point => new Vector2(point.X, point.Y))

@@ -202,6 +202,10 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="drawer"> - рисователь, реализующий интерфейс <c>IDrawer</c></param>
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
         var centerPoint = new Vector2(_centerPoint.X, _centerPoint.Y);
 
