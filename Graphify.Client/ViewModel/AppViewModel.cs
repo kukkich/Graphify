@@ -34,6 +34,8 @@ public class AppViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> Paste { get; private set; }
     public ReactiveCommand<Unit, Unit> Cut { get; private set; }
 
+    public ReactiveCommand<Unit, Unit> Delete { get; private set; }
+
     public ReactiveCommand<Unit, Unit> SelectAll { get; private set; }
 
     public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
@@ -76,7 +78,8 @@ public class AppViewModel : ReactiveObject
         Cut = ReactiveCommand.CreateFromObservable(CutObjects);
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
 
-        SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
+        Delete = ReactiveCommand.CreateFromObservable(DeleteObjects);
+        SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObjects);
 
         EditingObject = null;
         GeometryObjects = new SourceList<IGeometricObject>();
@@ -261,8 +264,14 @@ public class AppViewModel : ReactiveObject
         return Observable.Return(Unit.Default);
     }
 
+    private IObservable<Unit> DeleteObjects()
+    {
+        _application.Delete();
+        return Observable.Return(Unit.Default);
+    }
+
    
-    private IObservable<Unit> SelectAllObject()
+    private IObservable<Unit> SelectAllObjects()
     {
         _application.Context.SelectAll();
         return Observable.Return(Unit.Default);

@@ -19,6 +19,7 @@
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding OpenExportDialogCommand}" />
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding OpenImportDialogCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding Delete}" />
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="ObjectOptionsButton">
