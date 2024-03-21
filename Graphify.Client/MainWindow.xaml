@@ -14,7 +14,9 @@
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify"
     MinWidth="1000"
-    MinHeight="600" Name="mainwin">
+    MinHeight="600"
+    Name="mainwin"
+    Icon="/Icons/app.jpg">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
@@ -250,7 +252,7 @@
             <Button x:Name="RedoButton"
                     Width="50"
                     Height="40"
-                    Margin="0, 0, 100, 2"
+                    Margin="0, 0, 50, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource ChangeButtonStyle}"
                     Click="RedoButton_Click"
@@ -312,7 +314,13 @@
                             <RowDefinition Height="20"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Width="10" Height="10"
+                                 Grid.Column="0"
+                                 Grid.RowSpan="2"
+                                 />
                         <TextBlock Text="Точка" Grid.Column="1" Grid.Row="0"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                             <TextBlock Text="(" />

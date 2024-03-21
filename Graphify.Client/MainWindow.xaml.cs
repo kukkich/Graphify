@@ -281,7 +281,8 @@ public partial class MainWindow
     private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
     { }
     private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
+    {
+    }
     private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
     {
         if (ViewModel is null)
@@ -294,5 +295,5 @@ public partial class MainWindow
         position.Y = GlWindow.ActualHeight / 2 - position.Y;
         ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
-  
+
 }
