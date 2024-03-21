@@ -8,10 +8,13 @@
     xmlns:local="clr-namespace:Graphify.Client"    
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
+    xmlns:points="clr-namespace:Graphify.Geometry.GeometricObjects.Points;assembly=Graphify.Geometry"
+    xmlns:curves="clr-namespace:Graphify.Geometry.GeometricObjects.Curves;assembly=Graphify.Geometry"
+    xmlns:polygons="clr-namespace:Graphify.Geometry.GeometricObjects.Polygons;assembly=Graphify.Geometry"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify"
     MinWidth="850"
-    MinHeight="600">
+    MinHeight="600" Name="mainwin">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
@@ -23,7 +26,9 @@
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding OpenImportDialogCommand}" />
     </Window.InputBindings>
     <Window.Resources>
-        <ContextMenu x:Key="ObjectOptionsButton">
+        <ContextMenu x:Key="ObjectOptions">
+            <MenuItem Header="Редактировать"
+                      Click="EditObjectButton_Click"/>
             <MenuItem Header="Удалить"
                       Click="DeleteObjectButton_Click"/>
             <MenuItem Header="Клонировать"
@@ -262,7 +267,9 @@
         <ListBox Background="White"
                  Grid.Row="1"
                  Grid.Column="0"
-                 x:Name="listGeometryObjects">
+                 x:Name="listGeometryObjects"
+                 VerticalAlignment="Top"
+                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
@@ -276,35 +283,158 @@
                     <Setter Property="VerticalContentAlignment"
                             Value="Stretch"/>
                 </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>                    
+            </ListBox.ItemContainerStyle>            
+            <ListBox.Resources>
+                <DataTemplate DataType="{x:Type points:Point}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Ellipse Fill="{Binding Path=Type}"
-                                 Width="15" 
-                                 Height="15"
-                                 HorizontalAlignment="Left"/>
-                        <TextBlock Text="{Binding Path=Data}"
-                                   Margin="0"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Точка" Grid.Column="1" Grid.Row="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+                            <TextBlock Text="(" />
+                            <TextBlock Text="{Binding X}" />
+                            <TextBlock Text=", " />
+                            <TextBlock Text="{Binding Y}" />
+                            <TextBlock Text=")" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type polygons:Polygon}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Полигон" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type curves:Circle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Окружность" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Кубическая кривая Безье" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type curves:Line}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Линия" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="("/>
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>                
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <ContentControl Content="{Binding}"/>
                         <Button Padding="0"
                                 Margin="0"
                                 Width="30"
+                                Height="40"
                                 FontSize="25"
                                 FontWeight="Bold"
-                                HorizontalContentAlignment="Center"
+                                HorizontalAlignment="Right"
                                 Background="White"
                                 BorderBrush="White"
-                                Grid.Column="2"
                                 Content="︙"
                                 Click="ObjectOptionsButton_Click"/>
-                    </Grid>                    
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

@@ -7,7 +7,9 @@ using Graphify.Client.Model;
 using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
+using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -24,7 +26,7 @@ public class AppViewModel : ReactiveObject
 
     [Reactive] public int ReactiveProperty { get; private set; }
     [Reactive] public IGeometricObject? EditingObject { get; set; }
-    public SourceList<IGeometricObject> GeometryObjects { get; set; }
+    public SourceCache<IGeometricObject, IGeometricObject> GeometryObjects { get; set; }
 
     public ReactiveCommand<Vector2, Unit> RightMouseUp { get; private set; }
     public ReactiveCommand<Vector2, Unit> RightMouseDown { get; private set; }
@@ -86,6 +88,18 @@ public class AppViewModel : ReactiveObject
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
         
         EditingObject = null;
+
+        GeometryObjects = new SourceCache<IGeometricObject, IGeometricObject>(a => a);
+        // Test example, todo: remove if it'll work
+        //GeometryObjects.AddOrUpdate([
+        //    new Point(1,1),
+        //    new Point(2,2),
+        //    new CubicBezierCurve([new Point(1,0), new Point(0,0), new Point(0, 1), new Point(0, 4)]),
+        //    new Circle( new Point(1,1), new Point(2,2)),
+        //    new Line(new Point(1,1),
+        //    new Point(3,2))
+        //]);
+
         GeometryObjects = new SourceList<IGeometricObject>();
         _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
         _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);

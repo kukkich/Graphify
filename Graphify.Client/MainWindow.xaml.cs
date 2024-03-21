@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
@@ -5,13 +6,23 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DynamicData;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
+using Graphify.Geometry.GeometricObjects.Points;
+using System.Drawing;
+using ReactiveUI.Fody.Helpers;
+using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
+using Graphify.Geometry.GeometricObjects.Interfaces;
+using DynamicData;
+using System;
 
 namespace Graphify.Client;
 
@@ -19,12 +30,15 @@ public partial class MainWindow
 {
     private readonly OpenGLDrawer _drawer;
     private OpenGL _gl;
-
+    ReadOnlyObservableCollection<IGeometricObject> geometricObjects;
+    public ReadOnlyObservableCollection<IGeometricObject> GeometricObjects => geometricObjects;
     public MainWindow(AppViewModel viewModel, OpenGLDrawer drawer)
     {
         _drawer = drawer;
         ViewModel = viewModel;
         DataContext = viewModel;
+        var todispose = this.ViewModel.GeometryObjects.Connect().Bind(out geometricObjects)
+        .Subscribe();
         InitializeComponent();
 
         
@@ -40,7 +54,7 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
 
-            
+            todispose.DisposeWith(disposables);
             
             foreach (var command in ViewModel.AllCommands)
             {
@@ -49,6 +63,19 @@ public partial class MainWindow
             }
         });
 
+        this.listGeometryObjects.DataContext = viewModel;
+        this.WhenAnyValue(x => x.Height)
+            .Subscribe(height =>
+            {
+                listGeometryObjects.Height = height - 85;
+            });
+    }
+
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu cm = this.FindResource("ObjectOptions") as ContextMenu;
+        cm.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
     }
 
     private void HandleError(Exception e)
@@ -219,29 +246,6 @@ public partial class MainWindow
 
     private void ZoomInButton_Click(object sender, RoutedEventArgs e)
     {
-
-    }
-    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
-    {
-        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
-        cm.PlacementTarget = sender as Button;
-        cm.IsOpen = true;
-    }
-    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
-    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
-    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        var position = args.GetPosition((OpenGLControl)sender);
-        position.X -= GlWindow.ActualWidth / 2;
-        position.Y = GlWindow.ActualHeight / 2 - position.Y;
-        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
     private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
@@ -270,5 +274,24 @@ public partial class MainWindow
         ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
+    private void EditObjectButton_Click(object sender, RoutedEventArgs e)
+    {
+    }    
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
 
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+  
 }
