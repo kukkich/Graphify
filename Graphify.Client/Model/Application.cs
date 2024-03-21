@@ -74,4 +74,10 @@ public class Application
 
         CommandsBuffer.AddCommand(new DeleteCommand(Context, Context.SelectedObjects.ToHashSet()));
     }
+
+    public void Clear()
+    {
+        Context.Surface.Clear();
+        Context.ClearSelected();
+    }
 }

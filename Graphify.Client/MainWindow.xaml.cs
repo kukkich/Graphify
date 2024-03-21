@@ -298,6 +298,6 @@ public partial class MainWindow
 
     private void CleanAllModeButton_Click(object sender, RoutedEventArgs e)
     {
-
+        ViewModel?.Clean.Execute();
     }
 }

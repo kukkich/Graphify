@@ -316,6 +316,8 @@ public class AppViewModel : ReactiveObject
     }
     private IObservable<Unit> CleanObjects()
     {
+        _application.Clear();
+        GeometryObjects.Clear();
         return Observable.Return(Unit.Default);
     }
 }
