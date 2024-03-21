@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Client.Model;
+using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -56,6 +57,7 @@ public class AppViewModel : ReactiveObject
         _application = application;
         _currentTool = application.ToolsController.ChangeTool(EditMode.Move);
 
+
         SetEditMode = ReactiveCommand.CreateFromObservable<EditMode, Unit>(SetMode);
         Export = ReactiveCommand.CreateFromTask<(string Path, ExportFileType Format), Unit>(ExportTo);
         Import = ReactiveCommand.CreateFromTask<(string Path, ImportFileType Format), Unit>(ImportFrom);
@@ -77,9 +79,11 @@ public class AppViewModel : ReactiveObject
         Paste = ReactiveCommand.CreateFromObservable(PasteObjects);
 
         SelectAll = ReactiveCommand.CreateFromObservable(SelectAllObject);
-
+        
         EditingObject = null;
         GeometryObjects = new SourceList<IGeometricObject>();
+        _application.Context.Surface.OnGeometryObjectAddedEvent += newObject => GeometryObjects.Add(newObject);
+        _application.Context.Surface.OnGeometryObjectRemovedEvent += newObject => GeometryObjects.Remove(newObject);
     }
 
     public SaveFileDialog InitializeExportDialog()
@@ -151,11 +155,13 @@ public class AppViewModel : ReactiveObject
 
         return Observable.Return(Unit.Default);
     }
+
     public string GetFilePath(OpenFileDialog importFileDialog)
     {
         string filePath = importFileDialog.FileName;
         return filePath;
     }
+
     private OpenFileDialog InitializeImportDialog()
     {
         OpenFileDialog importFileDialog = new OpenFileDialog

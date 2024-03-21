@@ -10,5 +10,5 @@ public enum EditMode
     CreatePolygon,
     CreateCircleTwoPoints,
     CreateBezierCurve,
-    //AttachePoint
+    AttachDetach
 }

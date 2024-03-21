@@ -20,6 +20,6 @@ public class AddCommand : ICommand
 
     public void Undo()
     {
-        _context.Surface.TryRemove(_geometricObject);
+        _context.Surface.CancelObject(_geometricObject);
     }
 }
