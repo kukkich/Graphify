@@ -64,10 +64,11 @@ public partial class MainWindow
         });
 
         this.listGeometryObjects.DataContext = viewModel;
+        TopPanel.DataContext = viewModel;
         this.WhenAnyValue(x => x.Height)
             .Subscribe(height =>
             {
-                listGeometryObjects.Height = height - 85;
+                listGeometryObjects.Height = Math.Max(0, height - 85);
             });
     }
 

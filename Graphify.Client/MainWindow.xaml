@@ -112,7 +112,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="46"/>
+            <RowDefinition  Height="46"/>
             <RowDefinition MinHeight="722"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -125,6 +125,7 @@
                     Grid.ColumnSpan="2"
                     Background="#F5F5F5"
                     Orientation="Horizontal"
+                    x:Name="TopPanel"                    
                     >
             <Button x:Name="ExportButton"
                     Width="40"
@@ -269,7 +270,8 @@
                  Grid.Column="0"
                  x:Name="listGeometryObjects"
                  VerticalAlignment="Top"
-                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}">
+                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}"
+                 BorderThickness="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
