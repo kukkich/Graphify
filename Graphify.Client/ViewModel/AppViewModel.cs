@@ -4,12 +4,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 using Graphify.Client.Model;
-using Graphify.Client.Model.Draw;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
-using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Points;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -47,8 +44,8 @@ public class AppViewModel : ReactiveObject
 
     public ReactiveCommand<Unit, Unit> SelectAll { get; private set; }
 
-    public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; }
-    public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; }
+    public ReactiveCommand<Unit, Unit> ZoomIn { get; private set; } = null!;
+    public ReactiveCommand<Unit, Unit> ZoomOut { get; private set; } = null!;
     public ReactiveCommand<EditMode, Unit> SetEditMode { get; private set; }
 
     public ReactiveCommand<Unit, Unit> OpenExportDialogCommand { get; private set; }
@@ -121,7 +118,7 @@ public class AppViewModel : ReactiveObject
         _allCommands = commandProperties;
     }
 
-    
+
 
     public SaveFileDialog InitializeExportDialog()
     {
@@ -146,7 +143,7 @@ public class AppViewModel : ReactiveObject
         };
         return fileType;
     }
-    
+
     private ImportFileType SelectImportFileType(string selectedExtension)
     {
         ImportFileType fileType = selectedExtension switch
@@ -155,7 +152,7 @@ public class AppViewModel : ReactiveObject
             ".grafify" => ImportFileType.Custom,
             _ => throw new InvalidOperationException(selectedExtension)
         };
-        
+
         return fileType;
     }
 
@@ -164,14 +161,14 @@ public class AppViewModel : ReactiveObject
         string filePath = exportFileDialog.FileName;
         return filePath;
     }
-    
+
     public ExportFileType GetExportFileType(string path)
     {
         string selectedExtension = Path.GetExtension(path);
         ExportFileType type = SelectExportFileType(selectedExtension);
         return type;
     }
-    
+
     public ImportFileType GetImportFileType(string path)
     {
         string selectedExtension = Path.GetExtension(path);
@@ -223,7 +220,7 @@ public class AppViewModel : ReactiveObject
         Import.Execute((filePath, fileType));
 
         return Observable.Return(Unit.Default);
-    }    
+    }
 
     private Task<Unit> ExportTo((string Path, ExportFileType Format) tuple)
     {
@@ -232,7 +229,7 @@ public class AppViewModel : ReactiveObject
     }
     private Task<Unit> ImportFrom((string Path, ImportFileType Format) tuple)
     {
-        _application.Importer.Import(tuple.Format,  tuple.Path);
+        _application.Importer.Import(tuple.Format, tuple.Path);
         return Task.FromResult(Unit.Default);
     }
 
@@ -308,7 +305,7 @@ public class AppViewModel : ReactiveObject
         return Observable.Return(Unit.Default);
     }
 
-   
+
     private IObservable<Unit> SelectAllObjects()
     {
         _application.Context.SelectAll();

@@ -8,7 +8,7 @@ namespace Graphify.Client.Model.Draw;
 // TODO refactor
 public class DrawLoop
 {
-    private IGeometryContext _context;
+    private readonly IGeometryContext _context;
     private readonly OpenGLDrawer _drawer;
 
     private Stopwatch _stopwatch;

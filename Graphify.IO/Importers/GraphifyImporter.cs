@@ -115,7 +115,7 @@ public partial class GraphifyImporter : IImporter
 
         return points;
     }
-     
+
     private void AddPoints()
     {
         foreach (JsonPointObject pointObject in _jsonPointObjects!)

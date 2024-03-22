@@ -6,6 +6,7 @@ using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+#pragma warning disable CS8604 // Possible null reference argument.
 
 namespace Graphify.Geometry.GeometricObjects.Points;
 

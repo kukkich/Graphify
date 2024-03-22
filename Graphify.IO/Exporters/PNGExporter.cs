@@ -36,7 +36,7 @@ public sealed class PNGExporter : IExporter
         SvgDocument svgDocument = SvgDocument.Open(svgPath);
 
         Bitmap bitmap = svgDocument.Draw();
-        
+
         bitmap.Save(path, ImageFormat.Png);
     }
 }

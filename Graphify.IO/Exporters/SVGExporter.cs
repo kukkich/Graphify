@@ -1,5 +1,4 @@
 using System.Numerics;
-using Aspose.Imaging;
 using Aspose.Svg;
 using Aspose.Svg.Builder;
 using Aspose.Svg.Toolkit.Optimizers;

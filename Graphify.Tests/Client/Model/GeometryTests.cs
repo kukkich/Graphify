@@ -1,15 +1,14 @@
 using System.Numerics;
 using Graphify.Client.Model.Geometry;
-using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Curves;
-using Graphify.Geometry.GeometricObjects.Interfaces;
+using Graphify.Geometry.GeometricObjects.Points;
 
 namespace Graphify.Tests.Client.Model
 {
     internal class GeometryTests
     {
-        private Surface _surface = new Surface();
-        private Surface _emptySurface = new Surface();
+        private readonly Surface _surface = new Surface();
+        private readonly Surface _emptySurface = new Surface();
         private Point _point1;
         private Point _point2;
         private Line _line;
@@ -27,7 +26,7 @@ namespace Graphify.Tests.Client.Model
         [TestCaseSource(nameof(longDistance))]
         public void GIVEN_Point_WHEN_distance_between_points_is_too_long_THEN_expected_false(Vector2 point)
         {
-            var result = _surface.TryGetClosestObject(point,10);
+            var result = _surface.TryGetClosestObject(point, 10);
             Assert.NotNull(result);
         }
 

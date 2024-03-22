@@ -1,5 +1,4 @@
 using System.Numerics;
-using Graphify.Geometry.Attaching;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Points;
 
@@ -10,7 +9,7 @@ namespace Graphify.Tests.Geometry
         private Circle _circle = null;
         private Circle _secondCircle = null;
         private Point _b = null;
-        private Point _a = null;
+        private readonly Point _a = null;
         private readonly IEqualityComparer<Circle> _comparer = new CircleComparer();
 
         [SetUp]

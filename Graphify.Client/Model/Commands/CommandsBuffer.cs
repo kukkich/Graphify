@@ -17,7 +17,7 @@ public class CommandsBuffer
         if (_commands.Count >= StackSize)
         {
             _commands.RemoveLast();
-            
+
         }
 
         _commands.AddFirst(command);

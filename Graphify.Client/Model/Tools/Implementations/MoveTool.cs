@@ -14,7 +14,7 @@ public class MoveTool : IApplicationTool
     private readonly CommandsBuffer _commandsBuffer;
     private Vector2 _previousMousePosition;
     private Vector2 _moveShift = Vector2.Zero;
-    
+
     public MoveTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer)
     {
         _applicationContext = applicationContext;

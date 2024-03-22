@@ -17,7 +17,7 @@ public class BaseBezierCurveDrawer : BaseGeometryObjectDrawer<IEnumerable<Vector
     protected override void DrawSelected(IEnumerable<Vector2> point, DrawSettings settings)
     {
         defaultDrawer.DrawBezierCurve(point, settings.LineColor, settings.LineThickness);
-        
+
         defaultDrawer.DrawBezierCurve(point,
             Color.FromArgb(40,
                 settings.LineColor.R,

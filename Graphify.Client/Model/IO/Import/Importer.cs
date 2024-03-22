@@ -17,7 +17,7 @@ public class Importer
 
         _importers.Add(ImportFileType.Custom, serviceProvider.GetRequiredService<GraphifyImporter>());
     }
-    
+
     public SaveResult Import(ImportFileType fileType, string path)
     {
         ImportResult importResult = _importers[fileType].ImportFrom(path);
@@ -26,12 +26,12 @@ public class Importer
         {
             _context.Surface.AddObject(figure);
         }
-        
+
         foreach (var point in importResult.Points)
         {
             _context.Surface.AddObject(point);
         }
-        
+
         return SaveResult.Success;
     }
 }

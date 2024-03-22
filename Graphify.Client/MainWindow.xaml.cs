@@ -15,14 +15,6 @@ using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
 using SharpGL.WPF;
-using Graphify.Geometry.GeometricObjects.Points;
-using System.Drawing;
-using ReactiveUI.Fody.Helpers;
-using Microsoft.VisualBasic;
-using System.Collections.ObjectModel;
-using Graphify.Geometry.GeometricObjects.Interfaces;
-using DynamicData;
-using System;
 
 namespace Graphify.Client;
 
@@ -30,7 +22,7 @@ public partial class MainWindow
 {
     private readonly OpenGLDrawer _drawer;
     private OpenGL _gl;
-    ReadOnlyObservableCollection<IGeometricObject> geometricObjects;
+    private readonly ReadOnlyObservableCollection<IGeometricObject> geometricObjects;
     public ReadOnlyObservableCollection<IGeometricObject> GeometricObjects => geometricObjects;
     public MainWindow(AppViewModel viewModel, OpenGLDrawer drawer)
     {
@@ -41,7 +33,7 @@ public partial class MainWindow
         .Subscribe();
         InitializeComponent();
 
-        
+
 
         this.WhenActivated(disposables =>
         {
@@ -55,7 +47,7 @@ public partial class MainWindow
                 .DisposeWith(disposables);
 
             todispose.DisposeWith(disposables);
-            
+
             foreach (var command in ViewModel.AllCommands)
             {
                 command.ThrownExceptions.Subscribe(HandleError)
@@ -98,7 +90,7 @@ public partial class MainWindow
     private void MoveModeButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
-        {          
+        {
             return;
         }
 
@@ -200,7 +192,7 @@ public partial class MainWindow
         ExportFileType fileType = SelectFileType(selectedExtension);
         ViewModel?.Export.Execute((filePath, fileType));
     }
-  
+
     private void ImportButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)
@@ -277,7 +269,7 @@ public partial class MainWindow
 
     private void EditObjectButton_Click(object sender, RoutedEventArgs e)
     {
-    }    
+    }
     private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
     { }
     private void CloneObjectButton_Click(object sender, RoutedEventArgs e)

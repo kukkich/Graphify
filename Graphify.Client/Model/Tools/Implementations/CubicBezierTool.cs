@@ -46,9 +46,9 @@ public class CubicBezierTool : IApplicationTool
         {
             return;
         }
-        
+
         _points.Add(newPoint);
-        
+
         if (_points.Count == 4)
         {
             IFigure bezierCurve = _context.CreateFigure(ObjectType.CubicBezier, _points.ToArray());

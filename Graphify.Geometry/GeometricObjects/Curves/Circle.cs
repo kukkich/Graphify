@@ -115,7 +115,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
                 "Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре"
             );
         }
-        
+
         _attached.Remove(attached);
     }
 

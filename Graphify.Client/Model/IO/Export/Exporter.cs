@@ -1,6 +1,5 @@
 using Graphify.Client.Model;
 using Graphify.Client.Model.Enums;
-using Graphify.Client.Model.Interfaces;
 using Graphify.IO.Exporters;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;

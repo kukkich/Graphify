@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Windows.Navigation;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.Geometry.GeometricObjects.Polygons;
@@ -11,17 +10,17 @@ public class Surface : IGeometryContext
     public IEnumerable<IGeometricObject> Objects => _figures.Union<IGeometricObject>(_points);
     public IEnumerable<IFigure> Figures => _figures;
     public IEnumerable<Point> Points => _points;
-    
+
     public delegate void OnGeometryObjectAdded(IGeometricObject newObject);
     public event OnGeometryObjectAdded OnGeometryObjectAddedEvent = null!;
-    
+
     public delegate void OnGeometryObjectRemoved(IGeometricObject newObject);
     public event OnGeometryObjectRemoved OnGeometryObjectRemovedEvent = null!;
 
     private readonly HashSet<IFigure> _figures = [];
     private readonly HashSet<Point> _points = [];
 
-    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 10)
+    public IGeometricObject? TryGetClosestObject(Vector2 point, double precision = 15)
     {
         var closestPoint = TryGetClosestPoint(point, precision);
 
@@ -40,14 +39,14 @@ public class Surface : IGeometryContext
         return null;
     }
 
-    public Point? TryGetClosestPoint(Vector2 point, double precision = 10)
+    public Point? TryGetClosestPoint(Vector2 point, double precision = 15)
     {
         var closestPoint = _points.FirstOrDefault(p => p.IsNextTo(point, (float)precision));
 
         return closestPoint;
     }
 
-    public IFigure? TryGetClosestFigure(Vector2 point, double precision = 10)
+    public IFigure? TryGetClosestFigure(Vector2 point, double precision = 15)
     {
         var closestFigure = _figures.FirstOrDefault(f => f.IsNextTo(point, (float)precision));
 
@@ -70,7 +69,7 @@ public class Surface : IGeometryContext
                 controlPoint.AssignControl(figure);
             }
         }
-        
+
         OnGeometryObjectAddedEvent.Invoke(newObject);
     }
 
@@ -158,7 +157,7 @@ public class Surface : IGeometryContext
         var figureAttached = point.AttachedTo;
 
         figureAttached?.ConsumeDetach(point);
-        
+
         return _points.Remove(point);
     }
 }

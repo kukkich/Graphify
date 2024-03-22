@@ -19,7 +19,7 @@ public class DeleteCommand : ICommand
         {
             _context.Surface.TryRemove(geometricObject);
         }
-        
+
     }
 
     public void Undo()

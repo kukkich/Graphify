@@ -1,11 +1,9 @@
 using System.Numerics;
-using System.Windows;
 using System.Windows.Input;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Points;
 using Point = Graphify.Geometry.GeometricObjects.Points.Point;
 
 namespace Graphify.Client.Model.Tools.Implementations;
@@ -21,7 +19,7 @@ public class RotateTool : IApplicationTool
     private Point? _point;
     private float _angle;
 
-    public RotateTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer) 
+    public RotateTool(ApplicationContext applicationContext, CommandsBuffer commandsBuffer)
     {
         _applicationContext = applicationContext;
         _commandsBuffer = commandsBuffer;
@@ -81,7 +79,7 @@ public class RotateTool : IApplicationTool
                 }
                 else
                 {
-                    if(_point == null)
+                    if (_point == null)
                     {
                         _point = point;
                         _point.ObjectState = ObjectState.ControlPoint;

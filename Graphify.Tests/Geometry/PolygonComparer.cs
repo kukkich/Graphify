@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Graphify.Geometry.GeometricObjects.Curves;
-using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.Geometry.GeometricObjects.Points;
+using Graphify.Geometry.GeometricObjects.Polygons;
 
 namespace Graphify.Tests.Geometry
 {

@@ -11,7 +11,7 @@ namespace Graphify.Tests.Geometry
         private readonly IEqualityComparer<Line> _comparer = new LineComparer();
         private Line _secondLine = null;
         private Point _b = null;
-        static private Point _pointA = null;
+        private static Point _pointA = null;
         private Point _pointB = null;
 
         [SetUp]
