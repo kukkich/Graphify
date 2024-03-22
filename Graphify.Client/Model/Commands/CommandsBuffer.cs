@@ -17,7 +17,7 @@ public class CommandsBuffer
         if (_commands.Count >= StackSize)
         {
             _commands.RemoveLast();
-            
+
         }
 
         _commands.AddFirst(command);
@@ -28,7 +28,7 @@ public class CommandsBuffer
     {
         if (_commands.Count <= 0) return;
 
-        var command = _commands.First.Value;
+        var command = _commands.First!.Value;
         _commands.RemoveFirst();
         command.Undo();
 
@@ -42,7 +42,7 @@ public class CommandsBuffer
     {
         if (_cancelledCommands.Count <= 0) return;
 
-        var command = _cancelledCommands.First.Value;
+        var command = _cancelledCommands.First!.Value;
         _cancelledCommands.RemoveFirst();
         command.Execute();
         _commands.AddFirst(command);

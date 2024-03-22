@@ -8,14 +8,14 @@ namespace Graphify.Client.Model.Draw;
 // TODO refactor
 public class DrawLoop
 {
-    private IGeometryContext _context;
+    private readonly IGeometryContext _context;
     private readonly OpenGLDrawer _drawer;
 
-    private Stopwatch _stopwatch;
+    private Stopwatch _stopwatch = null!;
     private float _fps;
     private bool _isRunning;
 
-    private DispatcherTimer _timer;
+    private DispatcherTimer _timer = null!;
 
     public DrawLoop(ApplicationContext applicationContext, OpenGLDrawer drawer)
     {
@@ -30,7 +30,7 @@ public class DrawLoop
         _isRunning = false;
 
         _timer = new DispatcherTimer();
-        _timer.Tick += Timer_Tick;
+        _timer.Tick += Timer_Tick!;
     }
 
     private void Timer_Tick(object sender, EventArgs e)

@@ -38,7 +38,7 @@ public class Application
     public void Copy()
     {
         _clipboard.CopyObjects(Context.SelectedObjects);
-        CommandsBuffer.AddCommand(new CopyCommand(_clipboard, Context.SelectedObjects));
+        CommandsBuffer.AddCommand(new CopyCommand(_clipboard, Context.SelectedObjects.ToHashSet()));
     }
 
     public void Cut()
@@ -50,7 +50,7 @@ public class Application
             Context.Surface.TryRemove(geometricObject);
         }
 
-        CommandsBuffer.AddCommand(new CutCommand(Context, _clipboard, Context.SelectedObjects));
+        CommandsBuffer.AddCommand(new CutCommand(Context, _clipboard, Context.SelectedObjects.ToHashSet()));
     }
 
     public void Paste()
@@ -63,5 +63,21 @@ public class Application
         }
 
         CommandsBuffer.AddCommand(new PasteCommand(Context, _clipboard));
+    }
+
+    public void Delete()
+    {
+        foreach (var geometricObject in Context.SelectedObjects)
+        {
+            Context.Surface.TryRemove(geometricObject);
+        }
+
+        CommandsBuffer.AddCommand(new DeleteCommand(Context, Context.SelectedObjects.ToHashSet()));
+    }
+
+    public void Clear()
+    {
+        Context.Surface.Clear();
+        Context.ClearSelected();
     }
 }

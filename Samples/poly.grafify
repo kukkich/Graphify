@@ -1,0 +1,248 @@
+{
+  "Item1": [
+    {
+      "Id": 1,
+      "Position": {
+        "X": -259.10315,
+        "Y": 151.34686
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 2,
+      "Position": {
+        "X": -344.56708,
+        "Y": 362.34885
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 3,
+      "Position": {
+        "X": -385.4707,
+        "Y": -127.027115
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 4,
+      "Position": {
+        "X": 182.62074,
+        "Y": 301.94577
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 5,
+      "Position": {
+        "X": -670.6953,
+        "Y": 309.43985
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 6,
+      "Position": {
+        "X": -762.315,
+        "Y": 102.95911
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 7,
+      "Position": {
+        "X": -626.2026,
+        "Y": -38.18927
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 8,
+      "Position": {
+        "X": -183.31032,
+        "Y": 176.47104
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 9,
+      "Position": {
+        "X": -267.47305,
+        "Y": 407.43216
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "Id": 10,
+      "Position": {
+        "X": 23.0,
+        "Y": 43.5
+      },
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    }
+  ],
+  "Item2": [
+    {
+      "ObjectType": 2,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        1,
+        2
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 2,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        3,
+        1
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 2,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        4,
+        3
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 2,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        4,
+        2
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 1,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        2,
+        1,
+        3,
+        4
+      ],
+      "Style": {
+        "PrimaryColor": "Transparent",
+        "LineColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 3,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        2,
+        5,
+        6,
+        7
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 0,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        1,
+        8
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 0,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        2,
+        9
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    },
+    {
+      "ObjectType": 2,
+      "AttachedPoint": [],
+      "ControlPoints": [
+        9,
+        8
+      ],
+      "Style": {
+        "PrimaryColor": "Black",
+        "Name": "Default",
+        "Size": 4
+      }
+    }
+  ]
+}

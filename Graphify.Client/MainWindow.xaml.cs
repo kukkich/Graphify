@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Numerics;
 using System.Reactive.Disposables;
@@ -5,9 +6,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DynamicData;
 using Graphify.Client.Model.Enums;
 using Graphify.Client.View.Drawing;
 using Graphify.Client.ViewModel;
+using Graphify.Geometry.GeometricObjects.Interfaces;
 using Microsoft.Win32;
 using ReactiveUI;
 using SharpGL;
@@ -18,14 +21,23 @@ namespace Graphify.Client;
 public partial class MainWindow
 {
     private readonly OpenGLDrawer _drawer;
-    private OpenGL _gl;
+    private OpenGL _gl = null!;
+    private readonly ReadOnlyObservableCollection<IGeometricObject> _geometricObjects;
+    
+    public ReadOnlyObservableCollection<IGeometricObject> GeometricObjects => _geometricObjects;
 
     public MainWindow(AppViewModel viewModel, OpenGLDrawer drawer)
     {
         _drawer = drawer;
         ViewModel = viewModel;
         DataContext = viewModel;
+        var toDispose = ViewModel.GeometryObjects
+            .Connect()
+            .Bind(out _geometricObjects)
+        .Subscribe();
         InitializeComponent();
+
+
 
         this.WhenActivated(disposables =>
         {
@@ -37,8 +49,35 @@ public partial class MainWindow
                     _drawer.InitGl(_gl);
                 })
                 .DisposeWith(disposables);
+
+            toDispose.DisposeWith(disposables);
+
+            foreach (var command in ViewModel.AllCommands)
+            {
+                command.ThrownExceptions.Subscribe(HandleError)
+                    .DisposeWith(disposables);
+            }
         });
 
+        this.listGeometryObjects.DataContext = viewModel;
+        TopPanel.DataContext = viewModel;
+        this.WhenAnyValue(x => x.Height)
+            .Subscribe(height =>
+            {
+                listGeometryObjects.Height = double.Max(height - 85, 10);
+            });
+    }
+
+    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextMenu? cm = this.FindResource("ObjectOptions") as ContextMenu;
+        cm!.PlacementTarget = sender as Button;
+        cm.IsOpen = true;
+    }
+
+    private void HandleError(Exception e)
+    {
+        MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     private void GlWindow_Resized(object sender, OpenGLRoutedEventArgs args)
@@ -69,6 +108,15 @@ public partial class MainWindow
             return;
         }
         ViewModel?.SetEditMode.Execute(EditMode.CreatePoint);
+    }
+
+    private void AttachePointModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.SetEditMode.Execute(EditMode.AttachDetach);
     }
 
     private void CreateLineModeButton_Click(object sender, RoutedEventArgs e)
@@ -121,7 +169,7 @@ public partial class MainWindow
         {
             return;
         }
-        //ViewModel?.SetEditMode.Execute(EditMode.Reflect);
+        ViewModel?.SetEditMode.Execute(EditMode.Reflect);
     }
     private void ExportButton_Click(object sender, RoutedEventArgs e)
     {
@@ -134,7 +182,7 @@ public partial class MainWindow
             FileName = "test.svg",
             DefaultExt = ".svg",
             Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
-            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.FullName,
             CheckFileExists = false
         };
 
@@ -147,6 +195,15 @@ public partial class MainWindow
         string selectedExtension = Path.GetExtension(filePath);
         ExportFileType fileType = SelectFileType(selectedExtension);
         ViewModel?.Export.Execute((filePath, fileType));
+    }
+
+    private void ImportButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button)
+        {
+            return;
+        }
+        ViewModel?.OpenImportDialogCommand.Execute();
     }
 
     private ExportFileType SelectFileType(string selectedExtension)
@@ -186,29 +243,6 @@ public partial class MainWindow
 
     private void ZoomInButton_Click(object sender, RoutedEventArgs e)
     {
-
-    }
-    private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
-    {
-        ContextMenu cm = this.FindResource("ObjectOptionsButton") as ContextMenu;
-        cm.PlacementTarget = sender as Button;
-        cm.IsOpen = true;
-    }
-    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
-    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
-    { }
-    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-
-        var position = args.GetPosition((OpenGLControl)sender);
-        position.X -= GlWindow.ActualWidth / 2;
-        position.Y = GlWindow.ActualHeight / 2 - position.Y;
-        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
     private void GlWindow_MouseUp(object sender, MouseButtonEventArgs args)
@@ -237,5 +271,29 @@ public partial class MainWindow
         ViewModel.MouseMove.Execute(new Vector2((float)position.X, (float)position.Y));
     }
 
+    private void EditObjectButton_Click(object sender, RoutedEventArgs e)
+    {
+    }
+    private void DeleteObjectButton_Click(object sender, RoutedEventArgs e)
+    { }
+    private void CloneObjectButton_Click(object sender, RoutedEventArgs e)
+    {
+    }
+    private void GlWindow_MouseDown(object sender, MouseButtonEventArgs args)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
 
+        var position = args.GetPosition((OpenGLControl)sender);
+        position.X -= GlWindow.ActualWidth / 2;
+        position.Y = GlWindow.ActualHeight / 2 - position.Y;
+        ViewModel.MouseDown.Execute(new Vector2((float)position.X, (float)position.Y));
+    }
+
+    private void CleanAllModeButton_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel?.Clean.Execute();
+    }
 }

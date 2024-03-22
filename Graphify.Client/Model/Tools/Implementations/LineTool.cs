@@ -34,7 +34,7 @@ public class LineTool : IApplicationTool
     public void MouseDown(Vector2 clickPosition)
     {
         _currentClicks++;
-        IGeometricObject geometricObject = _context.Surface.TryGetClosestObject(clickPosition);
+        var geometricObject = _context.Surface.TryGetClosestObject(clickPosition)!;
 
         Point newPoint;
         if (geometricObject is Point point)

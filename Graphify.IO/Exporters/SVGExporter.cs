@@ -3,13 +3,14 @@ using Aspose.Svg;
 using Aspose.Svg.Builder;
 using Aspose.Svg.Toolkit.Optimizers;
 using DynamicData;
+using Graphify.Geometry.Drawing;
 using Graphify.Geometry.Export;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
-using Graphify.Geometry.GeometricObjects.Points;
 using Graphify.IO.Extension;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.Logging;
+using Point = Graphify.Geometry.GeometricObjects.Points.Point;
 
 namespace Graphify.IO.Exporters;
 
@@ -78,6 +79,7 @@ public sealed class SVGExporter : IExporter
                 .Cy(dataPoint.Position.Y)
                 .R(dataPoint.Style.Size)
                 .Fill(dataPoint.Style.PrimaryColor)
+                .Visibility(GetVisibilityType(dataPoint.Style))
                 .Transform(t => t.Scale(1, -1))
                 );
     }
@@ -100,6 +102,7 @@ public sealed class SVGExporter : IExporter
                 .Y2(points[1].Y)
                 .Stroke(dataLine.Style.PrimaryColor)
                 .StrokeWidth((dataLine.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Visibility(GetVisibilityType(dataLine.Style))
                 .Transform(t => t.Scale(1, -1))
                 );
     }
@@ -126,6 +129,7 @@ public sealed class SVGExporter : IExporter
                 .Fill(Paint.None)
                 .Stroke(dataCircle.Style.PrimaryColor)
                 .StrokeWidth((dataCircle.Style as CurveStyle ?? CurveStyle.Default).Size)
+                .Visibility(GetVisibilityType(dataCircle.Style))
                 .Transform(t => t.Scale(1, -1))
             );
     }
@@ -146,6 +150,7 @@ public sealed class SVGExporter : IExporter
             polygon => polygon
                 .Points(pointsSVG)
                 .Fill(dataPolygon.Style.PrimaryColor)
+                .Opacity(dataPolygon.Style.PrimaryColor.A / 255D)
                 .Stroke(Paint.None)
                 .Transform(t => t.Scale(1, -1))
             );
@@ -252,14 +257,15 @@ public sealed class SVGExporter : IExporter
     {
         const string str = "<text y=\"15\" style=\"font-family:Times New Roman; font-size:15px; fill:red;\" >Evaluation Only. Created with Aspose.SVG. Copyright 2018-2024 Aspose Pty Ltd.</text>";
 
-        int lastIndex = path.LastIndexOf('.');
+        var content = File.ReadLines(path).ToArray()[0];
 
-        using StreamReader reader = new(path);
-        using StreamWriter writer = new(path.Insert(lastIndex, "WW"));
+        var newContent = content.Replace(str, "");
 
-        var content = reader.ReadLine();
-        var newContent = content!.Replace(str, "");
+        File.WriteAllText(path, newContent);
+    }
 
-        writer.WriteLine(newContent);
+    private static Visibility GetVisibilityType(IStyle style)
+    {
+        return style.Visible ? Visibility.Visible : Visibility.Hidden;
     }
 }

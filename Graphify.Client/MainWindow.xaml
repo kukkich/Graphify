@@ -8,8 +8,15 @@
     xmlns:local="clr-namespace:Graphify.Client"    
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
+    xmlns:points="clr-namespace:Graphify.Geometry.GeometricObjects.Points;assembly=Graphify.Geometry"
+    xmlns:curves="clr-namespace:Graphify.Geometry.GeometricObjects.Curves;assembly=Graphify.Geometry"
+    xmlns:polygons="clr-namespace:Graphify.Geometry.GeometricObjects.Polygons;assembly=Graphify.Geometry"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
-    Title="Graphify">
+    Title="Graphify"
+    MinWidth="1000"
+    MinHeight="600"
+    Name="mainwin"
+    Icon="/Icons/app.jpg">
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding Copy}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding Paste}" />
@@ -18,9 +25,13 @@
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding Undo}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding OpenExportDialogCommand}" />
+        <KeyBinding Key="I" Modifiers="Control" Command="{Binding OpenImportDialogCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding Delete}" />
     </Window.InputBindings>
     <Window.Resources>
-        <ContextMenu x:Key="ObjectOptionsButton">
+        <ContextMenu x:Key="ObjectOptions">
+            <MenuItem Header="Редактировать"
+                      Click="EditObjectButton_Click"/>
             <MenuItem Header="Удалить"
                       Click="DeleteObjectButton_Click"/>
             <MenuItem Header="Клонировать"
@@ -70,13 +81,17 @@
                                     <Setter TargetName="border" Property="BorderBrush" Value="#4169E1" />
                                     <Setter TargetName="border" Property="BorderThickness" Value="2"/>
                                 </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="red" />
+                                    <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                                </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style.Setters>
         </Style>
-        <Style x:Key="CahgeButtonStyle" TargetType="Button">
+        <Style x:Key="ChangeButtonStyle" TargetType="Button">
             <Style.Setters>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -100,11 +115,11 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="46"/>
+            <RowDefinition  Height="46"/>
             <RowDefinition MinHeight="722"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="244"/>
+            <ColumnDefinition Width="*" MinWidth="290"/>
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
@@ -113,15 +128,27 @@
                     Grid.ColumnSpan="2"
                     Background="#F5F5F5"
                     Orientation="Horizontal"
+                    x:Name="TopPanel"                    
                     >
             <Button x:Name="ExportButton"
                     Width="40"
                     Height="40"
                     Margin="14, 0, 14, 2"
-                    Style="{StaticResource RoundButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="ExportButton_Click"
+                    ToolTip="Экспортировать изображение"
                     >
                 <Image Source="/Icons/save.png" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="ImportButton"
+                    Width="40"
+                    Height="40"
+                    Margin="14, 0, 14, 2"
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="ImportButton_Click"
+                    ToolTip="Загрузить изображение"
+             >
+                <Image Source="/Icons/import.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="MoveModeButton"
                     Width="40"
@@ -129,6 +156,7 @@
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"                    
                     Click="MoveModeButton_Click"
+                    ToolTip="Выбрать/переместить"
                     >
                 <Image Source="/Icons/move.png" Stretch="Uniform"/>
             </Button>
@@ -137,7 +165,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreatePointModeButton_Click">
+                    Click="CreatePointModeButton_Click"
+                    ToolTip="Нарисовать точку">
                 <Image Source="/Icons/point.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateLineModeButton"
@@ -145,7 +174,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateLineModeButton_Click">
+                    Click="CreateLineModeButton_Click"
+                    ToolTip="Нарисовать отрезок">
                 <Image Source="/Icons/line.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreatePolygonModeButton"
@@ -153,7 +183,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreatePolygonModeButton_Click">
+                    Click="CreatePolygonModeButton_Click"
+                    ToolTip="Нарисовать многоугольник">
                 <Image Source="/Icons/polygon.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateCircleModeButton"
@@ -161,7 +192,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateCircleModeButton_Click">
+                    Click="CreateCircleModeButton_Click"
+                    ToolTip="Нарисовать окружность">
                 <Image Source="/Icons/circle.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="CreateCurveModeButton"
@@ -169,7 +201,8 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="CreateCurveModeButton_Click">
+                    Click="CreateCurveModeButton_Click"
+                    ToolTip="Нарисовать кривую Безье">
                 <Image Source="/Icons/curve.png" Stretch="Uniform"/>
             </Button>
             <Button x:Name="RotateModeButton"
@@ -178,7 +211,8 @@
                     Margin="20, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="RotateModeButton_Click">
+                    Click="RotateModeButton_Click"
+                    ToolTip="Повернуть">
                 <Image Source="/Icons/rotate.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ReflectModeButton"
@@ -187,8 +221,27 @@
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
                     Style="{StaticResource RoundButtonStyle}"
-                    Click="ReflectModeButton_Click">
-                
+                    Click="ReflectModeButton_Click"
+                    ToolTip="Отразить">
+                <Image Source="/Icons/reflect.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="AttachePointModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="AttachePointModeButton_Click"
+                    ToolTip="Прикрепить/открепить точку">
+                <Image Source="/Icons/attach.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="CleanAllModeButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="CleanAllModeButton_Click"
+                    ToolTip="Очистить холст">
+                <Image Source="/Icons/clean.png" Stretch="Uniform" Margin="2"/>
             </Button>
         </StackPanel>
         <StackPanel Grid.Row="0"
@@ -201,35 +254,39 @@
                     Height="40"
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
-                    Click="UndoButton_Click">
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="UndoButton_Click"
+                    ToolTip="Отменить изменения">
                 <Image Source="/Icons/undo.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="RedoButton"
                     Width="50"
                     Height="40"
-                    Margin="0, 0, 100, 2"
+                    Margin="0, 0, 50, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
-                    Click="RedoButton_Click">
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="RedoButton_Click"
+                    ToolTip="Повторить изменения">
                 <Image Source="/Icons/redo.png" Stretch="Uniform" Margin="2"/>
-            </Button>
-            <Button x:Name="ZoomInButton"
-                    Width="40"
-                    Height="40"
-                    Margin="0, 0, 14, 2"
-                    HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
-                    Click="ZoomInButton_Click">
-                <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
             </Button>
             <Button x:Name="ZoomOutButton"
                     Width="40"
                     Height="40"
                     Margin="0, 0, 14, 2"
                     HorizontalAlignment="Right"
-                    Style="{StaticResource CahgeButtonStyle}"
-                    Click="ZoomOutButton_Click">
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="ZoomOutButton_Click"
+                    ToolTip="Приблизить">
+                <Image Source="/Icons/zoomOut.png" Stretch="Uniform" Margin="2"/>
+            </Button>
+            <Button x:Name="ZoomInButton"
+                    Width="40"
+                    Height="40"
+                    Margin="0, 0, 14, 2"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource ChangeButtonStyle}"
+                    Click="ZoomInButton_Click"
+                    ToolTip="Отдалить">
                 <Image Source="/Icons/zoomIn.png" Stretch="Uniform" Margin="2"/>
             </Button>
 
@@ -238,7 +295,10 @@
         <ListBox Background="White"
                  Grid.Row="1"
                  Grid.Column="0"
-                 x:Name="listGeometryObjects">
+                 x:Name="listGeometryObjects"
+                 VerticalAlignment="Top"
+                 ItemsSource="{Binding GeometricObjects, Mode=OneWay, ElementName=mainwin}"
+                 BorderThickness="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Padding"
@@ -252,35 +312,184 @@
                     <Setter Property="VerticalContentAlignment"
                             Value="Stretch"/>
                 </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>                    
+            </ListBox.ItemContainerStyle>            
+            <ListBox.Resources>
+                <DataTemplate DataType="{x:Type points:Point}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Ellipse Fill="{Binding Path=Type}"
-                                 Width="15" 
-                                 Height="15"
-                                 HorizontalAlignment="Left"/>
-                        <TextBlock Text="{Binding Path=Data}"
-                                   Margin="0"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Width="10" Height="10"
+                                 Grid.Column="0"
+                                 Grid.RowSpan="2"
+                                 />
+                        <TextBlock Text="Точка" Grid.Column="1" Grid.Row="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+                            <TextBlock Text="(" />
+                            <TextBlock Text="{Binding X}" />
+                            <TextBlock Text=", " />
+                            <TextBlock Text="{Binding Y}" />
+                            <TextBlock Text=")" />
+                        </StackPanel>
+                        <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
+                                  IsChecked="{Binding Style.Visible}" 
+                                  Content="Видимый"/>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type polygons:Polygon}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Полигон" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
+                                  IsChecked="{Binding Style.Visible}" 
+                                  Content="Видимый"/>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type curves:Circle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Окружность" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
+                                  IsChecked="{Binding Style.Visible}" 
+                                  Content="Видимый"/>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type curves:CubicBezierCurve}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Кривая Безье" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="(" />
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
+                                  IsChecked="{Binding Style.Visible}" 
+                                  Content="Видимый"/>
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type curves:Line}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
+                        <TextBlock Text="Линия" Grid.Column="1" Grid.Row="0"/>
+                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="("/>
+                                        <TextBlock Text="{Binding X}" />
+                                        <TextBlock Text=", " />
+                                        <TextBlock Text="{Binding Y}" />
+                                        <TextBlock Text=")" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
+                                  IsChecked="{Binding Style.Visible}" 
+                                  Content="Видимый"/>
+                    </Grid>
+                </DataTemplate>                
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <ContentControl Content="{Binding}"/>
                         <Button Padding="0"
                                 Margin="0"
                                 Width="30"
+                                Height="40"
                                 FontSize="25"
                                 FontWeight="Bold"
-                                HorizontalContentAlignment="Center"
+                                HorizontalAlignment="Right"
                                 Background="White"
                                 BorderBrush="White"
-                                Grid.Column="2"
                                 Content="︙"
                                 Click="ObjectOptionsButton_Click"/>
-                    </Grid>                    
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

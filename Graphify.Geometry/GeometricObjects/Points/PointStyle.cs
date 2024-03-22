@@ -1,3 +1,4 @@
+using System.Drawing;
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Curves;
 using ReactiveUI.Fody.Helpers;
@@ -10,7 +11,7 @@ public class PointStyle : CurveStyle
 
     public static new PointStyle Default => new(CurveStyle.Default, PointVariant.Circle);
 
-    public PointStyle(CurveStyle curveStyle, PointVariant variant) : base(curveStyle.PrimaryColor, curveStyle.Name, curveStyle.Size)
+    public PointStyle(CurveStyle curveStyle, PointVariant variant) : base(curveStyle?.PrimaryColor ?? Color.Black, curveStyle?.Name ?? "Default", curveStyle?.Size ?? 4)
     {
         Variant = variant;
     }

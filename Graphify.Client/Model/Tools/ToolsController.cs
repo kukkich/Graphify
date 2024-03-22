@@ -1,4 +1,4 @@
-﻿using Graphify.Client.Model.Enums;
+using Graphify.Client.Model.Enums;
 using Graphify.Client.Model.Interfaces;
 
 namespace Graphify.Client.Model.Tools;
@@ -39,7 +39,7 @@ public class ToolsController
 
     private IApplicationTool GetTool(EditMode editMode)
     {
-        if (_tools.TryGetValue(editMode, out IApplicationTool tool))
+        if (_tools.TryGetValue(editMode, out var tool))
         {
             return tool;
         }

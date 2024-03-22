@@ -1,4 +1,5 @@
 using Graphify.IO.Exporters;
+using Graphify.IO.Importers;
 using Graphify.IO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +12,11 @@ public static class ServicesExtension
         services.AddScoped<IExporter, SVGExporter>();
         services.AddScoped<IExporter, PNGExporter>();
         services.AddScoped<IExporter, GraphifyExporter>();
+        services.AddScoped<IImporter, GraphifyImporter>();
 
         services.AddScoped<SVGExporter>();
         services.AddScoped<PNGExporter>();
         services.AddScoped<GraphifyExporter>();
+        services.AddScoped<GraphifyImporter>();
     }
 }

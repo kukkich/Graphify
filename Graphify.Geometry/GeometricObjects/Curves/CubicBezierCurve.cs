@@ -32,7 +32,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     private Vector2 CurveFunction(float t)
     {
-        var tc = new float[4]
+        Span<float> tc = stackalloc float[]
         {
             (1f-t)*(1f-t)*(1f-t),
             3f*t*(1f-t)*(1f-t),
@@ -73,7 +73,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     public void Update()
     {
-        foreach (var attachedPoint in _attached)
+        foreach (var attachedPoint in _attached.ToList())
         {
             var point = attachedPoint.Object;
             var t = attachedPoint.T;
@@ -103,7 +103,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         for (float t = 0f; t < 1f; t += 0.01f)
         {
             var point = CurveFunction(t);
-            var distV = new Vector2(attachable.X - point.X, attachable.Y - point.Y);
+            var distV = new Vector2(point.X - attachable.X, point.Y - attachable.Y);
             var dist = distV.Length();
             if (!(dist < minDst))
             {
@@ -153,6 +153,8 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         return false;
     }
 
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
+
     public void Move(Vector2 shift)
     {
         if (!CanBeMoved)
@@ -194,6 +196,10 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
 
         var points = ControlPoints.Select(point => new Vector2(point.X, point.Y))

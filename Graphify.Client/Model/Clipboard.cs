@@ -4,7 +4,7 @@ namespace Graphify.Client.Model;
 
 public class Clipboard
 {
-    private readonly LinkedList<IGeometricObject> _copiedObjects = new();
+    private readonly LinkedList<IGeometricObject> _copiedObjects = [];
 
     public void CopyObject(IGeometricObject geometricObject)
     {

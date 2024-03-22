@@ -127,7 +127,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         var A = new Vector2(_pointA.X, _pointA.Y);
         var ab = new Vector2(_pointB.X - A.X, _pointB.Y - A.Y);
 
-        foreach (var attachedPoint in _attached)
+        foreach (var attachedPoint in _attached.ToList())
         {
             var t = attachedPoint.T;
             var newPointCoords = new Vector2(A.X + t * ab.X, A.Y + t * ab.Y);
@@ -142,6 +142,10 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="drawer"> - рисователь, реализующий интерфейс <c>IDrawer</c></param>
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
 
         var begin = new Vector2(_pointA.X, _pointA.Y);
@@ -167,6 +171,8 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         return distance > DistanceTo(point);
     }
 
+    bool IGeometricObject.CanBeMoved() => CanBeMoved;
+
     /// <summary>
     /// Метод, сдвигающий текущую прямую по направлению вектора <c>shift</c> на расстояние вектора <c>shift</c>.
     /// </summary>
@@ -179,7 +185,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
             throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
         }
 
-        foreach (var point in ControlPoints)
+        foreach (var point in ControlPoints.ToList())
         {
             point.Move(shift);
         }
