@@ -68,7 +68,7 @@ public partial class MainWindow
         this.WhenAnyValue(x => x.Height)
             .Subscribe(height =>
             {
-                listGeometryObjects.Height = Math.Max(0, height - 85);
+                listGeometryObjects.Height = double.Max(height - 85, 10);
             });
     }
 

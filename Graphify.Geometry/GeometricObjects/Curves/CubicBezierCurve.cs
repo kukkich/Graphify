@@ -196,6 +196,10 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
 
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
 
         var points = ControlPoints.Select(point => new Vector2(point.X, point.Y))

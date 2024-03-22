@@ -142,6 +142,10 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <param name="drawer"> - рисователь, реализующий интерфейс <c>IDrawer</c></param>
     public void Draw(IDrawer drawer)
     {
+        if (!Style.Visible)
+        {
+            return;
+        }
         Style.ApplyStyle(drawer);
 
         var begin = new Vector2(_pointA.X, _pointA.Y);
