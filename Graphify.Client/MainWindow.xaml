@@ -26,6 +26,7 @@
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding Redo}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding OpenExportDialogCommand}" />
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding OpenImportDialogCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding Delete}" />
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="ObjectOptions">
@@ -237,7 +238,7 @@
                     Width="40"
                     Height="40"
                     Margin="0, 0, 14, 2"
-                    Style="{StaticResource RoundButtonStyle}"
+                    Style="{StaticResource ChangeButtonStyle}"
                     Click="CleanAllModeButton_Click"
                     ToolTip="Очистить холст">
                 <Image Source="/Icons/clean.png" Stretch="Uniform" Margin="2"/>
