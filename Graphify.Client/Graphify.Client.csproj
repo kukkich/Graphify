@@ -18,8 +18,10 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Icons\app.jpg" />
     <None Remove="Icons\attach.png" />
     <None Remove="Icons\circle.png" />
+    <None Remove="Icons\clean.png" />
     <None Remove="Icons\curve.png" />
     <None Remove="Icons\import.png" />
     <None Remove="Icons\line.png" />
@@ -75,8 +77,10 @@
   </ItemGroup>
     
   <ItemGroup>
+    <Resource Include="Icons\app.jpg" />
     <Resource Include="Icons\attach.png" />
     <Resource Include="Icons\circle.png" />
+    <Resource Include="Icons\clean.png" />
     <Resource Include="Icons\curve.png" />
     <Resource Include="Icons\import.png" />
     <Resource Include="Icons\line.png" />
