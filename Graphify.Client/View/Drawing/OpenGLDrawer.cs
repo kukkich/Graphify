@@ -16,19 +16,19 @@ public class OpenGLDrawer : IDrawer
 {
     public bool GlInitialized => _gl is not null;
 
-    private OpenGL _gl;
-    private IBaseDrawer _defaultDrawer;
+    private OpenGL _gl = null!;
+    private IBaseDrawer _defaultDrawer = null!;
 
-    private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentBezierCurveDrawer;
-    private IGeometryObjectDrawer<(Vector2, float)> _currentCircleDrawer;
-    private IGeometryObjectDrawer<(Vector2, Vector2)> _currentLineDrawer;
+    private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentBezierCurveDrawer = null!;
+    private IGeometryObjectDrawer<(Vector2, float)> _currentCircleDrawer = null!;
+    private IGeometryObjectDrawer<(Vector2, Vector2)> _currentLineDrawer = null!;
 
     private readonly Dictionary<PointVariant, IGeometryObjectDrawer<Vector2>> _pointVariantDrawers = [];
-    private IGeometryObjectDrawer<Vector2> _currentPointDrawer;
+    private IGeometryObjectDrawer<Vector2> _currentPointDrawer = null!;
 
-    private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentPolygonDrawer;
+    private IGeometryObjectDrawer<IEnumerable<Vector2>> _currentPolygonDrawer = null!;
 
-    public DrawSettings Settings { get; private set; }
+    public DrawSettings Settings { get; private set; } = null!;
 
     public void InitGl(OpenGL gl)
     {

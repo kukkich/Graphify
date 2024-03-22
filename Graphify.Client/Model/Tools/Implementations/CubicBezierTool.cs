@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Graphify.Client.Model.Commands;
 using Graphify.Client.Model.Interfaces;
 using Graphify.Geometry.GeometricObjects.Interfaces;
@@ -30,7 +30,7 @@ public class CubicBezierTool : IApplicationTool
 
     public void MouseDown(Vector2 clickPosition)
     {
-        IGeometricObject geometricObject = _context.Surface.TryGetClosestObject(clickPosition);
+        var geometricObject = _context.Surface.TryGetClosestObject(clickPosition)!;
 
         Point newPoint;
         if (geometricObject is Point point)

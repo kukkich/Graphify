@@ -21,15 +21,19 @@ namespace Graphify.Client;
 public partial class MainWindow
 {
     private readonly OpenGLDrawer _drawer;
-    private OpenGL _gl;
-    private readonly ReadOnlyObservableCollection<IGeometricObject> geometricObjects;
-    public ReadOnlyObservableCollection<IGeometricObject> GeometricObjects => geometricObjects;
+    private OpenGL _gl = null!;
+    private readonly ReadOnlyObservableCollection<IGeometricObject> _geometricObjects;
+    
+    public ReadOnlyObservableCollection<IGeometricObject> GeometricObjects => _geometricObjects;
+
     public MainWindow(AppViewModel viewModel, OpenGLDrawer drawer)
     {
         _drawer = drawer;
         ViewModel = viewModel;
         DataContext = viewModel;
-        var todispose = this.ViewModel.GeometryObjects.Connect().Bind(out geometricObjects)
+        var toDispose = ViewModel.GeometryObjects
+            .Connect()
+            .Bind(out _geometricObjects)
         .Subscribe();
         InitializeComponent();
 
@@ -46,7 +50,7 @@ public partial class MainWindow
                 })
                 .DisposeWith(disposables);
 
-            todispose.DisposeWith(disposables);
+            toDispose.DisposeWith(disposables);
 
             foreach (var command in ViewModel.AllCommands)
             {
@@ -66,8 +70,8 @@ public partial class MainWindow
 
     private void ObjectOptionsButton_Click(object sender, RoutedEventArgs e)
     {
-        ContextMenu cm = this.FindResource("ObjectOptions") as ContextMenu;
-        cm.PlacementTarget = sender as Button;
+        ContextMenu? cm = this.FindResource("ObjectOptions") as ContextMenu;
+        cm!.PlacementTarget = sender as Button;
         cm.IsOpen = true;
     }
 
@@ -178,7 +182,7 @@ public partial class MainWindow
             FileName = "test.svg",
             DefaultExt = ".svg",
             Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
-            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.FullName,
             CheckFileExists = false
         };
 

@@ -66,7 +66,7 @@ public class RotateTool : IApplicationTool
 
     public void MouseDown(Vector2 clickPosition)
     {
-        IGeometricObject closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
+        var closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
 
         if (!Keyboard.IsKeyDown(Key.LeftCtrl))
         {
@@ -110,7 +110,7 @@ public class RotateTool : IApplicationTool
     {
         if (!(Math.Abs(_angle) >= SmallAngle) || !_applicationContext.SelectedObjects.Any()) return;
 
-        _commandsBuffer.AddCommand(new RotateCommand(_applicationContext.SelectedObjects, _point, _angle));
+        _commandsBuffer.AddCommand(new RotateCommand(_applicationContext.SelectedObjects, _point!, _angle));
         _angle = 0;
     }
 
@@ -135,7 +135,7 @@ public class RotateTool : IApplicationTool
 
     private float CalculateAngle(Vector2 newPosition)
     {
-        var pointAsVector = new Vector2(_point.X, _point.Y);
+        var pointAsVector = new Vector2(_point!.X, _point.Y);
 
         var vector1 = _previousMousePosition - pointAsVector;
         var vector2 = newPosition - pointAsVector;

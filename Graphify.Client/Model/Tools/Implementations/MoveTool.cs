@@ -50,7 +50,7 @@ public class MoveTool : IApplicationTool
 
     public void MouseDown(Vector2 clickPosition)
     {
-        IGeometricObject closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
+        var closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
 
         if (closestObject is null)
         {
@@ -59,13 +59,13 @@ public class MoveTool : IApplicationTool
 
         if (Keyboard.IsKeyDown(Key.LeftCtrl))
         {
-            _applicationContext.ToggleSelection(closestObject);
+            _applicationContext.ToggleSelection(closestObject!);
         }
         else
         {
             if (!_applicationContext.SelectedObjects.Contains(closestObject))
             {
-                _applicationContext.Select(closestObject, true);
+                _applicationContext.Select(closestObject!, true);
             }
         }
     }

@@ -5,7 +5,7 @@ namespace Graphify.Client.Model.Commands;
 public class ClearCommand : ICommand
 {
     private readonly ApplicationContext _context;
-    private Surface _surface;
+    private Surface _surface = null!;
 
     public ClearCommand(ApplicationContext context)
     {

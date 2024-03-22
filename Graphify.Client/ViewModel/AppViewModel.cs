@@ -111,11 +111,11 @@ public class AppViewModel : ReactiveObject
 
         var commandProperties = properties
             .Where(prop => typeof(IReactiveCommand).IsAssignableFrom(prop.PropertyType))
-            .Select(prop => (IReactiveCommand)prop.GetValue(this))
+            .Select(prop => (IReactiveCommand?)prop.GetValue(this))
             .Where(prop => prop is not null)
             .ToList();
 
-        _allCommands = commandProperties;
+        _allCommands = commandProperties!;
     }
 
 
@@ -127,7 +127,7 @@ public class AppViewModel : ReactiveObject
             FileName = "test",
             DefaultExt = ".svg",
             Filter = "SVG image (*.svg)|*.svg|PNG image (*.png)|*.png|Grafify image (*.grafify)|*.grafify",
-            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.FullName,
             CheckFileExists = false
         };
         return exportFileDialog;
@@ -203,7 +203,7 @@ public class AppViewModel : ReactiveObject
             FileName = "test",
             DefaultExt = ".grafify",
             Filter = "Grafify image (*.grafify)|*.grafify",
-            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName,
+            InitialDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.FullName,
             CheckFileExists = false
         };
         return importFileDialog;

@@ -29,7 +29,7 @@ public class ReflectTool : IApplicationTool
 
     public void MouseDown(Vector2 clickPosition)
     {
-        IGeometricObject closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
+        var closestObject = _applicationContext.Surface.TryGetClosestObject(clickPosition);
 
         if (!Keyboard.IsKeyDown(Key.LeftCtrl))
         {
@@ -100,7 +100,7 @@ public class ReflectTool : IApplicationTool
     {
         foreach (var selectedObject in _applicationContext.SelectedObjects)
         {
-            selectedObject.Reflect(_point);
+            selectedObject.Reflect(_point!);
         }
     }
 }
