@@ -155,7 +155,7 @@ public class Surface : IGeometryContext
 
         var figureAttached = point.AttachedTo;
 
-        figureAttached?.ConsumeDetach(point);
+        figureAttached?.Detach(point);
 
         return _points.Remove(point);
     }

@@ -150,8 +150,8 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(AttachedData))]
         public void GIVEN_Line_WHEN_the_point_is_attached_THEN_expected_true(Point attachable)
         {
-            _line.ConsumeAttach(attachable);
-            bool result = _line.Attached.Contains(attachable);
+            _line.Attach(attachable);
+            bool result = _line.Attached.Select(x => x.Object).Contains(attachable);
             Assert.That(result, Is.True);
         }
 
@@ -164,7 +164,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(ControlPointToAttachedData))]
         public void GIVEN_Line_WHEN_the_control_point_is_attached_THEN_expected_exception(Point attachable)
         {
-            Assert.Throws<InvalidOperationException>(() => _line.ConsumeAttach(attachable));
+            Assert.Throws<InvalidOperationException>(() => _line.Attach(attachable));
         }
 
         private static readonly object[] ControlPointToAttachedData =
@@ -176,8 +176,8 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(DoubleAttachedData))]
         public void GIVEN_Line_WHEN_the_attached_point_is_attached_THEN_expected_exception(Point attachable)
         {
-            _line.ConsumeAttach(attachable);
-            Assert.Throws<InvalidOperationException>(() => _line.ConsumeAttach(attachable));
+            _line.Attach(attachable);
+            Assert.Throws<InvalidOperationException>(() => _line.Attach(attachable));
         }
 
         private static readonly object[] DoubleAttachedData =
@@ -189,12 +189,10 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(DetachData))]
         public void GIVEN_Line_WHEN_the_point_is_detached_THEN_expected_true(Point dettachable)
         {
-            _line.ConsumeAttach(dettachable);
+            _line.Attach(dettachable);
 
-            _line.ConsumeDetach(dettachable);
-            bool result = true;
-            if (_line.Attached.Contains(dettachable))
-                result = false;
+            _line.Detach(dettachable);
+            bool result = !_line.Attached.Select(x => x.Object).Contains(dettachable);
             Assert.That(result, Is.True);
         }
 

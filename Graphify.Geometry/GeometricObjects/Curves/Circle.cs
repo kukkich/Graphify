@@ -14,7 +14,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <summary>
     /// Список точек, прикреплённых к данному объекту
     /// </summary>
-    public IEnumerable<Point> Attached => _attached.Select(x => x.Object);
+    public IEnumerable<AttachedPoint> Attached => _attached;
 
     /// <summary>
     /// Контрольные точки фигуры, по которым она строится
@@ -73,7 +73,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо присоединить к прямой</param>
     /// <exception cref="InvalidOperationException"> - если присоединить точку <c>attachable</c> к данной фигуре невозможно</exception>
-    public void ConsumeAttach(Point attachable)
+    public void Attach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
@@ -106,7 +106,7 @@ public class Circle : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
     /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
-    public void ConsumeDetach(Point attachable)
+    public void Detach(Point attachable)
     {
         AttachedPoint? attached = _attached.Find(x => x.Object == attachable);
         if (attached is null)

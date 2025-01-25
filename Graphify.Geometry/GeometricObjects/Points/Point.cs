@@ -234,7 +234,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         {
             throw new InvalidOperationException("Закрепление точки невозможно: точка является закреплённой либо имеет косвенную зависимость от прикрепляемой фигуры");
         }
-        consumer.ConsumeAttach(this);
+        consumer.Attach(this);
         AttachedTo = consumer;
 
         Update();
@@ -250,7 +250,7 @@ public class Point : ReactiveObject, IGeometricObject, IAttachable, IStyled<Poin
         {
             throw new InvalidOperationException("Открепление точки невозможно: точка ни к кому не закреплена");
         }
-        AttachedTo.ConsumeDetach(this);
+        AttachedTo.Detach(this);
         AttachedTo = null;
 
         Update();

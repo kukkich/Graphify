@@ -33,7 +33,7 @@ public class GraphifyExporter(ILogger<GraphifyExporter> logger) : IExporter
             FigureExportData exportFigureData = figure.GetExportData();
 
             uint[] idControlPoints = AddPoints(figure.ControlPoints.ToList(), ref id);
-            uint[] idAttachedPoints = AddPoints(figure.Attached.ToList(), ref id);
+            uint[] idAttachedPoints = AddPoints(figure.Attached.Select(x => x.Object).ToList(), ref id);
 
             _figures.Add(new JsonFigureObject(
                                              exportFigureData.FigureType,

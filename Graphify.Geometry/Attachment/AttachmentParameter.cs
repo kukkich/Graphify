@@ -4,7 +4,7 @@ public class AttachmentParameter
 {
     public float T
     {
-        get => _t;
+        get;
         set
         {
             if (value is < 0 or > 1)
@@ -12,8 +12,7 @@ public class AttachmentParameter
                 throw new ArgumentException();
             }
 
-            _t = value;
+            field = value;
         }
     }
-    private float _t;
 }

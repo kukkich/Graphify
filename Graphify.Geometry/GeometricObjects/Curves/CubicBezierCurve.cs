@@ -9,71 +9,35 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Graphify.Geometry.GeometricObjects.Curves;
 
-public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
+public class CubicBezierCurve : Curve
 {
-    [Reactive] public CurveStyle Style { get; set; }
-    [Reactive] public ObjectState ObjectState { get; set; }
-
-    public IEnumerable<Point> Attached => _attached.Select(x => x.Object);
-
-    public IEnumerable<Point> ControlPoints => _points;
-
-    internal bool CanBeMoved
-    {
-        get
-        {
-            return _points.All(point => !point.IsAttached);
-        }
-    }
-
-    private readonly List<AttachedPoint> _attached;
-
-    private readonly List<Point> _points;
+    public override int RequiredPointsCount => 4;
 
     private Vector2 CurveFunction(float t)
     {
-        Span<float> tc = stackalloc float[]
-        {
+        Span<float> tc =
+        [
             (1f-t)*(1f-t)*(1f-t),
             3f*t*(1f-t)*(1f-t),
             3f*t*t*(1f-t),
             t*t*t
-        };
+        ];
         Vector2 p = new Vector2 { X = 0f, Y = 0f };
         for (int i = 0; i < 4; i++)
         {
-            p.X += tc[i] * _points[i].X;
-            p.Y += tc[i] * _points[i].Y;
+            p.X += tc[i] * Points[i].X;
+            p.Y += tc[i] * Points[i].Y;
         }
         return p;
     }
 
-    /// <summary>
-    /// Конструктор класса CubicBezierCurve
-    /// </summary>
-    /// <param name="points"> - массив опорных точек кривой</param>
-    /// <param name="style"> - стиль кривой. <c>CurveStyle.Default</c>, если <c>null</c></param>
-    /// <exception cref="InvalidDataException"> - исключение в случае, если размер <c>points</c> != 4</exception>
     public CubicBezierCurve(Point[] points, CurveStyle? style = null)
+        : base(points, style) 
+    { }
+
+    public override void Update()
     {
-        if (points.Length != 4)
-        {
-            throw new InvalidDataException($"Невозможно создать кривую. Необходимо 4 точки, подано {points.Length}");
-        }
-
-        _points = [];
-        foreach (var point in points)
-        {
-            _points.Add(point);
-        }
-
-        Style = style ?? CurveStyle.Default;
-        _attached = [];
-    }
-
-    public void Update()
-    {
-        foreach (var attachedPoint in _attached.ToList())
+        foreach (var attachedPoint in Attached.ToList())
         {
             var point = attachedPoint.Object;
             var t = attachedPoint.T;
@@ -84,19 +48,19 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         }
     }
 
-    public void ConsumeAttach(Point attachable)
+    public override void Attach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
             throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка является опорной для данной фигуры");
         }
 
-        if (_attached.Find(x => x.Object == attachable) != null)
+        if (Attached.Find(x => x.Object == attachable) != null)
         {
             throw new InvalidOperationException("Нельзя присоединить точку к данной фигуре: точка уже присоединена к данной фигуре");
         }
 
-        // Stupid Linear Method (Should use logarithmical find)
+        // Todo Linear Search. Should use optimization method through minimizing ||S(t) - Point||
         Vector2 minV = new Vector2();
         float minDst = float.PositiveInfinity;
         float minT = -1f;
@@ -116,30 +80,18 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         }
 
         var attachedPoint = new AttachedPoint(attachable, minT);
-        _attached.Add(attachedPoint);
+        Attached.Add(attachedPoint);
         attachable.Move(minV);
     }
 
-    public void ConsumeDetach(Point attachable)
-    {
-        AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
-        if (maybeAttached is null)
-        {
-            throw new InvalidOperationException(
-                "Нельзя отсоединить точку от данной фигуры: эта точка не является прикреплённой к данной фигуре"
-             );
-        }
-        _attached.Remove(maybeAttached);
-    }
-
-    public bool IsNextTo(Vector2 point, float distance)
+    public override bool IsNextTo(Vector2 point, float distance)
     {
         if (distance <= 0)
         {
             throw new ArgumentException($"Значение distance должно быть строго положительным числом. Ожидалось: distance > 0, получено: {distance}");
         }
 
-        // Stupid Linear Method (Should use logarithmical find)
+        // Todo Linear Search. Should use optimization method through minimizing ||S(t) - Point||
         for (float t = 0f; t < 1f; t += 0.01f)
         {
             var curPoint = CurveFunction(t);
@@ -153,48 +105,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         return false;
     }
 
-    bool IGeometricObject.CanBeMoved() => CanBeMoved;
-
-    public void Move(Vector2 shift)
-    {
-        if (!CanBeMoved)
-        {
-            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
-        }
-
-        foreach (var point in _points)
-        {
-            point.Move(shift);
-        }
-    }
-
-    public void Rotate(Point shift, float angle)
-    {
-        if (!CanBeMoved)
-        {
-            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
-        }
-
-        foreach (var point in _points)
-        {
-            point.Rotate(shift, angle);
-        }
-    }
-
-    public void Reflect(Point point)
-    {
-        if (!CanBeMoved)
-        {
-            throw new InvalidOperationException("Невозможно выполнить перемещение фигуры: одна или несколько точек фигуры являются закреплёнными");
-        }
-
-        foreach (var pointi in _points)
-        {
-            pointi.Reflect(point);
-        }
-    }
-
-    public void Draw(IDrawer drawer)
+    public override void Draw(IDrawer drawer)
     {
         if (!Style.Visible)
         {
@@ -208,7 +119,7 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         drawer.DrawBezierCurve(points, ObjectState);
     }
 
-    public FigureExportData GetExportData()
+    public override FigureExportData GetExportData()
     {
         var exportData = new FigureExportData
         {
@@ -227,5 +138,5 @@ public class CubicBezierCurve : ReactiveObject, IFigure, IStyled<CurveStyle>
         return exportData;
     }
 
-    public IGeometricObject Clone() => throw new NotImplementedException();
+    public override IGeometricObject Clone() => throw new NotImplementedException();
 }

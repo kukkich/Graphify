@@ -145,8 +145,8 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(AttachedData))]
         public void GIVEN_Circle_WHEN_the_point_is_attached_THEN_expected_true(Point attachable)
         {
-            _circle!.ConsumeAttach(attachable);
-            bool result = _circle.Attached.Contains(attachable);
+            _circle!.Attach(attachable);
+            bool result = _circle.Attached.Select(x => x.Object).Contains(attachable);
             Assert.That(result, Is.True);
         }
 
@@ -160,7 +160,7 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(ControlPointToAttachedData))]
         public void GIVEN_Circle_WHEN_the_control_point_is_attached_THEN_expected_exception(Point attachable)
         {
-            Assert.Throws<InvalidOperationException>(() => _circle!.ConsumeAttach(attachable));
+            Assert.Throws<InvalidOperationException>(() => _circle!.Attach(attachable));
 
         }
 
@@ -172,8 +172,8 @@ namespace Graphify.Tests.Geometry
         [TestCaseSource(nameof(DoubleAttachedData))]
         public void GIVEN_Circle_WHEN_the_attached_point_is_attached_THEN_expected_exception(Point attachable)
         {
-            _circle!.ConsumeAttach(attachable);
-            Assert.Throws<InvalidOperationException>(() => _circle.ConsumeAttach(attachable));
+            _circle!.Attach(attachable);
+            Assert.Throws<InvalidOperationException>(() => _circle.Attach(attachable));
         }
 
         private static readonly object[] DoubleAttachedData =
@@ -188,9 +188,9 @@ namespace Graphify.Tests.Geometry
         {
             //_circle.ConsumeAttach(dettachable);
             dettachable.AttachTo(_circle!);
-            _circle!.ConsumeDetach(dettachable);
+            _circle!.Detach(dettachable);
 
-            bool result = _circle.Attached.Contains(dettachable);
+            bool result = _circle.Attached.Select(x => x.Object).Contains(dettachable);
 
             Assert.That(result, Is.False);
         }

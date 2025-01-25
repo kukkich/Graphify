@@ -171,7 +171,7 @@ namespace Graphify.Tests.Geometry
         public void GIVEN_Point_WHEN_attach_to_line_THEN_expected_line_contains_point(Line line)
         {
             _point.AttachTo(line);
-            bool result = line.Attached.Contains(_point);
+            bool result = line.Attached.Select(x => x.Object).Contains(_point);
 
             Assert.IsTrue(result);
         }
@@ -218,7 +218,7 @@ namespace Graphify.Tests.Geometry
         public void GIVEN_Point_WHEN_detach_from_line_THEN_expected_line_not_contains_point()
         {
             _attachedPoint.Detach();
-            bool result = _lineToAttach.Attached.Contains(_point);
+            bool result = _lineToAttach.Attached.Select(x => x.Object).Contains(_point);
 
             Assert.IsFalse(result);
         }

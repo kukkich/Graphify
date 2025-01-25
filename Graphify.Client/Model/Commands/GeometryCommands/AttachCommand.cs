@@ -16,11 +16,11 @@ public class AttachCommand : ICommand
 
     public void Execute()
     {
-        _figure.ConsumeAttach(_point);
+        _figure.Attach(_point);
     }
 
     public void Undo()
     {
-        _figure.ConsumeDetach(_point);
+        _figure.Detach(_point);
     }
 }

@@ -14,12 +14,12 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// <summary>
     /// Список точек, прикреплённых к данному объекту
     /// </summary>
-    public IEnumerable<Point> Attached { get => _attached.Select(x => x.Object); }
+    public IEnumerable<AttachedPoint> Attached => _attached;
 
     /// <summary>
     /// Контрольные точки фигуры, по которым она строится
     /// </summary>
-    public IEnumerable<Point> ControlPoints { get => [_pointA, _pointB]; }
+    public IEnumerable<Point> ControlPoints => [_pointA, _pointB];
 
     /// <summary>
     /// Стиль прямой
@@ -31,7 +31,6 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// Возвращает, может ли прямая менять своё положение за счёт методов перемещения фигуры
     /// </summary>
     internal bool CanBeMoved => !(_pointA.IsAttached || _pointB.IsAttached);
-
 
     private readonly List<AttachedPoint> _attached; //TODO: подумать над переходом на HashSet или любой другой *Set
 
@@ -47,15 +46,12 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
         _attached = [];
     }
 
-
-
-
     /// <summary>
     /// Добавляет присоединяемую точку <c>attachable</c> в своё множество присоединённых точек
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо присоединить к прямой</param>
     /// <exception cref="InvalidOperationException"> - если присоединить точку <c>attachable</c> к данной фигуре невозможно</exception>
-    public void ConsumeAttach(Point attachable)
+    public void Attach(Point attachable)
     {
         if (ControlPoints.Contains(attachable))
         {
@@ -107,7 +103,7 @@ public class Line : ReactiveObject, IFigure, IStyled<CurveStyle>
     /// </summary>
     /// <param name="attachable"> - точка, которую необходимо отсоединить</param>
     /// <exception cref="InvalidOperationException"> - если точка <c>attachable</c> не является прикреплённой к фигуре</exception>
-    public void ConsumeDetach(Point attachable)
+    public void Detach(Point attachable)
     {
         AttachedPoint? maybeAttached = _attached.Find(x => x.Object == attachable);
         if (maybeAttached != null)
