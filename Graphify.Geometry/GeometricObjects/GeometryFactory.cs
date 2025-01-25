@@ -2,7 +2,6 @@ using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.GeometricObjects.Polygons;
 using Microsoft.Extensions.Logging;
 
 namespace Graphify.Geometry.GeometricObjects;
@@ -22,7 +21,6 @@ public class GeometryFactory : IGeometryFactory
     private void InitializeFactoryMethods()
     {
         _factoryMethods.Add(ObjectType.Circle, (points) => new Circle(points[0], points[1], CurveStyle.Default));
-        _factoryMethods.Add(ObjectType.Polygon, (points) => new Polygon(points));
         _factoryMethods.Add(ObjectType.Line, (points) => new Line(points[0], points[1], CurveStyle.Default));
         _factoryMethods.Add(ObjectType.CubicBezier, (points) => new CubicBezierCurve(points, CurveStyle.Default));
     }

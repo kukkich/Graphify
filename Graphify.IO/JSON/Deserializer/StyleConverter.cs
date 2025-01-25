@@ -1,6 +1,5 @@
 using Graphify.Geometry.Drawing;
 using Graphify.Geometry.GeometricObjects.Curves;
-using Graphify.Geometry.GeometricObjects.Polygons;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -23,7 +22,7 @@ public partial class GraphifyImporter
 
             if (styleType is not null)
             {
-                return styleObject.ToObject<PolygonStyle>(serializer);
+                throw new Exception("Unknown Exception. There was styleObject.ToObject<PolygonStyle>(serializer);");
             }
 
             return styleObject.ToObject<CurveStyle>(serializer);

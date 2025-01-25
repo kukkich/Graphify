@@ -12,7 +12,6 @@ public interface IGeometryFactory
 public enum ObjectType
 {
     Circle,
-    Polygon,
     Line,
     CubicBezier
 }

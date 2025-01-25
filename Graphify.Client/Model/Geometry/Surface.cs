@@ -1,7 +1,6 @@
 using System.Numerics;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.GeometricObjects.Polygons;
 
 namespace Graphify.Client.Model.Geometry;
 
@@ -123,7 +122,7 @@ public class Surface : IGeometryContext
             {
                 controlPoint.RetrieveControl(figure);
 
-                if (controlPoint.ControlFor.Any() || (figure is Polygon && controlPoint.ControlFor.Count() > 2))
+                if (controlPoint.ControlFor.Any())
                     continue;
 
                 _points.Remove(controlPoint);

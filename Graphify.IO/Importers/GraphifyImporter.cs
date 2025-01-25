@@ -1,7 +1,6 @@
 using Graphify.Geometry.GeometricObjects.Curves;
 using Graphify.Geometry.GeometricObjects.Interfaces;
 using Graphify.Geometry.GeometricObjects.Points;
-using Graphify.Geometry.GeometricObjects.Polygons;
 using Graphify.IO.Interfaces;
 using Graphify.IO.JSON.Objects;
 using Microsoft.Extensions.Logging;
@@ -82,7 +81,6 @@ public partial class GraphifyImporter : IImporter
                 case ObjectType.Circle: AddCircle(figureObject); break;
                 case ObjectType.Line: AddLine(figureObject); break;
                 case ObjectType.CubicBezier: AddCubicBezire(figureObject); break;
-                case ObjectType.Polygon: AddPolygon(figureObject); break;
             }
         }
     }
@@ -182,36 +180,6 @@ public partial class GraphifyImporter : IImporter
         }
 
         _figures.Add(circle);
-    }
-
-    private void AddPolygon(JsonFigureObject polygonObject)
-    {
-        PolygonStyle polygonStyle = new PolygonStyle(
-            polygonObject.Style.PrimaryColor,
-            polygonObject.Style.Name
-        );
-
-        List<Point>? controlPoints = CreateListPoints(polygonObject.ControlPoints);
-        List<Point>? attachedPoints = CreateListPoints(polygonObject.AttachedPoint);
-
-        if (controlPoints is null || (controlPoints.Count < 3))
-        {
-            _logger.LogError("The number of points to build a polygon is less than 3. The number of points contained: {pointsCount}", controlPoints?.Count);
-            throw new ArgumentException("");
-        }
-
-        Point[] points = [.. controlPoints];
-        Polygon polygon = new(points, polygonStyle);
-
-        if (attachedPoints is not null)
-        {
-            foreach (Point point in attachedPoints)
-            {
-                point.AttachTo(polygon);
-            }
-        }
-
-        _figures.Add(polygon);
     }
 
     private void AddCubicBezire(JsonFigureObject cubicBezireObject)

@@ -128,16 +128,6 @@ public partial class MainWindow
         ViewModel?.SetEditMode.Execute(EditMode.CreateLine);
     }
 
-    private void CreatePolygonModeButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (sender is not Button)
-        {
-            return;
-        }
-
-        ViewModel?.SetEditMode.Execute(EditMode.CreatePolygon);
-    }
-
     private void CreateCircleModeButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button)

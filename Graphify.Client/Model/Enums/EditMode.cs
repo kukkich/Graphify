@@ -7,7 +7,6 @@ public enum EditMode
     Reflect,
     CreatePoint,
     CreateLine,
-    CreatePolygon,
     CreateCircleTwoPoints,
     CreateBezierCurve,
     AttachDetach

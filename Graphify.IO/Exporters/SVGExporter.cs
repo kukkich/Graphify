@@ -66,7 +66,6 @@ public sealed class SVGExporter : IExporter
         {
             case ObjectType.Line: AddLine(data, controlPoints); break;
             case ObjectType.Circle: AddCircle(data, controlPoints); break;
-            case ObjectType.Polygon: AddPolygon(data, controlPoints); break;
             case ObjectType.CubicBezier: AddCubicBezier(data, controlPoints); break;
         }
     }

@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphify.IO", "Graphify.IO\
 		{F62DA488-2FC2-4725-8382-C6349685F3A5} = {F62DA488-2FC2-4725-8382-C6349685F3A5}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skadi", "..\Skadi\Skadi\Skadi.csproj", "{F2736BEF-28F3-47D0-BD1C-854774803A0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{371A4BED-839E-43D2-88FF-87A3BAB5EA9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2736BEF-28F3-47D0-BD1C-854774803A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2736BEF-28F3-47D0-BD1C-854774803A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2736BEF-28F3-47D0-BD1C-854774803A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2736BEF-28F3-47D0-BD1C-854774803A0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

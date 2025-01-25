@@ -10,7 +10,6 @@
     xmlns:viewModel="clr-namespace:Graphify.Client.ViewModel"
     xmlns:points="clr-namespace:Graphify.Geometry.GeometricObjects.Points;assembly=Graphify.Geometry"
     xmlns:curves="clr-namespace:Graphify.Geometry.GeometricObjects.Curves;assembly=Graphify.Geometry"
-    xmlns:polygons="clr-namespace:Graphify.Geometry.GeometricObjects.Polygons;assembly=Graphify.Geometry"
     xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
     Title="Graphify"
     MinWidth="1000"
@@ -178,15 +177,6 @@
                     ToolTip="Нарисовать отрезок">
                 <Image Source="/Icons/line.png" Stretch="Uniform"/>
             </Button>
-            <Button x:Name="CreatePolygonModeButton"
-                    Width="40"
-                    Height="40"
-                    Margin="0, 0, 14, 2"
-                    Style="{StaticResource RoundButtonStyle}"
-                    Click="CreatePolygonModeButton_Click"
-                    ToolTip="Нарисовать многоугольник">
-                <Image Source="/Icons/polygon.png" Stretch="Uniform"/>
-            </Button>
             <Button x:Name="CreateCircleModeButton"
                     Width="40"
                     Height="40"
@@ -340,38 +330,6 @@
                             <TextBlock Text="{Binding Y}" />
                             <TextBlock Text=")" />
                         </StackPanel>
-                        <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
-                                  IsChecked="{Binding Style.Visible}" 
-                                  Content="Видимый"/>
-                    </Grid>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type polygons:Polygon}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Ellipse Fill="{Binding Style.PrimaryColor.Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10"  Grid.Column="0" Grid.RowSpan="2"/>
-                        <TextBlock Text="Полигон" Grid.Column="1" Grid.Row="0"/>
-                        <ItemsControl ItemsSource="{Binding ControlPoints}" Grid.Column="1" Grid.Row="1">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="(" />
-                                        <TextBlock Text="{Binding X}" />
-                                        <TextBlock Text=", " />
-                                        <TextBlock Text="{Binding Y}" />
-                                        <TextBlock Text=")" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
                         <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
                                   IsChecked="{Binding Style.Visible}" 
                                   Content="Видимый"/>
